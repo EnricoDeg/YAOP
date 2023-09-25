@@ -6,6 +6,6 @@ extern "C" {
 
 static std::unique_ptr<TKE> impl = nullptr;
 
-void TKE_Init() {
-    impl.reset(new TKE());
+void TKE_Init(int nproma, int nlevs, int nblocks) {
+    impl.reset(new TKE(nproma, nlevs, nblocks));
 }

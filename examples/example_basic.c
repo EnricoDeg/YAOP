@@ -3,7 +3,11 @@
 
 int main(int argc, char ** argv) {
 
-    TKE_Init();
+	int nproma = 600;
+	int nlevs = 64;
+	int nblocks = 4;
+
+    TKE_Init(nproma, nlevs, nblocks);
 
     return 0;
 

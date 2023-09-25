@@ -4,7 +4,7 @@ extern "C" {
 
 
 // Constructor
-void TKE_Init();
+void TKE_Init(int nproma, int nlevs, int nblocks);
 
 
 #ifdef __cplusplus
