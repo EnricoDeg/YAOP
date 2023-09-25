@@ -1,0 +1,7 @@
+PROGRAM main
+    USE mod_TKE
+    IMPLICIT NONE
+
+    CALL TKE_Init_f()
+
+END PROGRAM
