@@ -4,10 +4,10 @@ extern "C" {
 }
 #include "TKE.hpp"
 
-static std::unique_ptr<TKE<double>> impl = nullptr;
+static std::unique_ptr<TKE> impl = nullptr;
 
 void TKE_Init(int nproma, int nlevs, int nblocks) {
-    impl.reset(new TKE<double>(nproma, nlevs, nblocks));
+    impl.reset(new TKE(nproma, nlevs, nblocks));
 }
 
 void TKE_Calc(double * temperature) {
