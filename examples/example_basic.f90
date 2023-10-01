@@ -8,4 +8,7 @@ PROGRAM main
 
     CALL TKE_Init_f(nproma, nlevs, nblocks)
 
+
+    CALL TKE_Finalize_f()
+
 END PROGRAM
