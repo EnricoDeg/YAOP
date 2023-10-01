@@ -2,8 +2,14 @@ module mod_TKE
     use iso_c_binding
     implicit none
     private
+
+    integer, parameter :: pd = 12
+    integer, parameter :: rd = 307
+    integer, parameter :: dp = selected_real_kind(pd,rd)
+
     public :: tke_init_f
     public :: tke_finalize_f
+    public :: tke_calc_f
 
     contains
 
@@ -40,5 +46,25 @@ module mod_TKE
 
         CALL tke_finalize_c()
     end subroutine tke_finalize_f    
+
+    subroutine tke_calc_f(temperature)
+        implicit none
+        real(c_double), intent(inout) :: temperature(:,:,:)
+        
+        type(c_ptr) :: temperature_ptr
+
+        interface
+            subroutine tke_calc_c(temperature_c) bind(C, name="TKE_Calc")
+                use iso_c_binding
+                implicit none
+                
+                type(c_ptr), value :: temperature_c
+            end subroutine tke_calc_c
+        end interface
+
+        temperature_ptr = c_loc(temperature(1,1,1))
+
+        CALL tke_calc_c(temperature_ptr)
+    end subroutine tke_calc_f
 
 end module mod_TKE
