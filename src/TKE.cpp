@@ -23,6 +23,11 @@ TKE::TKE(int nproma, int nlevs, int nblocks)
 
 }
 
+TKE::~TKE() {
+    std::cout << "Finalizing TKE... " << std::endl;
+    delete m_impl;
+}
+
 void TKE::calc(double *temperature) {
     m_temperature = stdex::mdspan<double, stdex::dextents<size_t, 3>>(temperature, stdex::extents{m_nblocks, m_nlevs, m_nproma});
 

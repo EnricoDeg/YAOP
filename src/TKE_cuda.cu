@@ -10,6 +10,11 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks)
     cudaMalloc(&rho_up, nproma*nlevs*sizeof(double));
 }
 
+TKE_cuda::~TKE_cuda() {
+    std::cout << "Finalizing TKE cuda... " << std::endl;
+    cudaFree(rho_up);
+}
+
 void TKE_cuda::calc_impl() {
 
 }

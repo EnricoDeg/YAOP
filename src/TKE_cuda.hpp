@@ -7,6 +7,7 @@ class TKE_cuda : public TKE_backend {
 
     public:
         TKE_cuda(int nproma, int nlevs, int nblocks);
+        ~TKE_cuda();
 
     protected:
         void calc_impl();

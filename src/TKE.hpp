@@ -11,6 +11,7 @@ class TKE {
     public:
         
     	TKE(int nproma, int nlevs, int nblocks);
+        ~TKE();
         void calc(double * temperature);
 
     protected:
