@@ -20,6 +20,8 @@ int main(int argc, char ** argv) {
 
     TKE_Calc(temperature);
 
+    TKE_Finalize();
+
     free(temperature);
 
     return 0;
