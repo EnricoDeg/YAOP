@@ -1,11 +1,17 @@
 
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+  set(CMAKE_CUDA_ARCHITECTURES 80)
+endif()
+
 include_directories(${CMAKE_BINARY_DIR})
 
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
 
 set(SOURCE_EXE  TKE.cpp
                 TKE_capi.cpp
-                mod_TKE.f90)
+                mod_TKE.f90
+                TKE_backend.cpp
+                TKE_cuda.cu)
 
 add_library(tke SHARED ${SOURCE_EXE})
 
