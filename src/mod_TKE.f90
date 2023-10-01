@@ -3,6 +3,7 @@ module mod_TKE
     implicit none
     private
     public :: tke_init_f
+    public :: tke_finalize_f
 
     contains
 
@@ -26,6 +27,18 @@ module mod_TKE
         CALL tke_init_c(nproma, nlevs, nblocks)
     end subroutine tke_init_f
 
-    
+    subroutine tke_finalize_f()
+        implicit none
+
+        interface
+            subroutine tke_finalize_c() bind(C, name="TKE_Finalize")
+                use iso_c_binding
+                implicit none
+
+            end subroutine tke_finalize_c
+        end interface
+
+        CALL tke_finalize_c()
+    end subroutine tke_finalize_f    
 
 end module mod_TKE
