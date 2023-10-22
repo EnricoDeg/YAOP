@@ -6,11 +6,15 @@
 class TKE_cuda : public TKE_backend {
 
     public:
-        TKE_cuda(int nproma, int nlevs, int nblocks);
+        TKE_cuda(int nproma, int nlevs, int nblocks,
+                 int block_size, int start_index, int end_index);
         ~TKE_cuda();
 
     protected:
-        void calc_impl();
+        void calc_impl(int start_block, int end_block, double *tke);
+
+    private:
+        bool is_view_init;
 
 };
 
