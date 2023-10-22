@@ -1,6 +1,8 @@
 
 SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -Mallocatable=03 -acc=verystrict -Minfo=accel,inline -gpu=cc80,cuda12.2")
 
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -acc=verystrict -Minfo=accel,inline -gpu=cc80,cuda12.2")
+
 add_executable(example_basic_cxx example_basic.cpp)
 target_link_libraries (example_basic_cxx tke)
 target_include_directories(example_basic_cxx PRIVATE ${PROJECT_SOURCE_DIR}/src)
