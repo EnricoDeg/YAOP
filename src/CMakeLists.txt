@@ -12,7 +12,8 @@ set(SOURCE_EXE  TKE.cpp
                 mod_TKE.f90
                 TKE_backend.cpp
                 cuda_check.cu
-                TKE_cuda.cu)
+                TKE_cuda.cu
+                utils.cpp)
 
 add_library(tke SHARED ${SOURCE_EXE})
 
