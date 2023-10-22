@@ -17,13 +17,6 @@ set(SOURCE_EXE  TKE.cpp
 
 add_library(tke SHARED ${SOURCE_EXE})
 
-#add_executable(testf test.f90)
-#set_property(TARGET testf PROPERTY LINKER_LANGUAGE Fortran)
-#target_link_libraries (testf tke)
-
-#add_executable(testcxx test.cpp)
-#target_link_libraries (testcxx tke)
-
 # Install the library
 install (
   TARGETS tke
@@ -34,14 +27,9 @@ install (
 install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY} 
         DESTINATION ${PROJECT_SOURCE_DIR})
 
-# Install executables.
-#install (TARGETS
-#  testf testcxx # executables
-#  RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-
 # ------------ Header Files	
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
   DESTINATION ${PROJECT_SOURCE_DIR}/include
   FILES_MATCHING
-  PATTERN "*.h*"
+  PATTERN "TKE.h*"
   )
