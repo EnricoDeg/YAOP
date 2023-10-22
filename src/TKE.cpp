@@ -30,8 +30,8 @@ TKE::~TKE() {
     delete m_impl;
 }
 
-void TKE::calc(int start_block, int end_block, double *tke) {
-    m_impl->backend->calc(start_block, end_block, tke);
+void TKE::calc(int start_block, int end_block, double *tke, int *dolic_c) {
+    m_impl->backend->calc(start_block, end_block, tke, dolic_c);
 }
 
 template <

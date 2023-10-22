@@ -10,10 +10,10 @@ class TKE_backend {
         TKE_backend(int nproma, int nlevs, int nblocks,
                     int block_size, int start_index, int end_index);
         virtual ~TKE_backend() = default;
-        void calc(int start_block, int end_block, double *tke);
+        void calc(int start_block, int end_block, double *tke, int *dolic_c);
 
     protected:
-        virtual void calc_impl(int start_block, int end_block, double *tke) = 0;
+        virtual void calc_impl(int start_block, int end_block, double *tke, int *dolic_c) = 0;
 
     protected:
         double *rho_up;

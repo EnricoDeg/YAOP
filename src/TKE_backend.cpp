@@ -7,6 +7,6 @@ TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks,
       m_block_size(block_size), m_start_index(start_index), m_end_index(end_index) {
 }
 
-void TKE_backend::calc(int start_block, int end_block, double *tke) {
-    this->calc_impl(start_block, end_block, tke);
+void TKE_backend::calc(int start_block, int end_block, double *tke, int *dolic_c) {
+    this->calc_impl(start_block, end_block, tke, dolic_c);
 }
