@@ -10,7 +10,8 @@ struct TKE::Impl {
   TKE_backend::Ptr backend;
 };
 
-TKE::TKE(int nproma, int nlevs, int nblocks) 
+TKE::TKE(int nproma, int nlevs, int nblocks, 
+         int block_size, int start_index, int end_index) 
     : m_impl(new Impl) {
     m_nproma = nproma;
     m_nlevs = nlevs;
@@ -19,7 +20,8 @@ TKE::TKE(int nproma, int nlevs, int nblocks)
     std::cout << "Setting nlevs to " << m_nlevs << std::endl;
     std::cout << "Setting nblocks to " << m_nblocks << std::endl;
 
-    m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks));
+    m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks, 
+                                                    block_size, start_index, end_index));
 
 }
 
@@ -28,13 +30,8 @@ TKE::~TKE() {
     delete m_impl;
 }
 
-void TKE::calc(double *temperature) {
-    m_temperature = stdex::mdspan<double, stdex::dextents<size_t, 3>>(temperature, stdex::extents{m_nblocks, m_nlevs, m_nproma});
-
-    print_field(m_temperature);
-
-    m_impl->backend->calc();
-
+void TKE::calc(int start_block, int end_block, double *tke) {
+    m_impl->backend->calc(start_block, end_block, tke);
 }
 
 template <
