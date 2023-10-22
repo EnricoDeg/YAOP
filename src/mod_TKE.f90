@@ -60,30 +60,34 @@ module mod_TKE
         CALL tke_finalize_c()
     end subroutine tke_finalize_f    
 
-    subroutine tke_calc_f(start_block, end_block, tke)
+    subroutine tke_calc_f(start_block, end_block, tke, dolic_c)
         implicit none
         integer, intent(in) :: start_block
         integer, intent(in) :: end_block
         real(c_double), intent(inout) :: tke(:,:,:)
+        integer, intent(in) :: dolic_c(:,:)
         
         type(c_ptr) :: tke_ptr
+        type(c_ptr) :: dolic_c_ptr
         integer :: start_block_m1, end_block_m1
 
         interface
-            subroutine tke_calc_c(start_block_c, end_block_c, tke_c) bind(C, name="TKE_Calc")
+            subroutine tke_calc_c(start_block_c, end_block_c, tke_c, dolic_c_c) bind(C, name="TKE_Calc")
                 use iso_c_binding
                 implicit none
                 integer(c_int), value :: start_block_c
                 integer(c_int), value :: end_block_c
                 type(c_ptr), value :: tke_c
+                type(c_ptr), value :: dolic_c_c
             end subroutine tke_calc_c
         end interface
 
         start_block_m1 = start_block - 1
         end_block_m1 = end_block - 1
         tke_ptr = c_loc(tke(1,1,1))
+        dolic_c_ptr = c_loc(dolic_c(1,1))
 
-        CALL tke_calc_c(start_block_m1, end_block_m1, tke_ptr)
+        CALL tke_calc_c(start_block_m1, end_block_m1, tke_ptr, dolic_c_ptr)
     end subroutine tke_calc_f
 
 end module mod_TKE

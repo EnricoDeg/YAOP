@@ -11,7 +11,7 @@ void TKE_Init(int nproma, int nlevs, int nblocks,
 void TKE_Finalize();
 
 // Calculation
-void TKE_Calc(int start_block, int end_block, double * temperature);
+void TKE_Calc(int start_block, int end_block, double * tke, int *dolic_c);
 
 
 #ifdef __cplusplus

@@ -16,6 +16,6 @@ void TKE_Finalize() {
     impl.reset();
 }
 
-void TKE_Calc(int start_block, int end_block, double * temperature) {
-    impl->calc(start_block, end_block, temperature);
+void TKE_Calc(int start_block, int end_block, double *tke, int *dolic_c) {
+    impl->calc(start_block, end_block, tke, dolic_c);
 }
