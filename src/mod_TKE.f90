@@ -13,24 +13,37 @@ module mod_TKE
 
     contains
 
-    subroutine tke_init_f(nproma, nlevs, nblocks)
+    subroutine tke_init_f(nproma, nlevs, nblocks, block_size, start_index, end_index)
         implicit none
         integer, intent(in) :: nproma
         integer, intent(in) :: nlevs
         integer, intent(in) :: nblocks
+        integer, intent(in) :: block_size
+        integer, intent(in) :: start_index
+        integer, intent(in) :: end_index
+
+        integer :: start_index_c
+        integer :: end_index_c
 
         interface
-            subroutine tke_init_c(nproma, nlevs, nblocks) bind(C, name="TKE_Init")
+            subroutine tke_init_c(nproma, nlevs, nblocks, &
+                                  block_size, start_index, end_index) bind(C, name="TKE_Init")
                 use iso_c_binding
                 implicit none
 
                 integer(c_int), value :: nproma
                 integer(c_int), value :: nlevs
                 integer(c_int), value :: nblocks
+                integer(c_int), value :: block_size
+                integer(c_int), value :: start_index
+                integer(c_int), value :: end_index
             end subroutine tke_init_c
         end interface
+
+        start_index_c = start_index - 1
+        end_index_c = end_index - 1
         
-        CALL tke_init_c(nproma, nlevs, nblocks)
+        CALL tke_init_c(nproma, nlevs, nblocks, block_size, start_index_c, end_index_c)
     end subroutine tke_init_f
 
     subroutine tke_finalize_f()
@@ -47,24 +60,30 @@ module mod_TKE
         CALL tke_finalize_c()
     end subroutine tke_finalize_f    
 
-    subroutine tke_calc_f(temperature)
+    subroutine tke_calc_f(start_block, end_block, tke)
         implicit none
-        real(c_double), intent(inout) :: temperature(:,:,:)
+        integer, intent(in) :: start_block
+        integer, intent(in) :: end_block
+        real(c_double), intent(inout) :: tke(:,:,:)
         
-        type(c_ptr) :: temperature_ptr
+        type(c_ptr) :: tke_ptr
+        integer :: start_block_m1, end_block_m1
 
         interface
-            subroutine tke_calc_c(temperature_c) bind(C, name="TKE_Calc")
+            subroutine tke_calc_c(start_block_c, end_block_c, tke_c) bind(C, name="TKE_Calc")
                 use iso_c_binding
                 implicit none
-                
-                type(c_ptr), value :: temperature_c
+                integer(c_int), value :: start_block_c
+                integer(c_int), value :: end_block_c
+                type(c_ptr), value :: tke_c
             end subroutine tke_calc_c
         end interface
 
-        temperature_ptr = c_loc(temperature(1,1,1))
+        start_block_m1 = start_block - 1
+        end_block_m1 = end_block - 1
+        tke_ptr = c_loc(tke(1,1,1))
 
-        CALL tke_calc_c(temperature_ptr)
+        CALL tke_calc_c(start_block_m1, end_block_m1, tke_ptr)
     end subroutine tke_calc_f
 
 end module mod_TKE

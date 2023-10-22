@@ -4,13 +4,14 @@ extern "C" {
 
 
 // Constructor
-void TKE_Init(int nproma, int nlevs, int nblocks);
+void TKE_Init(int nproma, int nlevs, int nblocks,
+              int block_size, int start_index, int end_index);
 
 // Destructor
 void TKE_Finalize();
 
 // Calculation
-void TKE_Calc(double * temperature);
+void TKE_Calc(int start_block, int end_block, double * temperature);
 
 
 #ifdef __cplusplus
