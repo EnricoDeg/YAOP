@@ -9,14 +9,21 @@ program main
     integer :: nproma = 6
     integer :: nlevs = 4
     integer :: nblocks = 2
+    integer :: block_size
+    integer :: start_index
+    integer :: end_index
 
     integer :: i, j, k
 
     real(dp), allocatable, dimension(:,:,:) :: temperature
 
+    block_size = nproma
+    start_index = 1
+    end_index = nproma
+
     allocate(temperature(nproma, nlevs, nblocks))
 
-    CALL TKE_Init_f(nproma, nlevs, nblocks)
+    CALL TKE_Init_f(nproma, nlevs, nblocks, block_size, start_index, end_index)
 
     ! Fill array
     do k=1,nblocks
@@ -27,7 +34,7 @@ program main
         end do
     end do
 
-    CALL TKE_Calc_f(temperature)
+    CALL TKE_Calc_f(1,nblocks,temperature)
 
     do k=1,nblocks
         do j=1,nlevs
