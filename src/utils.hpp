@@ -14,11 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#ifndef SRC_UTILS_HPP_
+#define SRC_UTILS_HPP_
 
 void get_index_range(int subset_block_size, int subset_start_block, int subset_end_block,
                      int subset_start_index, int subset_end_index, int current_block,
                      int *start_index, int *end_index);
 
-#endif /* UTILS_HPP */
+#endif  // SRC_UTILS_HPP_
