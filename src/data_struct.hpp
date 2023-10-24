@@ -72,7 +72,7 @@ struct t_atmos_for_ocean {
 };
 
 struct t_sea_ice {
-   double *concsum;
+    double *concsum;
 };
 
 #endif  // SRC_DATA_STRUCT_HPP_
