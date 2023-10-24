@@ -62,7 +62,6 @@ void TKE::calc(int start_block, int end_block,
                double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot,
                double *tke_Lmix, double *tke_Pr, double *stress_xw,
                double *stress_yw, double *fu10, double *concsum) {
-    
     struct t_patch p_patch;
     p_patch.dolic_c = dolic_c;
     struct t_cvmix p_cvmix;
@@ -71,10 +70,9 @@ void TKE::calc(int start_block, int end_block,
     struct t_atmos_for_ocean p_as;
     struct t_atmo_fluxes atmos_fluxes;
     struct t_ocean_state ocean_state;
-    
-    m_impl->backend->calc(start_block, end_block, p_patch, p_cvmix, ocean_state, 
+
+    m_impl->backend->calc(start_block, end_block, p_patch, p_cvmix, ocean_state,
                           atmos_fluxes, p_as, p_sea_ice);
-    
 }
 
 template <
