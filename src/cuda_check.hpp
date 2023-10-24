@@ -14,11 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef CUDA_CHECK_HPP
-#define CUDA_CHECK_HPP
+#ifndef SRC_CUDA_CHECK_HPP_
+#define SRC_CUDA_CHECK_HPP_
 
 #include <cuda_runtime.h>
 
 void check(cudaError_t err);
 
-#endif /* CUDA_CHECK_HPP  */
+#endif  // SRC_CUDA_CHECK_HPP_
