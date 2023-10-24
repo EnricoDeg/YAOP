@@ -25,8 +25,6 @@ TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int block_size, int
 void TKE_backend::calc(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix,
                        struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
                        struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice) {
-
     this->calc_impl(start_block, end_block, p_patch, p_cvmix, ocean_state,
                     atmos_fluxes, p_as, p_sea_ice);
-
 }
