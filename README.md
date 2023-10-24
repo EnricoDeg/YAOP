@@ -10,3 +10,9 @@
 `make`
 
 `make install`
+
+### Development
+Setup to use pre-commit:
+`pip install pre-commit`
+`pre-commit install`
+`pip install cpplint`
