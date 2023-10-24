@@ -3,6 +3,7 @@
 #include "TKE.hpp"
 #include "TKE_backend.hpp"
 #include "TKE_cuda.hpp"
+#include "data_struct.hpp"
 
 namespace stdex = std::experimental;
 
@@ -10,8 +11,8 @@ struct TKE::Impl {
   TKE_backend::Ptr backend;
 };
 
-TKE::TKE(int nproma, int nlevs, int nblocks, 
-         int block_size, int start_index, int end_index) 
+TKE::TKE(int nproma, int nlevs, int nblocks,
+         int block_size, int start_index, int end_index)
     : m_impl(new Impl) {
     m_nproma = nproma;
     m_nlevs = nlevs;
@@ -20,7 +21,7 @@ TKE::TKE(int nproma, int nlevs, int nblocks,
     std::cout << "Setting nlevs to " << m_nlevs << std::endl;
     std::cout << "Setting nblocks to " << m_nblocks << std::endl;
 
-    m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks, 
+    m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks,
                                                     block_size, start_index, end_index));
 
 }
@@ -32,7 +33,7 @@ TKE::~TKE() {
 
 void TKE::calc(int start_block, int end_block,
                double *depth_CellInterface, double *prism_center_dist_c,
-               double *inv_prism_center_dist_c, double *prism_thick_c, 
+               double *inv_prism_center_dist_c, double *prism_thick_c,
                int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c,
                int *edges_cell_idx, int *edges_cell_blk,
                double *temp, double *salt, double *stretch_c, double *eta_c,
@@ -44,8 +45,11 @@ void TKE::calc(int start_block, int end_block,
                double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot,
                double *tke_Lmix, double *tke_Pr, double *stress_xw,
                double *stress_yw, double *fu10, double *concsum) {
-
-    m_impl->backend->calc(start_block, end_block, tke, dolic_c);
+    struct t_patch p_patch;
+    p_patch.dolic_c = dolic_c;
+    struct t_cvmix p_cvmix;
+    p_cvmix.tke = tke;
+    m_impl->backend->calc(start_block, end_block, p_patch, p_cvmix);
 
 }
 

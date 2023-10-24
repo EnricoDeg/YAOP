@@ -9,7 +9,7 @@ namespace stdex = std::experimental;
 
 class TKE {
     public:
-        
+
     	TKE(int nproma, int nlevs, int nblocks,
             int block_size, int start_index, int end_index);
         ~TKE();

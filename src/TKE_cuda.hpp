@@ -11,7 +11,7 @@ class TKE_cuda : public TKE_backend {
         ~TKE_cuda();
 
     protected:
-        void calc_impl(int start_block, int end_block, double *tke, int *dolic_c);
+        void calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix);
 
     private:
         bool is_view_init;

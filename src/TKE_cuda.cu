@@ -104,11 +104,11 @@ TKE_cuda::~TKE_cuda() {
 
 }
 
-void TKE_cuda::calc_impl(int start_block, int end_block, double *tke, int *dolic_c) {
+void TKE_cuda::calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix) {
 
     if (!is_view_init) {
-        tke_view = mdspan_3d_double{ tke, ext3d_t{m_nblocks,m_nlevs,m_nproma} };
-        dolic_c_view = mdspan_2d_int{ dolic_c, ext2d_t{m_nblocks,m_nproma} };
+        tke_view = mdspan_3d_double{ p_cvmix.tke, ext3d_t{m_nblocks,m_nlevs,m_nproma} };
+        dolic_c_view = mdspan_2d_int{ p_patch.dolic_c, ext2d_t{m_nblocks,m_nproma} };
         is_view_init = true;
     }
 

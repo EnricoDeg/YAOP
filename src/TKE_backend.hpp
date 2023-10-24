@@ -2,6 +2,7 @@
 #define TKE_BACKEND_HPP
 
 #include <memory>
+#include "data_struct.hpp"
 
 class TKE_backend {
 
@@ -10,10 +11,10 @@ class TKE_backend {
         TKE_backend(int nproma, int nlevs, int nblocks,
                     int block_size, int start_index, int end_index);
         virtual ~TKE_backend() = default;
-        void calc(int start_block, int end_block, double *tke, int *dolic_c);
+        void calc(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix);
 
     protected:
-        virtual void calc_impl(int start_block, int end_block, double *tke, int *dolic_c) = 0;
+        virtual void calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix) = 0;
 
     protected:
         int m_nproma;
