@@ -14,10 +14,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef SRC_TKE_H_
+#define SRC_TKE_H_
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 // Constructor
 void TKE_Init(int nproma, int nlevs, int nblocks,
@@ -42,7 +44,8 @@ void TKE_Calc(int start_block, int end_block,
                double *tke_Lmix, double *tke_Pr, double *stress_xw,
                double *stress_yw, double *fu10, double *concsum);
 
-
 #ifdef __cplusplus
 }
 #endif
+
+#endif  // SRC_TKE_H_
