@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "TKE.h"
+#include "src/TKE.h"
 
 int main(int argc, char ** argv) {
     int nproma = 10240;

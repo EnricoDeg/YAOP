@@ -5,11 +5,11 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -acc=verystrict -Minfo=accel,inline -gpu=cc8
 
 add_executable(example_basic_cxx example_basic.cpp)
 target_link_libraries (example_basic_cxx tke)
-target_include_directories(example_basic_cxx PRIVATE ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(example_basic_cxx PRIVATE ${PROJECT_SOURCE_DIR})
 
 add_executable(example_basic_c example_basic.c)
 target_link_libraries (example_basic_c tke)
-target_include_directories(example_basic_c PRIVATE ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(example_basic_c PRIVATE ${PROJECT_SOURCE_DIR})
 
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
 add_executable(example_basic_f example_basic.f90)

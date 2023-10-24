@@ -15,7 +15,7 @@
  */
 
 #include <memory>
-#include "TKE.hpp"
+#include "src/TKE.hpp"
 
 int main(int argc, char ** argv) {
     int nproma = 1200;
