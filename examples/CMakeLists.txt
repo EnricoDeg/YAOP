@@ -29,4 +29,3 @@ install (TARGETS
 install (TARGETS
   example_basic_f # executables
   RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/examples)
-

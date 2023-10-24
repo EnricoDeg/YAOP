@@ -42,7 +42,7 @@ module mod_TKE
 
         start_index_c = start_index - 1
         end_index_c = end_index - 1
-        
+
         CALL tke_init_c(nproma, nlevs, nblocks, block_size, start_index_c, end_index_c)
     end subroutine tke_init_f
 
@@ -58,7 +58,7 @@ module mod_TKE
         end interface
 
         CALL tke_finalize_c()
-    end subroutine tke_finalize_f    
+    end subroutine tke_finalize_f
 
     subroutine tke_calc_f(start_block, end_block, depth_CellInterface, prism_center_dist_c, &
                inv_prism_center_dist_c, prism_thick_c, &

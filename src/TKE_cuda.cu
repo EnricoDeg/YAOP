@@ -18,7 +18,7 @@ using mdspan_2d_double = cudastd::mdspan<double, ext2d_t>;
 using mdspan_3d_double = cudastd::mdspan<double, ext3d_t>;
 using mdspan_2d_int = cudastd::mdspan<int, ext2d_t>;
 
-// this needs to be defined static or TKE_cuda.hpp can not 
+// this needs to be defined static or TKE_cuda.hpp can not
 // be included in C++ files (need to think about other solutions)
 static mdspan_1d_double view_cuda_malloc(double *field, size_t dim1);
 static mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2);
@@ -48,11 +48,11 @@ static mdspan_3d_double tke_view;
 static mdspan_2d_int dolic_c_view;
 
 // TKE CUDA kernels functions
-__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index, 
+__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
                                  mdspan_2d_int dolic_c, mdspan_3d_double tke,
                                  mdspan_2d_double tke_old);
 
-TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, 
+TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks,
                    int block_size, int start_index, int end_index)
     : TKE_backend(nproma, nlevs, nblocks, block_size, start_index, end_index) {
 
@@ -75,7 +75,7 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks,
     pressure_view = view_cuda_malloc(m_pressure, (size_t)(nlevs), (size_t)nproma);
     Nsqr_view = view_cuda_malloc(m_Nsqr, (size_t)(nlevs+1), (size_t)nproma);
     Ssqr_view = view_cuda_malloc(m_Ssqr, (size_t)(nlevs+1), (size_t)nproma);
-    
+
     is_view_init = false;
 
 }
@@ -120,19 +120,19 @@ void TKE_cuda::calc_impl(int start_block, int end_block, struct t_patch p_patch,
         int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
         dim3 blocksPerGrid(blocksPerGridI, 1, 1);
         dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
-        calc_impl_kernel<<<blocksPerGrid,threadsPerBlock>>>(jb, start_index, end_index, 
-                                                            dolic_c_view, tke_view, 
+        calc_impl_kernel<<<blocksPerGrid,threadsPerBlock>>>(jb, start_index, end_index,
+                                                            dolic_c_view, tke_view,
                                                             tke_old_view);
     }
 
 }
 
 static mdspan_1d_double view_cuda_malloc(double *field, size_t dim1) {
-    
+
     check( cudaMalloc(&field, dim1*sizeof(double)) );
     mdspan_1d_double memview{ field, ext1d_t{dim1} };
     return memview;
-    
+
 }
 
 static mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2) {
@@ -151,8 +151,8 @@ static mdspan_3d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2
 
 }
 
-__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index, 
-                                 mdspan_2d_int dolic_c, mdspan_3d_double tke, 
+__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
+                                 mdspan_2d_int dolic_c, mdspan_3d_double tke,
                                  mdspan_2d_double tke_old) {
 
     int jc = blockIdx.x * blockDim.x + threadIdx.x + start_index;
@@ -165,4 +165,3 @@ __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
     }
 
 }
-

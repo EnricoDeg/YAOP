@@ -84,7 +84,7 @@ int main(int argc, char ** argv) {
                tke_Tiwf, tke_Tbck, tke_Ttot,
                tke_Lmix, tke_Pr, stress_xw,
                stress_yw, fu10, concsum);
-      
+
       #pragma acc wait
     }
 

@@ -24,10 +24,10 @@ install (
   ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib)
 
 # Install the library Fortran module
-install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY} 
+install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}
         DESTINATION ${PROJECT_SOURCE_DIR})
 
-# ------------ Header Files	
+# ------------ Header Files
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
   DESTINATION ${PROJECT_SOURCE_DIR}/include
   FILES_MATCHING

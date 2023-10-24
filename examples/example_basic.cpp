@@ -9,7 +9,7 @@ int main(int argc, char ** argv) {
     int start_index = 0;
     int end_index = nproma - 1;
     std::shared_ptr<TKE> ocean_physics;
-    ocean_physics.reset(new TKE(nproma, nlevs, nblocks, 
+    ocean_physics.reset(new TKE(nproma, nlevs, nblocks,
                                 block_size, start_index, end_index));
 
     ocean_physics.reset();
