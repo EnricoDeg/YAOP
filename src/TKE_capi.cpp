@@ -46,7 +46,6 @@ void TKE_Calc(int start_block, int end_block,
                double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot,
                double *tke_Lmix, double *tke_Pr, double *stress_xw,
                double *stress_yw, double *fu10, double *concsum) {
-
     impl->calc(start_block, end_block,
                depth_CellInterface, prism_center_dist_c,
                inv_prism_center_dist_c, prism_thick_c,
@@ -61,5 +60,4 @@ void TKE_Calc(int start_block, int end_block,
                tke_Tiwf, tke_Tbck, tke_Ttot,
                tke_Lmix, tke_Pr, stress_xw,
                stress_yw, fu10, concsum);
-
 }
