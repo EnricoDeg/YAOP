@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "src/TKE_backend.hpp"
 #include <iostream>
-#include "TKE_backend.hpp"
 
 TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks,
                          int block_size, int start_index, int end_index)

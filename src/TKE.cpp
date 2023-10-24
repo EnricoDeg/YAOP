@@ -14,12 +14,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "src/TKE.hpp"
+
+#include <experimental/mdspan>
 #include <iostream>
-#include  <experimental/mdspan>
-#include "TKE.hpp"
-#include "TKE_backend.hpp"
-#include "TKE_cuda.hpp"
-#include "data_struct.hpp"
+
+#include "src/TKE_backend.hpp"
+#include "src/TKE_cuda.hpp"
+#include "src/data_struct.hpp"
 
 namespace stdex = std::experimental;
 

@@ -15,7 +15,7 @@
  */
 
 #include <iostream>
-#include "cuda_check.hpp"
+#include "src/cuda_check.hpp"
 
 void check(cudaError_t err) {
     if (err != cudaSuccess) {

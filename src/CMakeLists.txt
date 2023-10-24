@@ -16,6 +16,7 @@ set(SOURCE_EXE  TKE.cpp
                 utils.cpp)
 
 add_library(tke SHARED ${SOURCE_EXE})
+target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR})
 
 # Install the library
 install (

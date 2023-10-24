@@ -14,14 +14,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "src/TKE_cuda.hpp"
+
+
+#include <cuda.h>
+#include <cuda/std/mdspan>
 #include <iostream>
 
-#include "cuda.h"
-#include <cuda/std/mdspan>
-
-#include "utils.hpp"
-#include "TKE_cuda.hpp"
-#include "cuda_check.hpp"
+#include "src/utils.hpp"
+#include "src/cuda_check.hpp"
 
 namespace cudastd = cuda::std;
 

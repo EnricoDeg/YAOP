@@ -16,9 +16,9 @@
 
 #include <memory>
 extern "C" {
-#include "TKE.h"
+#include "src/TKE.h"
 }
-#include "TKE.hpp"
+#include "src/TKE.hpp"
 
 static std::unique_ptr<TKE> impl = nullptr;
 

@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "utils.hpp"
+#include "src/utils.hpp"
 
 void get_index_range(int subset_block_size, int subset_start_block, int subset_end_block,
                      int subset_start_index, int subset_end_index, int current_block,

@@ -18,7 +18,7 @@
 #define TKE_BACKEND_HPP
 
 #include <memory>
-#include "data_struct.hpp"
+#include "src/data_struct.hpp"
 
 class TKE_backend {
 

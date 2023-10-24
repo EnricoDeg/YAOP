@@ -17,7 +17,7 @@
 #ifndef TKE_CUDA_HPP
 #define TKE_CUDA_HPP
 
-#include "TKE_backend.hpp"
+#include "src/TKE_backend.hpp"
 
 class TKE_cuda : public TKE_backend {
 
