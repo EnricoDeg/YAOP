@@ -20,6 +20,45 @@ program main
     real(dp), allocatable, dimension(:,:,:) :: tke
     integer, allocatable, dimension(:,:) :: dolic_c
 
+    real(dp), allocatable :: depth_CellInterface(:,:,:)
+    real(dp), allocatable :: prism_center_dist_c(:,:,:)
+    real(dp), allocatable :: inv_prism_center_dist_c(:,:,:)
+    real(dp), allocatable :: prism_thick_c(:,:,:)
+    integer, allocatable :: dolic_e(:,:)
+    real(dp), allocatable :: zlev_i(:)
+    real(dp), allocatable :: wet_c(:)
+    integer, allocatable :: edges_cell_idx(:,:,:)
+    integer, allocatable :: edges_cell_blk(:,:,:)
+    real(dp), allocatable :: temp(:,:,:)
+    real(dp), allocatable :: salt(:,:,:)
+    real(dp), allocatable :: stretch_c(:,:)
+    real(dp), allocatable :: eta_c(:,:)
+    real(dp), allocatable :: tke_plc_in(:,:,:)
+    real(dp), allocatable :: hlc_in(:,:)
+    real(dp), allocatable :: wlc_in(:,:,:)
+    real(dp), allocatable :: u_stokes_in(:,:)
+    real(dp), allocatable :: a_veloc_v(:,:,:)
+    real(dp), allocatable :: a_temp_v(:,:,:)
+    real(dp), allocatable :: a_salt_v(:,:,:)
+    real(dp), allocatable :: iwe_Tdis(:,:,:)
+    real(dp), allocatable :: cvmix_dummy_1(:,:,:)
+    real(dp), allocatable :: cvmix_dummy_2(:,:,:)
+    real(dp), allocatable :: cvmix_dummy_3(:,:,:)
+    real(dp), allocatable :: tke_Tbpr(:,:,:)
+    real(dp), allocatable :: tke_Tspr(:,:,:)
+    real(dp), allocatable :: tke_Tdif(:,:,:)
+    real(dp), allocatable :: tke_Tdis(:,:,:)
+    real(dp), allocatable :: tke_Twin(:,:,:)
+    real(dp), allocatable :: tke_Tiwf(:,:,:)
+    real(dp), allocatable :: tke_Tbck(:,:,:)
+    real(dp), allocatable :: tke_Ttot(:,:,:)
+    real(dp), allocatable :: tke_Lmix(:,:,:)
+    real(dp), allocatable :: tke_Pr(:,:,:)
+    real(dp), allocatable :: stress_xw(:,:)
+    real(dp), allocatable :: stress_yw(:,:)
+    real(dp), allocatable :: fu10(:,:)
+    real(dp), allocatable :: concsum(:,:)
+
     block_size = nproma
     start_index = 1
     end_index = nproma
@@ -43,7 +82,19 @@ program main
 
     do t=1,ntimesteps
         !$ACC HOST_DATA USE_DEVICE(tke, dolic_c)
-        CALL TKE_Calc_f(1, nblocks, tke, dolic_c)
+        CALL TKE_Calc_f(1, nblocks, depth_CellInterface, prism_center_dist_c, &
+                        inv_prism_center_dist_c, prism_thick_c, &
+                        dolic_c, dolic_e, zlev_i, wet_c, &
+                        edges_cell_idx, edges_cell_blk, &
+                        temp, salt, stretch_c, eta_c, &
+                        tke, tke_plc_in, hlc_in, wlc_in, &
+                        u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, &
+                        iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, &
+                        cvmix_dummy_3, tke_Tbpr, tke_Tspr, &
+                        tke_Tdif, tke_Tdis, tke_Twin, &
+                        tke_Tiwf, tke_Tbck, tke_Ttot, &
+                        tke_Lmix, tke_Pr, stress_xw, &
+                        stress_yw, fu10, concsum)
         !$ACC END HOST_DATA
         !$ACC WAIT
     end do
