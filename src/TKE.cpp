@@ -41,7 +41,6 @@ TKE::TKE(int nproma, int nlevs, int nblocks,
 
     m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks,
                                                     block_size, start_index, end_index));
-
 }
 
 TKE::~TKE() {
@@ -68,7 +67,6 @@ void TKE::calc(int start_block, int end_block,
     struct t_cvmix p_cvmix;
     p_cvmix.tke = tke;
     m_impl->backend->calc(start_block, end_block, p_patch, p_cvmix);
-
 }
 
 template <
@@ -77,10 +75,9 @@ template <
 >
 void TKE::print_field(
     stdex::mdspan<T, ExtsA, LayA, AccA> a
-    ) // requires ExtsA::rank() == 3
-{
-    for(int i = 0; i < a.extent(0); ++i)
-        for(int j = 0; j < a.extent(1); ++j)
-            for(int k = 0; k < a.extent(2); ++k)
-                std::cout << "field(" << i << "," << j << "," << k << ") = " << a(i,j,k) << std::endl;
+    ) {  // requires ExtsA::rank() == 3
+    for (int i = 0; i < a.extent(0); ++i)
+        for (int j = 0; j < a.extent(1); ++j)
+            for (int k = 0; k < a.extent(2); ++k)
+                std::cout << "field(" << i << "," << j << "," << k << ") = " << a(i, j, k) << std::endl;
 }
