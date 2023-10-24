@@ -12,3 +12,4 @@ repos:
     rev: v1.3.5
     hooks:
     -   id: cpplint
+        args: [--linelength=120]
