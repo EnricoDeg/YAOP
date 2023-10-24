@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef DATA_STRUCT_HPP
-#define DATA_STRUCT_HPP
+#ifndef SRC_DATA_STRUCT_HPP_
+#define SRC_DATA_STRUCT_HPP_
 
 // grid information
 struct t_patch {
@@ -27,4 +27,4 @@ struct t_cvmix {
     double *tke;
 };
 
-#endif /* DATA_STRUCT_HPP */
+#endif  // SRC_DATA_STRUCT_HPP_
