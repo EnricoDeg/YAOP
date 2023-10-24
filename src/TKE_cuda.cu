@@ -119,7 +119,10 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_Ssqr) );
 }
 
-void TKE_cuda::calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix) {
+void TKE_cuda::calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix,
+                         struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
+                         struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice) {
+
     if (!is_view_init) {
         tke_view = mdspan_3d_double{ p_cvmix.tke, ext3d_t{m_nblocks, m_nlevs, m_nproma} };
         dolic_c_view = mdspan_2d_int{ p_patch.dolic_c, ext2d_t{m_nblocks, m_nproma} };

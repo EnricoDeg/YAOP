@@ -26,7 +26,9 @@ class TKE_cuda : public TKE_backend {
     ~TKE_cuda();
 
  protected:
-    void calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix);
+    void calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix,
+                       struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
+                       struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice);
 
  private:
     bool is_view_init;
