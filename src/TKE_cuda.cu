@@ -119,19 +119,23 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_Ssqr) );
 }
 
-void TKE_cuda::calc_impl(int start_block, int end_block, struct t_patch p_patch, struct t_cvmix p_cvmix,
+void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
                          struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
-                         struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice) {
+                         struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice,
+                         int edges_block_size, int edges_start_block, int edges_end_block,
+                         int edges_start_index, int edges_end_index, int cells_block_size,
+                         int cells_start_block, int cells_end_block, int cells_start_index,
+                         int cells_end_index) {
     if (!is_view_init) {
         tke_view = mdspan_3d_double{ p_cvmix.tke, ext3d_t{m_nblocks, m_nlevs, m_nproma} };
         dolic_c_view = mdspan_2d_int{ p_patch.dolic_c, ext2d_t{m_nblocks, m_nproma} };
         is_view_init = true;
     }
 
-    for (int jb = start_block; jb <= end_block; jb++) {
+    for (int jb = cells_start_block; jb <= cells_end_block; jb++) {
         int start_index, end_index;
-        get_index_range(m_block_size, 0, m_nblocks-1, m_start_index, m_end_index,
-                       jb, &start_index, &end_index);
+        get_index_range(cells_block_size, cells_start_block, cells_end_block,
+                        cells_start_index, cells_end_index, jb, &start_index, &end_index);
         int threadsPerBlockI = 512;
         int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
         dim3 blocksPerGrid(blocksPerGridI, 1, 1);
@@ -140,7 +144,7 @@ void TKE_cuda::calc_impl(int start_block, int end_block, struct t_patch p_patch,
                                                             dolic_c_view, tke_view,
                                                             tke_old_view);
     }
-}
+                         }
 
 static mdspan_1d_double view_cuda_malloc(double *field, size_t dim1) {
     check( cudaMalloc(&field, dim1*sizeof(double)) );
