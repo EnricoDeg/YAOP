@@ -22,7 +22,9 @@
 
 class TKE {
  public:
-    TKE(int nproma, int nlevs, int nblocks);
+    TKE(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+        int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
+        int l_lc, double clc, double ReferencePressureIndbars, double pi);
     ~TKE();
     void calc(double *depth_CellInterface, double *prism_center_dist_c,
               double *inv_prism_center_dist_c, double *prism_thick_c,
