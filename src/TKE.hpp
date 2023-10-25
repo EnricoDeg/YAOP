@@ -17,11 +17,8 @@
 #ifndef SRC_TKE_HPP_
 #define SRC_TKE_HPP_
 
-#include <experimental/mdspan>
 #include <iostream>
-
-
-namespace stdex = std::experimental;
+#include "src/data_struct.hpp"
 
 class TKE {
  public:
@@ -43,8 +40,15 @@ class TKE {
               double *stress_yw, double *fu10, double *concsum);
 
  private:
-        struct Impl;
-        Impl *m_impl;
+    struct Impl;
+    Impl *m_impl;
+    struct t_patch p_patch;
+    struct t_cvmix p_cvmix;
+    struct t_sea_ice p_sea_ice;
+    struct t_atmos_for_ocean p_as;
+    struct t_atmo_fluxes atmos_fluxes;
+    struct t_ocean_state ocean_state;
+    bool m_is_struct_init;
 };
 
 #endif  // SRC_TKE_HPP_

@@ -20,7 +20,6 @@
 
 #include "src/TKE_backend.hpp"
 #include "src/TKE_cuda.hpp"
-#include "src/data_struct.hpp"
 
 struct TKE::Impl {
   TKE_backend::Ptr backend;
@@ -32,6 +31,7 @@ TKE::TKE(int nproma, int nlevs, int nblocks,
     std::cout << "Initializing TKE... " << std::endl;
     m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks,
                                                     block_size, start_index, end_index));
+    m_is_struct_init = false;
 }
 
 TKE::~TKE() {
@@ -53,14 +53,20 @@ void TKE::calc(int start_block, int end_block,
                double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot,
                double *tke_Lmix, double *tke_Pr, double *stress_xw,
                double *stress_yw, double *fu10, double *concsum) {
-    struct t_patch p_patch;
-    p_patch.dolic_c = dolic_c;
-    struct t_cvmix p_cvmix;
-    p_cvmix.tke = tke;
-    struct t_sea_ice p_sea_ice;
-    struct t_atmos_for_ocean p_as;
-    struct t_atmo_fluxes atmos_fluxes;
-    struct t_ocean_state ocean_state;
+    if (!m_is_struct_init) {
+        fill_struct(&p_patch, depth_CellInterface, prism_center_dist_c,
+                    inv_prism_center_dist_c, prism_thick_c, dolic_c, dolic_e,
+                    zlev_i, wet_c, edges_cell_idx, edges_cell_blk);
+        fill_struct(&p_cvmix, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
+                    a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
+                    cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
+                    tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
+        fill_struct(&ocean_state, temp, salt, stretch_c, eta_c);
+        fill_struct(&atmos_fluxes, stress_xw, stress_yw);
+        fill_struct(&p_as, fu10);
+        fill_struct(&p_sea_ice, concsum);
+        m_is_struct_init = true;
+    }
 
     m_impl->backend->calc(start_block, end_block, p_patch, p_cvmix, ocean_state,
                           atmos_fluxes, p_as, p_sea_ice);
