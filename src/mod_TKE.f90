@@ -28,37 +28,24 @@ module mod_TKE
 
     contains
 
-    subroutine tke_init_f(nproma, nlevs, nblocks, block_size, start_index, end_index)
+    subroutine tke_init_f(nproma, nlevs, nblocks)
         implicit none
         integer, intent(in) :: nproma
         integer, intent(in) :: nlevs
         integer, intent(in) :: nblocks
-        integer, intent(in) :: block_size
-        integer, intent(in) :: start_index
-        integer, intent(in) :: end_index
-
-        integer :: start_index_c
-        integer :: end_index_c
 
         interface
-            subroutine tke_init_c(nproma, nlevs, nblocks, &
-                                  block_size, start_index, end_index) bind(C, name="TKE_Init")
+            subroutine tke_init_c(nproma, nlevs, nblocks) bind(C, name="TKE_Init")
                 use iso_c_binding
                 implicit none
 
                 integer(c_int), value :: nproma
                 integer(c_int), value :: nlevs
                 integer(c_int), value :: nblocks
-                integer(c_int), value :: block_size
-                integer(c_int), value :: start_index
-                integer(c_int), value :: end_index
             end subroutine tke_init_c
         end interface
 
-        start_index_c = start_index - 1
-        end_index_c = end_index - 1
-
-        CALL tke_init_c(nproma, nlevs, nblocks, block_size, start_index_c, end_index_c)
+        CALL tke_init_c(nproma, nlevs, nblocks)
     end subroutine tke_init_f
 
     subroutine tke_finalize_f()

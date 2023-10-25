@@ -22,10 +22,8 @@ extern "C" {
 
 static std::unique_ptr<TKE> impl = nullptr;
 
-void TKE_Init(int nproma, int nlevs, int nblocks,
-              int block_size, int start_index, int end_index) {
-    impl.reset(new TKE(nproma, nlevs, nblocks,
-                       block_size, start_index, end_index));
+void TKE_Init(int nproma, int nlevs, int nblocks) {
+    impl.reset(new TKE(nproma, nlevs, nblocks));
 }
 
 void TKE_Finalize() {

@@ -22,8 +22,7 @@ extern "C" {
 #endif
 
 // Constructor
-void TKE_Init(int nproma, int nlevs, int nblocks,
-              int block_size, int start_index, int end_index);
+void TKE_Init(int nproma, int nlevs, int nblocks);
 
 // Destructor
 void TKE_Finalize();
