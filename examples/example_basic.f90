@@ -30,6 +30,17 @@ program main
     integer :: start_index
     integer :: end_index
 
+    integer :: edges_block_size
+    integer :: edges_start_block
+    integer :: edges_end_block
+    integer :: edges_start_index
+    integer :: edges_end_index
+    integer :: cells_block_size
+    integer :: cells_start_block
+    integer :: cells_end_block
+    integer :: cells_start_index
+    integer :: cells_end_index
+
     integer :: i, j, k, t
 
     real(dp), allocatable, dimension(:,:,:) :: tke
@@ -78,6 +89,17 @@ program main
     start_index = 1
     end_index = nproma
 
+    edges_block_size = nblocks
+    edges_start_block = 1
+    edges_end_block = nblocks
+    edges_start_index = 1
+    edges_end_index = nproma
+    cells_block_size = nblocks
+    cells_start_block = 1
+    cells_end_block = nblocks
+    cells_start_index = 1
+    cells_end_index = nproma
+
     allocate(tke(nproma, nlevs, nblocks))
     allocate(dolic_c(nproma,nblocks))
 
@@ -97,7 +119,7 @@ program main
 
     do t=1,ntimesteps
         !$ACC HOST_DATA USE_DEVICE(tke, dolic_c)
-        CALL TKE_Calc_f(1, nblocks, depth_CellInterface, prism_center_dist_c, &
+        CALL TKE_Calc_f(depth_CellInterface, prism_center_dist_c, &
                         inv_prism_center_dist_c, prism_thick_c, &
                         dolic_c, dolic_e, zlev_i, wet_c, &
                         edges_cell_idx, edges_cell_blk, &
@@ -109,7 +131,11 @@ program main
                         tke_Tdif, tke_Tdis, tke_Twin, &
                         tke_Tiwf, tke_Tbck, tke_Ttot, &
                         tke_Lmix, tke_Pr, stress_xw, &
-                        stress_yw, fu10, concsum)
+                        stress_yw, fu10, concsum, &
+                        edges_block_size, edges_start_block, edges_end_block, &
+                        edges_start_index, edges_end_index, cells_block_size, &
+                        cells_start_block, cells_end_block, cells_start_index, &
+                        cells_end_index)
         !$ACC END HOST_DATA
         !$ACC WAIT
     end do

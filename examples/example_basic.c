@@ -28,6 +28,17 @@ int main(int argc, char ** argv) {
     int start_index = 0;
     int end_index = nproma - 1;
 
+    int edges_block_size = nblocks;
+    int edges_start_block = 0;
+    int edges_end_block = nblocks - 1;
+    int edges_start_index = 0;
+    int edges_end_index = nproma - 1;
+    int cells_block_size = nblocks;
+    int cells_start_block = 0;
+    int cells_end_block = nblocks - 1;
+    int cells_start_index = 0;
+    int cells_end_index = nproma - 1;
+
     TKE_Init(nproma, nlevs, nblocks, block_size, start_index, end_index);
 
     double * tke = malloc(nproma * nlevs * nblocks * sizeof(double));
@@ -86,7 +97,7 @@ int main(int argc, char ** argv) {
 
     for (int t = 0; t < ntimesteps; t++) {
       #pragma acc host_data use_device(tke, dolic_c)
-      TKE_Calc(0, nblocks-1, depth_CellInterface, prism_center_dist_c,
+      TKE_Calc(depth_CellInterface, prism_center_dist_c,
                inv_prism_center_dist_c, prism_thick_c,
                dolic_c, dolic_e, zlev_i, wet_c,
                edges_cell_idx, edges_cell_blk,
@@ -98,7 +109,11 @@ int main(int argc, char ** argv) {
                tke_Tdif, tke_Tdis, tke_Twin,
                tke_Tiwf, tke_Tbck, tke_Ttot,
                tke_Lmix, tke_Pr, stress_xw,
-               stress_yw, fu10, concsum);
+               stress_yw, fu10, concsum,
+               edges_block_size, edges_start_block, edges_end_block,
+               edges_start_index, edges_end_index, cells_block_size,
+               cells_start_block, cells_end_block, cells_start_index,
+               cells_end_index);
 
       #pragma acc wait
     }
