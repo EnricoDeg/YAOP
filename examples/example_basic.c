@@ -24,10 +24,6 @@ int main(int argc, char ** argv) {
     int nblocks = 1;
     int ntimesteps = 10;
 
-    int block_size = nproma;
-    int start_index = 0;
-    int end_index = nproma - 1;
-
     int edges_block_size = nblocks;
     int edges_start_block = 0;
     int edges_end_block = nblocks - 1;
@@ -39,7 +35,7 @@ int main(int argc, char ** argv) {
     int cells_start_index = 0;
     int cells_end_index = nproma - 1;
 
-    TKE_Init(nproma, nlevs, nblocks, block_size, start_index, end_index);
+    TKE_Init(nproma, nlevs, nblocks);
 
     double * tke = malloc(nproma * nlevs * nblocks * sizeof(double));
     int *dolic_c = malloc(nproma * nlevs * nblocks * sizeof(int));

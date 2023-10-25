@@ -26,10 +26,6 @@ program main
     integer :: nblocks = 1
     integer :: ntimesteps = 10
 
-    integer :: block_size
-    integer :: start_index
-    integer :: end_index
-
     integer :: edges_block_size
     integer :: edges_start_block
     integer :: edges_end_block
@@ -85,10 +81,6 @@ program main
     real(dp), allocatable :: fu10(:,:)
     real(dp), allocatable :: concsum(:,:)
 
-    block_size = nproma
-    start_index = 1
-    end_index = nproma
-
     edges_block_size = nblocks
     edges_start_block = 1
     edges_end_block = nblocks
@@ -103,7 +95,7 @@ program main
     allocate(tke(nproma, nlevs, nblocks))
     allocate(dolic_c(nproma,nblocks))
 
-    CALL TKE_Init_f(nproma, nlevs, nblocks, block_size, start_index, end_index)
+    CALL TKE_Init_f(nproma, nlevs, nblocks)
 
     ! Fill array
     do k=1,nblocks
