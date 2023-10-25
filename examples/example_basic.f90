@@ -37,6 +37,17 @@ program main
     integer :: cells_start_index
     integer :: cells_end_index
 
+    integer  :: vert_mix_type
+    integer  :: vmix_idemix_tke
+    integer  :: vert_cor_type
+    real(dp) :: dtime
+    real(dp) :: OceanReferenceDensity
+    real(dp) :: grav
+    integer  :: l_lc
+    real(dp) :: clc
+    real(dp) :: ReferencePressureIndbars
+    real(dp) :: pi;
+
     integer :: i, j, k, t
 
     real(dp), allocatable, dimension(:,:,:) :: tke
@@ -92,10 +103,23 @@ program main
     cells_start_index = 1
     cells_end_index = nproma
 
+    vert_mix_type = 2
+    vmix_idemix_tke = 4
+    vert_cor_type = 0
+    dtime = 0.0
+    OceanReferenceDensity = 1025.022
+    grav = 9.80665
+    l_lc = 0
+    clc = 0.15
+    ReferencePressureIndbars = 1035.0*grav*1.0e-4
+    pi = 3.14159265358979323846264338327950288
+
     allocate(tke(nproma, nlevs, nblocks))
     allocate(dolic_c(nproma,nblocks))
 
-    CALL TKE_Init_f(nproma, nlevs, nblocks)
+    CALL TKE_Init_f(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
+                    vert_cor_type, dtime, OceanReferenceDensity, grav, &
+                    l_lc, clc, ReferencePressureIndbars, pi)
 
     ! Fill array
     do k=1,nblocks

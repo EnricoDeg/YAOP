@@ -35,7 +35,20 @@ int main(int argc, char ** argv) {
     int cells_start_index = 0;
     int cells_end_index = nproma - 1;
 
-    TKE_Init(nproma, nlevs, nblocks);
+    int vert_mix_type = 2;
+    int vmix_idemix_tke = 4;
+    int vert_cor_type = 0;
+    double dtime = 0.0;
+    double OceanReferenceDensity = 1025.022;
+    double grav = 9.80665;
+    int l_lc = 0;
+    double clc = 0.15;
+    double ReferencePressureIndbars = 1035.0*grav*1.0e-4;
+    double pi = 3.14159265358979323846264338327950288;
+
+    TKE_Init(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
+             vert_cor_type, dtime, OceanReferenceDensity, grav,
+             l_lc, clc, ReferencePressureIndbars, pi);
 
     double * tke = malloc(nproma * nlevs * nblocks * sizeof(double));
     int *dolic_c = malloc(nproma * nlevs * nblocks * sizeof(int));

@@ -21,8 +21,21 @@ int main(int argc, char ** argv) {
     int nproma = 1200;
     int nlevs = 64;
     int nblocks = 2;
+    int vert_mix_type = 2;
+    int vmix_idemix_tke = 4;
+    int vert_cor_type = 0;
+    double dtime = 0.0;
+    double OceanReferenceDensity = 1025.022;
+    double grav = 9.80665;
+    int l_lc = 0;
+    double clc = 0.15;
+    double ReferencePressureIndbars = 1035.0*grav*1.0e-4;
+    double pi = 3.14159265358979323846264338327950288;
+
     std::shared_ptr<TKE> ocean_physics;
-    ocean_physics.reset(new TKE(nproma, nlevs, nblocks));
+    ocean_physics.reset(new TKE(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
+                                vert_cor_type, dtime, OceanReferenceDensity, grav,
+                                l_lc, clc, ReferencePressureIndbars, pi));
 
     ocean_physics.reset();
 }
