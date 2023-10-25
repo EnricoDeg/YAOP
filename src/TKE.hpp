@@ -24,8 +24,7 @@ class TKE {
  public:
     TKE(int nproma, int nlevs, int nblocks, int block_size, int start_index, int end_index);
     ~TKE();
-    void calc(int start_block, int end_block,
-              double *depth_CellInterface, double *prism_center_dist_c,
+    void calc(double *depth_CellInterface, double *prism_center_dist_c,
               double *inv_prism_center_dist_c, double *prism_thick_c,
               int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c,
               int *edges_cell_idx, int *edges_cell_blk,
@@ -37,7 +36,11 @@ class TKE {
               double *tke_Tdif, double *tke_Tdis, double *tke_Twin,
               double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot,
               double *tke_Lmix, double *tke_Pr, double *stress_xw,
-              double *stress_yw, double *fu10, double *concsum);
+              double *stress_yw, double *fu10, double *concsum,
+              int edges_block_size, int edges_start_block, int edges_end_block,
+              int edges_start_index, int edges_end_index, int cells_block_size,
+              int cells_start_block, int cells_end_block, int cells_start_index,
+              int cells_end_index);
 
  private:
     struct Impl;

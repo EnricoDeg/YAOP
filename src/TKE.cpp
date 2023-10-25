@@ -39,8 +39,7 @@ TKE::~TKE() {
     delete m_impl;
 }
 
-void TKE::calc(int start_block, int end_block,
-               double *depth_CellInterface, double *prism_center_dist_c,
+void TKE::calc(double *depth_CellInterface, double *prism_center_dist_c,
                double *inv_prism_center_dist_c, double *prism_thick_c,
                int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c,
                int *edges_cell_idx, int *edges_cell_blk,
@@ -52,7 +51,11 @@ void TKE::calc(int start_block, int end_block,
                double *tke_Tdif, double *tke_Tdis, double *tke_Twin,
                double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot,
                double *tke_Lmix, double *tke_Pr, double *stress_xw,
-               double *stress_yw, double *fu10, double *concsum) {
+               double *stress_yw, double *fu10, double *concsum,
+               int edges_block_size, int edges_start_block, int edges_end_block,
+               int edges_start_index, int edges_end_index, int cells_block_size,
+               int cells_start_block, int cells_end_block, int cells_start_index,
+               int cells_end_index) {
     if (!m_is_struct_init) {
         fill_struct(&p_patch, depth_CellInterface, prism_center_dist_c,
                     inv_prism_center_dist_c, prism_thick_c, dolic_c, dolic_e,
@@ -68,6 +71,9 @@ void TKE::calc(int start_block, int end_block,
         m_is_struct_init = true;
     }
 
-    m_impl->backend->calc(start_block, end_block, p_patch, p_cvmix, ocean_state,
-                          atmos_fluxes, p_as, p_sea_ice);
+    m_impl->backend->calc(p_patch, p_cvmix, ocean_state, atmos_fluxes, p_as, p_sea_ice,
+                          edges_block_size, edges_start_block, edges_end_block,
+                          edges_start_index, edges_end_index, cells_block_size,
+                          cells_start_block, cells_end_block, cells_start_index,
+                          cells_end_index);
 }
