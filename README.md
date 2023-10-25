@@ -1,3 +1,5 @@
+[![build status](https://github.com/enricodeg/TKE/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/enricodeg/TKE/actions/workflows/pre-commit.yml)
+
 # TKE
 
 ### Installation
