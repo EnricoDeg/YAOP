@@ -21,8 +21,7 @@
 
 class TKE_cuda : public TKE_backend {
  public:
-    TKE_cuda(int nproma, int nlevs, int nblocks,
-             int block_size, int start_index, int end_index);
+    TKE_cuda(int nproma, int nlevs, int nblocks);
     ~TKE_cuda();
 
  protected:

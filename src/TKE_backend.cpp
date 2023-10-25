@@ -17,9 +17,8 @@
 #include "src/TKE_backend.hpp"
 #include <iostream>
 
-TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int block_size, int start_index, int end_index)
-    : m_nproma(nproma), m_nlevs(nlevs), m_nblocks(nblocks),
-      m_block_size(block_size), m_start_index(start_index), m_end_index(end_index) {
+TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int block_size)
+    : m_nproma(nproma), m_nlevs(nlevs), m_nblocks(nblocks) {
 }
 
 void TKE_backend::calc(struct t_patch p_patch, struct t_cvmix p_cvmix,

@@ -69,9 +69,8 @@ __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
                                  mdspan_2d_int dolic_c, mdspan_3d_double tke,
                                  mdspan_2d_double tke_old);
 
-TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks,
-                   int block_size, int start_index, int end_index)
-    : TKE_backend(nproma, nlevs, nblocks, block_size, start_index, end_index) {
+TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks)
+    : TKE_backend(nproma, nlevs, nblocks) {
 
     // Initialize internal arrays
     std::cout << "Initializing TKE cuda... " << std::endl;
