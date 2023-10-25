@@ -69,9 +69,12 @@ __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
                                  mdspan_2d_int dolic_c, mdspan_3d_double tke,
                                  mdspan_2d_double tke_old);
 
-TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks)
-    : TKE_backend(nproma, nlevs, nblocks) {
-
+TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+                   int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
+                   int l_lc, double clc, double ReferencePressureIndbars, double pi)
+    : TKE_backend(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
+                  vert_cor_type, dtime, OceanReferenceDensity, grav,
+                  l_lc, clc, ReferencePressureIndbars, pi) {
     // Initialize internal arrays
     std::cout << "Initializing TKE cuda... " << std::endl;
     rho_up_view = view_cuda_malloc(m_rho_up, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));

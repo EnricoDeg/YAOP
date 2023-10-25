@@ -23,7 +23,9 @@
 class TKE_backend {
  public:
     typedef std::shared_ptr<TKE_backend> Ptr;
-    TKE_backend(int nproma, int nlevs, int nblocks);
+    TKE_backend(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+                int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
+                int l_lc, double clc, double ReferencePressureIndbars, double pi);
     virtual ~TKE_backend() = default;
     void calc(struct t_patch p_patch, struct t_cvmix p_cvmix,
               struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
@@ -46,7 +48,16 @@ class TKE_backend {
     int m_nproma;
     int m_nlevs;
     int m_nblocks;
-    int m_block_size;
+    int m_vert_mix_type;
+    int m_vmix_idemix_tke;
+    int m_vert_cor_type;
+    double m_dtime;
+    double m_OceanReferenceDensity;
+    double m_grav;
+    int m_l_lc;
+    double m_clc;
+    double m_ReferencePressureIndbars;
+    double m_pi;
 
     double *m_rho_up;
     double *m_rho_down;

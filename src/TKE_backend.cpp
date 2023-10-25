@@ -17,8 +17,13 @@
 #include "src/TKE_backend.hpp"
 #include <iostream>
 
-TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks)
-    : m_nproma(nproma), m_nlevs(nlevs), m_nblocks(nblocks) {
+TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+                         int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
+                         int l_lc, double clc, double ReferencePressureIndbars, double pi)
+    : m_nproma(nproma), m_nlevs(nlevs), m_nblocks(nblocks), m_vert_mix_type(vert_mix_type),
+      m_vmix_idemix_tke(vmix_idemix_tke), m_vert_cor_type(vert_cor_type), m_dtime(dtime),
+      m_OceanReferenceDensity(OceanReferenceDensity), m_grav(grav), m_l_lc(l_lc), m_clc(clc),
+      m_ReferencePressureIndbars(ReferencePressureIndbars), m_pi(pi) {
 }
 
 void TKE_backend::calc(struct t_patch p_patch, struct t_cvmix p_cvmix,

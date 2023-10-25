@@ -21,7 +21,9 @@
 
 class TKE_cuda : public TKE_backend {
  public:
-    TKE_cuda(int nproma, int nlevs, int nblocks);
+    TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+             int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
+             int l_lc, double clc, double ReferencePressureIndbars, double pi);
     ~TKE_cuda();
 
  protected:
