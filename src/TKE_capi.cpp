@@ -22,8 +22,12 @@ extern "C" {
 
 static std::unique_ptr<TKE> impl = nullptr;
 
-void TKE_Init(int nproma, int nlevs, int nblocks) {
-    impl.reset(new TKE(nproma, nlevs, nblocks));
+void TKE_Init(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+              int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
+              int l_lc, double clc, double ReferencePressureIndbars, double pi) {
+    impl.reset(new TKE(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
+                       vert_cor_type, dtime, OceanReferenceDensity, grav,
+                       l_lc, clc, ReferencePressureIndbars, pi));
 }
 
 void TKE_Finalize() {

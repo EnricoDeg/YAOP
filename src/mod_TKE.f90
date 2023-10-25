@@ -28,24 +28,50 @@ module mod_TKE
 
     contains
 
-    subroutine tke_init_f(nproma, nlevs, nblocks)
+    subroutine tke_init_f(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
+                          vert_cor_type, dtime, OceanReferenceDensity, grav, &
+                          l_lc, clc, ReferencePressureIndbars, pi)
         implicit none
-        integer, intent(in) :: nproma
-        integer, intent(in) :: nlevs
-        integer, intent(in) :: nblocks
+        integer, intent(in)  :: nproma
+        integer, intent(in)  :: nlevs
+        integer, intent(in)  :: nblocks
+        integer, intent(in)  :: vert_mix_type
+        integer, intent(in)  :: vmix_idemix_tke
+        integer, intent(in)  :: vert_cor_type
+        real(dp), intent(in) :: dtime
+        real(dp), intent(in) :: OceanReferenceDensity
+        real(dp), intent(in) :: grav
+        integer, intent(in)  :: l_lc
+        real(dp), intent(in) :: clc
+        real(dp), intent(in) :: ReferencePressureIndbars
+        real(dp), intent(in) :: pi
 
         interface
-            subroutine tke_init_c(nproma, nlevs, nblocks) bind(C, name="TKE_Init")
+            subroutine tke_init_c(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
+                                  vert_cor_type, dtime, OceanReferenceDensity, grav, &
+                                  l_lc, clc, ReferencePressureIndbars, pi) bind(C, name="TKE_Init")
                 use iso_c_binding
                 implicit none
 
                 integer(c_int), value :: nproma
                 integer(c_int), value :: nlevs
                 integer(c_int), value :: nblocks
+                integer(c_int), value :: vert_mix_type
+                integer(c_int), value :: vmix_idemix_tke
+                integer(c_int), value :: vert_cor_type
+                real(c_double), value :: dtime
+                real(c_double), value :: OceanReferenceDensity
+                real(c_double), value :: grav
+                integer(c_int), value :: l_lc
+                real(c_double), value :: clc
+                real(c_double), value :: ReferencePressureIndbars
+                real(c_double), value :: pi
             end subroutine tke_init_c
         end interface
 
-        CALL tke_init_c(nproma, nlevs, nblocks)
+        CALL tke_init_c(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
+                        vert_cor_type, dtime, OceanReferenceDensity, grav, &
+                        l_lc, clc, ReferencePressureIndbars, pi)
     end subroutine tke_init_f
 
     subroutine tke_finalize_f()

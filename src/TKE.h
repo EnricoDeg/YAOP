@@ -22,7 +22,9 @@ extern "C" {
 #endif
 
 // Constructor
-void TKE_Init(int nproma, int nlevs, int nblocks);
+void TKE_Init(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+              int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
+              int l_lc, double clc, double ReferencePressureIndbars, double pi);
 
 // Destructor
 void TKE_Finalize();
