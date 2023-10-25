@@ -13,7 +13,8 @@ set(SOURCE_EXE  TKE.cpp
                 TKE_backend.cpp
                 cuda_check.cu
                 TKE_cuda.cu
-                utils.cpp)
+                utils.cpp
+                data_struct.cpp)
 
 add_library(tke SHARED ${SOURCE_EXE})
 target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR})
