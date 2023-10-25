@@ -43,19 +43,8 @@ class TKE {
               double *stress_yw, double *fu10, double *concsum);
 
  private:
-        int m_nproma;
-        int m_nlevs;
-        int m_nblocks;
         struct Impl;
         Impl *m_impl;
-
-
-        template <
-            class T,
-            class ExtsA, class LayA, class AccA
-        >
-        void print_field(
-        stdex::mdspan<T, ExtsA, LayA, AccA> a);  // requires ExtsA::rank() == 3
 };
 
 #endif  // SRC_TKE_HPP_

@@ -16,14 +16,11 @@
 
 #include "src/TKE.hpp"
 
-#include <experimental/mdspan>
 #include <iostream>
 
 #include "src/TKE_backend.hpp"
 #include "src/TKE_cuda.hpp"
 #include "src/data_struct.hpp"
-
-namespace stdex = std::experimental;
 
 struct TKE::Impl {
   TKE_backend::Ptr backend;
@@ -32,13 +29,7 @@ struct TKE::Impl {
 TKE::TKE(int nproma, int nlevs, int nblocks,
          int block_size, int start_index, int end_index)
     : m_impl(new Impl) {
-    m_nproma = nproma;
-    m_nlevs = nlevs;
-    m_nblocks = nblocks;
-    std::cout << "Setting nproma to " << m_nproma << std::endl;
-    std::cout << "Setting nlevs to " << m_nlevs << std::endl;
-    std::cout << "Setting nblocks to " << m_nblocks << std::endl;
-
+    std::cout << "Initializing TKE... " << std::endl;
     m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks,
                                                     block_size, start_index, end_index));
 }
@@ -73,17 +64,4 @@ void TKE::calc(int start_block, int end_block,
 
     m_impl->backend->calc(start_block, end_block, p_patch, p_cvmix, ocean_state,
                           atmos_fluxes, p_as, p_sea_ice);
-}
-
-template <
-    class T,
-    class ExtsA, class LayA, class AccA
->
-void TKE::print_field(
-    stdex::mdspan<T, ExtsA, LayA, AccA> a
-    ) {  // requires ExtsA::rank() == 3
-    for (int i = 0; i < a.extent(0); ++i)
-        for (int j = 0; j < a.extent(1); ++j)
-            for (int k = 0; k < a.extent(2); ++k)
-                std::cout << "field(" << i << "," << j << "," << k << ") = " << a(i, j, k) << std::endl;
 }
