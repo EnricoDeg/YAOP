@@ -25,12 +25,10 @@ struct TKE::Impl {
   TKE_backend::Ptr backend;
 };
 
-TKE::TKE(int nproma, int nlevs, int nblocks,
-         int block_size, int start_index, int end_index)
+TKE::TKE(int nproma, int nlevs, int nblocks)
     : m_impl(new Impl) {
     std::cout << "Initializing TKE... " << std::endl;
-    m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks,
-                                                    block_size, start_index, end_index));
+    m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks));
     m_is_struct_init = false;
 }
 

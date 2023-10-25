@@ -22,7 +22,7 @@
 
 class TKE {
  public:
-    TKE(int nproma, int nlevs, int nblocks, int block_size, int start_index, int end_index);
+    TKE(int nproma, int nlevs, int nblocks);
     ~TKE();
     void calc(double *depth_CellInterface, double *prism_center_dist_c,
               double *inv_prism_center_dist_c, double *prism_thick_c,
