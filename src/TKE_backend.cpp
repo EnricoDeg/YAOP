@@ -17,7 +17,7 @@
 #include "src/TKE_backend.hpp"
 #include <iostream>
 
-TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int block_size)
+TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks)
     : m_nproma(nproma), m_nlevs(nlevs), m_nblocks(nblocks) {
 }
 
