@@ -75,7 +75,7 @@ module mod_TKE
         CALL tke_finalize_c()
     end subroutine tke_finalize_f
 
-    subroutine tke_calc_f(start_block, end_block, depth_CellInterface, prism_center_dist_c, &
+    subroutine tke_calc_f(depth_CellInterface, prism_center_dist_c, &
                inv_prism_center_dist_c, prism_thick_c, &
                dolic_c, dolic_e, zlev_i, wet_c, &
                edges_cell_idx, edges_cell_blk, &
@@ -87,10 +87,12 @@ module mod_TKE
                tke_Tdif, tke_Tdis, tke_Twin, &
                tke_Tiwf, tke_Tbck, tke_Ttot, &
                tke_Lmix, tke_Pr, stress_xw, &
-               stress_yw, fu10, concsum)
+               stress_yw, fu10, concsum, &
+               edges_block_size, edges_start_block, edges_end_block, &
+               edges_start_index, edges_end_index, cells_block_size, &
+               cells_start_block, cells_end_block, cells_start_index, &
+               cells_end_index)
         implicit none
-        integer, intent(in) :: start_block
-        integer, intent(in) :: end_block
         real(c_double), intent(in) :: depth_CellInterface(:,:,:)
         real(c_double), intent(in) :: prism_center_dist_c(:,:,:)
         real(c_double), intent(in) :: inv_prism_center_dist_c(:,:,:)
@@ -131,6 +133,16 @@ module mod_TKE
         real(c_double), intent(in) :: stress_yw(:,:)
         real(c_double), intent(in) :: fu10(:,:)
         real(c_double), intent(in) :: concsum(:,:)
+        integer, intent(in) :: edges_block_size
+        integer, intent(in) :: edges_start_block
+        integer, intent(in) :: edges_end_block
+        integer, intent(in) :: edges_start_index
+        integer, intent(in) :: edges_end_index
+        integer, intent(in) :: cells_block_size
+        integer, intent(in) :: cells_start_block
+        integer, intent(in) :: cells_end_block
+        integer, intent(in) :: cells_start_index
+        integer, intent(in) :: cells_end_index
 
         type(c_ptr) :: depth_CellInterface_ptr, prism_center_dist_c_ptr, &
                        inv_prism_center_dist_c_ptr, prism_thick_c_ptr, &
@@ -145,10 +157,9 @@ module mod_TKE
                        tke_Tiwf_ptr, tke_Tbck_ptr, tke_Ttot_ptr, &
                        tke_Lmix_ptr, tke_Pr_ptr, stress_xw_ptr, &
                        stress_yw_ptr, fu10_ptr, concsum_ptr
-        integer :: start_block_m1, end_block_m1
 
         interface
-            subroutine tke_calc_c(start_block_c, end_block_c, depth_CellInterface_c, prism_center_dist_c_c, &
+            subroutine tke_calc_c(depth_CellInterface_c, prism_center_dist_c_c, &
                                   inv_prism_center_dist_c_c, prism_thick_c_c, &
                                   dolic_c_c, dolic_e_c, zlev_i_c, wet_c_c, &
                                   edges_cell_idx_c, edges_cell_blk_c, &
@@ -160,11 +171,13 @@ module mod_TKE
                                   tke_Tdif_c, tke_Tdis_c, tke_Twin_c, &
                                   tke_Tiwf_c, tke_Tbck_c, tke_Ttot_c, &
                                   tke_Lmix_c, tke_Pr_c, stress_xw_c, &
-                                  stress_yw_c, fu10_c, concsum_c) bind(C, name="TKE_Calc")
+                                  stress_yw_c, fu10_c, concsum_c, &
+                                  edges_block_size_c, edges_start_block_c, edges_end_block_c, &
+                                  edges_start_index_c, edges_end_index_c, cells_block_size_c, &
+                                  cells_start_block_c, cells_end_block_c, cells_start_index_c, &
+                                  cells_end_index_c) bind(C, name="TKE_Calc")
                 use iso_c_binding
                 implicit none
-                integer(c_int), value :: start_block_c
-                integer(c_int), value :: end_block_c
                 type(c_ptr), value :: depth_CellInterface_c
                 type(c_ptr), value :: prism_center_dist_c_c
                 type(c_ptr), value :: inv_prism_center_dist_c_c
@@ -205,12 +218,19 @@ module mod_TKE
                 type(c_ptr), value :: stress_yw_c
                 type(c_ptr), value :: fu10_c
                 type(c_ptr), value :: concsum_c
+                integer(c_int), value :: edges_block_size_c
+                integer(c_int), value :: edges_start_block_c
+                integer(c_int), value :: edges_end_block_c
+                integer(c_int), value :: edges_start_index_c
+                integer(c_int), value :: edges_end_index_c
+                integer(c_int), value :: cells_block_size_c
+                integer(c_int), value :: cells_start_block_c
+                integer(c_int), value :: cells_end_block_c
+                integer(c_int), value :: cells_start_index_c
+                integer(c_int), value :: cells_end_index_c
 
             end subroutine tke_calc_c
         end interface
-
-        start_block_m1 = start_block - 1
-        end_block_m1 = end_block - 1
 
         depth_CellInterface_ptr = c_loc(depth_CellInterface(1,1,1))
         prism_center_dist_c_ptr = c_loc(prism_center_dist_c(1,1,1))
@@ -253,7 +273,7 @@ module mod_TKE
         fu10_ptr = c_loc(fu10(1,1))
         concsum_ptr = c_loc(concsum(1,1))
 
-        CALL tke_calc_c(start_block_m1, end_block_m1, depth_CellInterface_ptr, prism_center_dist_c_ptr, &
+        CALL tke_calc_c(depth_CellInterface_ptr, prism_center_dist_c_ptr, &
                        inv_prism_center_dist_c_ptr, prism_thick_c_ptr, &
                        dolic_c_ptr, dolic_e_ptr, zlev_i_ptr, wet_c_ptr, &
                        edges_cell_idx_ptr, edges_cell_blk_ptr, &
@@ -265,7 +285,11 @@ module mod_TKE
                        tke_Tdif_ptr, tke_Tdis_ptr, tke_Twin_ptr, &
                        tke_Tiwf_ptr, tke_Tbck_ptr, tke_Ttot_ptr, &
                        tke_Lmix_ptr, tke_Pr_ptr, stress_xw_ptr, &
-                       stress_yw_ptr, fu10_ptr, concsum_ptr)
+                       stress_yw_ptr, fu10_ptr, concsum_ptr, &
+                       edges_block_size, edges_start_block-1, edges_end_block-1, &
+                       edges_start_index-1, edges_end_index-1, cells_block_size, &
+                       cells_start_block-1, cells_end_block-1, cells_start_index-1, &
+                       cells_end_index-1)
 
     end subroutine tke_calc_f
 
