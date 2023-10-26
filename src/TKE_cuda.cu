@@ -32,6 +32,7 @@ using mdspan_1d_double = cuda::std::mdspan<double, ext1d_t>;
 using mdspan_2d_double = cuda::std::mdspan<double, ext2d_t>;
 using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
 using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
+using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
 
 // this needs to be defined static or TKE_cuda.hpp can not
 // be included in C++ files (need to think about other solutions)
@@ -58,9 +59,6 @@ static mdspan_2d_double Nsqr_view;
 static mdspan_2d_double Ssqr_view;
 
 // TKE interface memory views
-static mdspan_3d_double tke_view;
-static mdspan_2d_int dolic_c_view;
-
 struct t_cvmix_view {
     mdspan_3d_double tke;
     mdspan_3d_double tke_plc;
@@ -86,14 +84,30 @@ struct t_cvmix_view {
     mdspan_3d_double tke_Pr;
 };
 
-struct t_cvmix_view *p_cvmix_view;
+struct t_patch_view {
+    mdspan_3d_double depth_CellInterface;
+    mdspan_3d_double prism_center_dist_c;
+    mdspan_3d_double inv_prism_center_dist_c;
+    mdspan_3d_double prism_thick_c;
+    mdspan_2d_int dolic_c;
+    mdspan_2d_int dolic_e;
+    mdspan_1d_double zlev_i;
+    mdspan_3d_double wet_c;
+    mdspan_3d_int edges_cell_idx;
+    mdspan_3d_int edges_cell_blk;
+};
+
+struct t_cvmix_view p_cvmix_view_l;
+struct t_patch_view p_patch_view_l;
 
 static void fill_struct_view(struct t_cvmix_view *p_cvmix_view_d, struct t_cvmix *p_cvmix,
+                             int nblocks, int nlevs, int nproma);
+static void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
                              int nblocks, int nlevs, int nproma);
 
 // TKE CUDA kernels functions
 __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
-                                 mdspan_2d_int dolic_c, struct t_cvmix_view *p_cvmix,
+                                 struct t_patch_view p_patch, struct t_cvmix_view p_cvmix,
                                  mdspan_2d_double tke_old);
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
@@ -156,8 +170,8 @@ void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
                          int cells_start_block, int cells_end_block, int cells_start_index,
                          int cells_end_index) {
     if (!is_view_init) {
-        fill_struct_view(p_cvmix_view, &p_cvmix, m_nblocks, m_nlevs, m_nproma);
-        dolic_c_view = mdspan_2d_int{ p_patch.dolic_c, ext2d_t{m_nblocks, m_nproma} };
+        fill_struct_view(&p_cvmix_view_l, &p_cvmix, m_nblocks, m_nlevs, m_nproma);
+        fill_struct_view(&p_patch_view_l, &p_patch, m_nblocks, m_nlevs, m_nproma);
         is_view_init = true;
     }
 
@@ -170,7 +184,7 @@ void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
         dim3 blocksPerGrid(blocksPerGridI, 1, 1);
         dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
         calc_impl_kernel<<<blocksPerGrid, threadsPerBlock>>>(jb, start_index, end_index,
-                                                            dolic_c_view, p_cvmix_view,
+                                                            p_patch_view_l, p_cvmix_view_l,
                                                             tke_old_view);
     }
                          }
@@ -187,47 +201,58 @@ static mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2
     return memview;
 }
 
-static void fill_struct_view(struct t_cvmix_view *p_cvmix_view_d, struct t_cvmix *p_cvmix,
+static void fill_struct_view(struct t_cvmix_view *p_cvmix_view, struct t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma) {
-    struct t_cvmix_view p_cvmix_view_l;
-    // create mdspan CPU object containing GPU pointers provided by the frontend
-    p_cvmix_view_l.tke = mdspan_3d_double{ p_cvmix->tke, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_plc = mdspan_3d_double{ p_cvmix->tke_plc, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.hlc = mdspan_2d_double{ p_cvmix->hlc, ext2d_t{nblocks, nproma} };
-    p_cvmix_view_l.wlc = mdspan_3d_double{ p_cvmix->wlc, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.u_stokes = mdspan_2d_double{ p_cvmix->u_stokes, ext2d_t{nblocks, nproma} };
-    p_cvmix_view_l.a_veloc_v = mdspan_3d_double{ p_cvmix->a_veloc_v, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.a_temp_v = mdspan_3d_double{ p_cvmix->a_temp_v, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.a_salt_v = mdspan_3d_double{ p_cvmix->a_salt_v, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.iwe_Tdis = mdspan_3d_double{ p_cvmix->iwe_Tdis, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.cvmix_dummy_1 = mdspan_3d_double{ p_cvmix->cvmix_dummy_1, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.cvmix_dummy_2 = mdspan_3d_double{ p_cvmix->cvmix_dummy_2, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.cvmix_dummy_3 = mdspan_3d_double{ p_cvmix->cvmix_dummy_3, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Tbpr = mdspan_3d_double{ p_cvmix->tke_Tbpr, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Tspr = mdspan_3d_double{ p_cvmix->tke_Tspr, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Tdif = mdspan_3d_double{ p_cvmix->tke_Tdif, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Tdis = mdspan_3d_double{ p_cvmix->tke_Tdis, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Twin = mdspan_3d_double{ p_cvmix->tke_Twin, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Tiwf = mdspan_3d_double{ p_cvmix->tke_Tiwf, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Tbck = mdspan_3d_double{ p_cvmix->tke_Tbck, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Ttot = mdspan_3d_double{ p_cvmix->tke_Ttot, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Lmix = mdspan_3d_double{ p_cvmix->tke_Lmix, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view_l.tke_Pr = mdspan_3d_double{ p_cvmix->tke_Pr, ext3d_t{nblocks, nlevs, nproma} };
-    // allocate t_cvmix_view structure on the GPU
-    check( cudaMalloc(&p_cvmix_view_d, sizeof(t_cvmix_view)) );
-    // copy CPU t_cvmix_view to GPU
-    check( cudaMemcpy(p_cvmix_view_d, &p_cvmix_view_l, sizeof(t_cvmix_view), cudaMemcpyHostToDevice) );
+    p_cvmix_view->tke = mdspan_3d_double{ p_cvmix->tke, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_plc = mdspan_3d_double{ p_cvmix->tke_plc, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->hlc = mdspan_2d_double{ p_cvmix->hlc, ext2d_t{nblocks, nproma} };
+    p_cvmix_view->wlc = mdspan_3d_double{ p_cvmix->wlc, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->u_stokes = mdspan_2d_double{ p_cvmix->u_stokes, ext2d_t{nblocks, nproma} };
+    p_cvmix_view->a_veloc_v = mdspan_3d_double{ p_cvmix->a_veloc_v, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->a_temp_v = mdspan_3d_double{ p_cvmix->a_temp_v, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->a_salt_v = mdspan_3d_double{ p_cvmix->a_salt_v, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->iwe_Tdis = mdspan_3d_double{ p_cvmix->iwe_Tdis, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->cvmix_dummy_1 = mdspan_3d_double{ p_cvmix->cvmix_dummy_1, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->cvmix_dummy_2 = mdspan_3d_double{ p_cvmix->cvmix_dummy_2, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->cvmix_dummy_3 = mdspan_3d_double{ p_cvmix->cvmix_dummy_3, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Tbpr = mdspan_3d_double{ p_cvmix->tke_Tbpr, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Tspr = mdspan_3d_double{ p_cvmix->tke_Tspr, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Tdif = mdspan_3d_double{ p_cvmix->tke_Tdif, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Tdis = mdspan_3d_double{ p_cvmix->tke_Tdis, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Twin = mdspan_3d_double{ p_cvmix->tke_Twin, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Tiwf = mdspan_3d_double{ p_cvmix->tke_Tiwf, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Tbck = mdspan_3d_double{ p_cvmix->tke_Tbck, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Ttot = mdspan_3d_double{ p_cvmix->tke_Ttot, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Lmix = mdspan_3d_double{ p_cvmix->tke_Lmix, ext3d_t{nblocks, nlevs, nproma} };
+    p_cvmix_view->tke_Pr = mdspan_3d_double{ p_cvmix->tke_Pr, ext3d_t{nblocks, nlevs, nproma} };
+}
+
+static void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
+                             int nblocks, int nlevs, int nproma) {
+    p_patch_view->depth_CellInterface = mdspan_3d_double{ p_patch->depth_CellInterface,
+                                                          ext3d_t{nblocks, nlevs, nproma} };
+    p_patch_view->prism_center_dist_c = mdspan_3d_double{ p_patch->prism_center_dist_c,
+                                                          ext3d_t{nblocks, nlevs, nproma} };
+    p_patch_view->inv_prism_center_dist_c = mdspan_3d_double{ p_patch->inv_prism_center_dist_c,
+                                                              ext3d_t{nblocks, nlevs, nproma} };
+    p_patch_view->prism_thick_c = mdspan_3d_double{ p_patch->prism_thick_c, ext3d_t{nblocks, nlevs, nproma} };
+    p_patch_view->dolic_c = mdspan_2d_int{ p_patch->dolic_c, ext2d_t{nblocks, nproma} };
+    p_patch_view->dolic_e = mdspan_2d_int{ p_patch->dolic_e, ext2d_t{nblocks, nproma} };
+    p_patch_view->zlev_i = mdspan_1d_double{ p_patch->zlev_i, ext1d_t{nlevs} };
+    p_patch_view->wet_c = mdspan_3d_double{ p_patch->wet_c, ext3d_t{nblocks, nlevs, nproma} };
+    p_patch_view->edges_cell_idx = mdspan_3d_int{ p_patch->edges_cell_idx, ext3d_t{nblocks, nlevs, nproma} };
+    p_patch_view->edges_cell_blk = mdspan_3d_int{ p_patch->edges_cell_blk, ext3d_t{nblocks, nlevs, nproma} };
 }
 
 __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
-                                 mdspan_2d_int dolic_c, struct t_cvmix_view *p_cvmix,
+                                 struct t_patch_view p_patch, struct t_cvmix_view p_cvmix,
                                  mdspan_2d_double tke_old) {
     int jc = blockIdx.x * blockDim.x + threadIdx.x + start_index;
     if (jc <= end_index) {
-        int levels = dolic_c(blockNo, jc);
+        int levels = p_patch.dolic_c(blockNo, jc);
         for (int level = 0; level < levels; level++) {
-            tke_old(level, jc) = p_cvmix->tke(blockNo, level, jc);
-            p_cvmix->tke(blockNo, level, jc) = p_cvmix->tke(blockNo, level, jc) + 1.0;
+            tke_old(level, jc) = p_cvmix.tke(blockNo, level, jc);
+            p_cvmix.tke(blockNo, level, jc) = p_cvmix.tke(blockNo, level, jc) + 1.0;
         }
     }
 }
