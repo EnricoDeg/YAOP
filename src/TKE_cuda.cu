@@ -14,135 +14,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "src/TKE_cuda.hpp"
-
-
-#include <cuda.h>
-#include <cuda/std/mdspan>
 #include <iostream>
-
+#include "src/TKE_cuda.hpp"
 #include "src/utils.hpp"
-#include "src/cuda_check.hpp"
+#include "src/cuda_memory.hpp"
 
-constexpr auto dyn = cuda::std::dynamic_extent;
-using ext1d_t = cuda::std::extents<size_t, dyn>;
-using ext2d_t = cuda::std::extents<size_t, dyn, dyn>;
-using ext3d_t = cuda::std::extents<size_t, dyn, dyn, dyn>;
-using mdspan_1d_double = cuda::std::mdspan<double, ext1d_t>;
-using mdspan_2d_double = cuda::std::mdspan<double, ext2d_t>;
-using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
-using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
-using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
-
-// this needs to be defined static or TKE_cuda.hpp can not
-// be included in C++ files (need to think about other solutions)
-static mdspan_1d_double view_cuda_malloc(double *field, size_t dim1);
-static mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2);
-
-// TKE internal memory views
-static mdspan_2d_double rho_up_view;
-static mdspan_2d_double rho_down_view;
-static mdspan_1d_double forc_tke_surf_2D_view;
-static mdspan_1d_double forc_rho_surf_2D_view;
-static mdspan_1d_double bottom_fric_2D_view;
-static mdspan_1d_double s_c_view;
-static mdspan_2d_double dzw_stretched_view;
-static mdspan_2d_double dzt_stretched_view;
-static mdspan_2d_double tke_old_view;
-static mdspan_2d_double tke_Av_view;
-static mdspan_2d_double tke_kv_view;
-static mdspan_2d_double tke_iw_alpha_c_view;
-static mdspan_2d_double tke_iwe_view;
-static mdspan_2d_double tke_iwe_forcing_view;
-static mdspan_2d_double pressure_view;
-static mdspan_2d_double Nsqr_view;
-static mdspan_2d_double Ssqr_view;
-
-// TKE interface memory views
-struct t_cvmix_view {
-    mdspan_3d_double tke;
-    mdspan_3d_double tke_plc;
-    mdspan_2d_double hlc;
-    mdspan_3d_double wlc;
-    mdspan_2d_double u_stokes;
-    mdspan_3d_double a_veloc_v;
-    mdspan_3d_double a_temp_v;
-    mdspan_3d_double a_salt_v;
-    mdspan_3d_double iwe_Tdis;
-    mdspan_3d_double cvmix_dummy_1;
-    mdspan_3d_double cvmix_dummy_2;
-    mdspan_3d_double cvmix_dummy_3;
-    mdspan_3d_double tke_Tbpr;
-    mdspan_3d_double tke_Tspr;
-    mdspan_3d_double tke_Tdif;
-    mdspan_3d_double tke_Tdis;
-    mdspan_3d_double tke_Twin;
-    mdspan_3d_double tke_Tiwf;
-    mdspan_3d_double tke_Tbck;
-    mdspan_3d_double tke_Ttot;
-    mdspan_3d_double tke_Lmix;
-    mdspan_3d_double tke_Pr;
-};
-
-struct t_patch_view {
-    mdspan_3d_double depth_CellInterface;
-    mdspan_3d_double prism_center_dist_c;
-    mdspan_3d_double inv_prism_center_dist_c;
-    mdspan_3d_double prism_thick_c;
-    mdspan_2d_int dolic_c;
-    mdspan_2d_int dolic_e;
-    mdspan_1d_double zlev_i;
-    mdspan_3d_double wet_c;
-    mdspan_3d_int edges_cell_idx;
-    mdspan_3d_int edges_cell_blk;
-};
-
-struct t_ocean_state_view {
-    mdspan_3d_double temp;
-    mdspan_3d_double salt;
-    mdspan_2d_double stretch_c;
-    mdspan_2d_double eta_c;
-};
-
-struct t_atmo_fluxes_view {
-    mdspan_2d_double stress_xw;
-    mdspan_2d_double stress_yw;
-};
-
-struct t_atmos_for_ocean_view {
-    mdspan_2d_double fu10;
-};
-
-struct t_sea_ice_view {
-    mdspan_2d_double concsum;
-};
-
+// Structures with memory views
 struct t_cvmix_view p_cvmix_view_l;
 struct t_patch_view p_patch_view_l;
 struct t_ocean_state_view ocean_state_view_l;
 struct t_atmo_fluxes_view atmos_fluxes_view_l;
 struct t_atmos_for_ocean_view p_as_view_l;
 struct t_sea_ice_view p_sea_ice_view_l;
-
-static void fill_struct_view(struct t_cvmix_view *p_cvmix_view_d, struct t_cvmix *p_cvmix,
-                             int nblocks, int nlevs, int nproma);
-static void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
-                             int nblocks, int nlevs, int nproma);
-static void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocean_state *ocean_state,
-                             int nblocks, int nlevs, int nproma);
-static void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atmo_fluxes *atmos_fluxes,
-                             int nblocks, int nlevs, int nproma);
-static void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_for_ocean *p_as,
-                             int nblocks, int nlevs, int nproma);
-static void fill_struct_view(struct t_sea_ice_view *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
-                             int nblocks, int nlevs, int nproma);
+struct t_tke_internal_view p_internal_view_l;
 
 // TKE CUDA kernels functions
 __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
                                  struct t_patch_view p_patch, struct t_cvmix_view p_cvmix,
                                  struct t_ocean_state_view ocean_state, struct t_atmo_fluxes_view atmos_fluxes,
                                  struct t_atmos_for_ocean_view p_as, struct t_sea_ice_view p_sea_ice,
-                                 mdspan_2d_double tke_old);
+                                 struct t_tke_internal_view p_internal);
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
@@ -150,27 +41,26 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     : TKE_backend(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
                   vert_cor_type, dtime, OceanReferenceDensity, grav,
                   l_lc, clc, ReferencePressureIndbars, pi) {
-    // Initialize internal arrays
+    // Allocate internal arrays memory and create memory views
     std::cout << "Initializing TKE cuda... " << std::endl;
-    rho_up_view = view_cuda_malloc(m_rho_up, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    rho_down_view = view_cuda_malloc(m_rho_down, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    forc_tke_surf_2D_view = view_cuda_malloc(m_forc_tke_surf_2D, static_cast<size_t>(nproma));
-    forc_rho_surf_2D_view = view_cuda_malloc(m_forc_rho_surf_2D, static_cast<size_t>(nproma));
-    bottom_fric_2D_view = view_cuda_malloc(m_bottom_fric_2D, static_cast<size_t>(nproma));
-    s_c_view = view_cuda_malloc(m_s_c, static_cast<size_t>(nproma));
-    dzw_stretched_view = view_cuda_malloc(m_dzw_stretched, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    dzt_stretched_view = view_cuda_malloc(m_dzt_stretched, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    tke_old_view = view_cuda_malloc(m_tke_old, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    tke_Av_view = view_cuda_malloc(m_tke_Av, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    tke_kv_view = view_cuda_malloc(m_tke_kv, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    tke_iw_alpha_c_view = view_cuda_malloc(m_tke_iw_alpha_c, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    tke_iwe_view = view_cuda_malloc(m_tke_iwe, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    tke_iwe_forcing_view = view_cuda_malloc(m_tke_iwe_forcing, static_cast<size_t>(nlevs+1),
+    p_internal_view_l.tke_old = view_cuda_malloc(m_tke_old, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.rho_up = view_cuda_malloc(m_rho_up, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
+    p_internal_view_l.rho_down = view_cuda_malloc(m_rho_down, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
+    p_internal_view_l.forc_tke_surf_2D = view_cuda_malloc(m_forc_tke_surf_2D, static_cast<size_t>(nproma));
+    p_internal_view_l.forc_rho_surf_2D = view_cuda_malloc(m_forc_rho_surf_2D, static_cast<size_t>(nproma));
+    p_internal_view_l.bottom_fric_2D = view_cuda_malloc(m_bottom_fric_2D, static_cast<size_t>(nproma));
+    p_internal_view_l.s_c = view_cuda_malloc(m_s_c, static_cast<size_t>(nproma));
+    p_internal_view_l.dzw_stretched = view_cuda_malloc(m_dzw_stretched, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
+    p_internal_view_l.dzt_stretched = view_cuda_malloc(m_dzt_stretched, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_Av = view_cuda_malloc(m_tke_Av, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_kv = view_cuda_malloc(m_tke_kv, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_iw_alpha_c = view_cuda_malloc(m_tke_iw_alpha_c, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_iwe = view_cuda_malloc(m_tke_iwe, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_iwe_forcing = view_cuda_malloc(m_tke_iwe_forcing, static_cast<size_t>(nlevs+1),
                                             static_cast<size_t>(nproma));
-    pressure_view = view_cuda_malloc(m_pressure, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    Nsqr_view = view_cuda_malloc(m_Nsqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    Ssqr_view = view_cuda_malloc(m_Ssqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-
+    p_internal_view_l.pressure = view_cuda_malloc(m_pressure, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
+    p_internal_view_l.Nsqr = view_cuda_malloc(m_Nsqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.Ssqr = view_cuda_malloc(m_Ssqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     is_view_init = false;
 }
 
@@ -225,99 +115,20 @@ void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
                                                             p_patch_view_l, p_cvmix_view_l,
                                                             ocean_state_view_l, atmos_fluxes_view_l,
                                                             p_as_view_l, p_sea_ice_view_l,
-                                                            tke_old_view);
+                                                            p_internal_view_l);
     }
                          }
-
-static mdspan_1d_double view_cuda_malloc(double *field, size_t dim1) {
-    check( cudaMalloc(&field, dim1*sizeof(double)) );
-    mdspan_1d_double memview{ field, ext1d_t{dim1} };
-    return memview;
-}
-
-static mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2) {
-    check( cudaMalloc(&field, dim1*dim2*sizeof(double)) );
-    mdspan_2d_double memview{ field, ext2d_t{dim1, dim2} };
-    return memview;
-}
-
-static void fill_struct_view(struct t_cvmix_view *p_cvmix_view, struct t_cvmix *p_cvmix,
-                             int nblocks, int nlevs, int nproma) {
-    p_cvmix_view->tke = mdspan_3d_double{ p_cvmix->tke, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_plc = mdspan_3d_double{ p_cvmix->tke_plc, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->hlc = mdspan_2d_double{ p_cvmix->hlc, ext2d_t{nblocks, nproma} };
-    p_cvmix_view->wlc = mdspan_3d_double{ p_cvmix->wlc, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->u_stokes = mdspan_2d_double{ p_cvmix->u_stokes, ext2d_t{nblocks, nproma} };
-    p_cvmix_view->a_veloc_v = mdspan_3d_double{ p_cvmix->a_veloc_v, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->a_temp_v = mdspan_3d_double{ p_cvmix->a_temp_v, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->a_salt_v = mdspan_3d_double{ p_cvmix->a_salt_v, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->iwe_Tdis = mdspan_3d_double{ p_cvmix->iwe_Tdis, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->cvmix_dummy_1 = mdspan_3d_double{ p_cvmix->cvmix_dummy_1, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->cvmix_dummy_2 = mdspan_3d_double{ p_cvmix->cvmix_dummy_2, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->cvmix_dummy_3 = mdspan_3d_double{ p_cvmix->cvmix_dummy_3, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Tbpr = mdspan_3d_double{ p_cvmix->tke_Tbpr, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Tspr = mdspan_3d_double{ p_cvmix->tke_Tspr, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Tdif = mdspan_3d_double{ p_cvmix->tke_Tdif, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Tdis = mdspan_3d_double{ p_cvmix->tke_Tdis, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Twin = mdspan_3d_double{ p_cvmix->tke_Twin, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Tiwf = mdspan_3d_double{ p_cvmix->tke_Tiwf, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Tbck = mdspan_3d_double{ p_cvmix->tke_Tbck, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Ttot = mdspan_3d_double{ p_cvmix->tke_Ttot, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Lmix = mdspan_3d_double{ p_cvmix->tke_Lmix, ext3d_t{nblocks, nlevs, nproma} };
-    p_cvmix_view->tke_Pr = mdspan_3d_double{ p_cvmix->tke_Pr, ext3d_t{nblocks, nlevs, nproma} };
-}
-
-static void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
-                             int nblocks, int nlevs, int nproma) {
-    p_patch_view->depth_CellInterface = mdspan_3d_double{ p_patch->depth_CellInterface,
-                                                          ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->prism_center_dist_c = mdspan_3d_double{ p_patch->prism_center_dist_c,
-                                                          ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->inv_prism_center_dist_c = mdspan_3d_double{ p_patch->inv_prism_center_dist_c,
-                                                              ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->prism_thick_c = mdspan_3d_double{ p_patch->prism_thick_c, ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->dolic_c = mdspan_2d_int{ p_patch->dolic_c, ext2d_t{nblocks, nproma} };
-    p_patch_view->dolic_e = mdspan_2d_int{ p_patch->dolic_e, ext2d_t{nblocks, nproma} };
-    p_patch_view->zlev_i = mdspan_1d_double{ p_patch->zlev_i, ext1d_t{nlevs} };
-    p_patch_view->wet_c = mdspan_3d_double{ p_patch->wet_c, ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->edges_cell_idx = mdspan_3d_int{ p_patch->edges_cell_idx, ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->edges_cell_blk = mdspan_3d_int{ p_patch->edges_cell_blk, ext3d_t{nblocks, nlevs, nproma} };
-}
-
-static void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocean_state *ocean_state,
-                             int nblocks, int nlevs, int nproma) {
-    ocean_state_view->temp = mdspan_3d_double{ ocean_state->temp, ext3d_t{nblocks, nlevs, nproma} };
-    ocean_state_view->salt = mdspan_3d_double{ ocean_state->salt, ext3d_t{nblocks, nlevs, nproma} };
-    ocean_state_view->stretch_c = mdspan_2d_double{ ocean_state->stretch_c, ext2d_t{nblocks, nproma} };
-    ocean_state_view->eta_c = mdspan_2d_double{ ocean_state->eta_c, ext2d_t{nblocks, nproma} };
-}
-
-static void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atmo_fluxes *atmos_fluxes,
-                             int nblocks, int nlevs, int nproma) {
-    atmos_fluxes_view->stress_xw = mdspan_2d_double{ atmos_fluxes->stress_xw, ext2d_t{nblocks, nproma} };
-    atmos_fluxes_view->stress_yw = mdspan_2d_double{ atmos_fluxes->stress_yw, ext2d_t{nblocks, nproma} };
-}
-
-static void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_for_ocean *p_as,
-                             int nblocks, int nlevs, int nproma) {
-    p_as_view->fu10 = mdspan_2d_double{ p_as->fu10, ext2d_t{nblocks, nproma} };
-}
-
-static void fill_struct_view(struct t_sea_ice_view *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
-                             int nblocks, int nlevs, int nproma) {
-    p_sea_ice_view->concsum = mdspan_2d_double{ p_sea_ice->concsum, ext2d_t{nblocks, nproma} };
-}
 
 __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index, struct t_patch_view p_patch,
                                  struct t_cvmix_view p_cvmix, struct t_ocean_state_view ocean_state,
                                  struct t_atmo_fluxes_view atmos_fluxes,
                                  struct t_atmos_for_ocean_view p_as, struct t_sea_ice_view p_sea_ice,
-                                 mdspan_2d_double tke_old) {
+                                 struct t_tke_internal_view p_internal) {
     int jc = blockIdx.x * blockDim.x + threadIdx.x + start_index;
     if (jc <= end_index) {
         int levels = p_patch.dolic_c(blockNo, jc);
         for (int level = 0; level < levels; level++) {
-            tke_old(level, jc) = p_cvmix.tke(blockNo, level, jc);
+            p_internal.tke_old(level, jc) = p_cvmix.tke(blockNo, level, jc);
             p_cvmix.tke(blockNo, level, jc) = p_cvmix.tke(blockNo, level, jc) + 1.0;
         }
     }
