@@ -97,17 +97,51 @@ struct t_patch_view {
     mdspan_3d_int edges_cell_blk;
 };
 
+struct t_ocean_state_view {
+    mdspan_3d_double temp;
+    mdspan_3d_double salt;
+    mdspan_2d_double stretch_c;
+    mdspan_2d_double eta_c;
+};
+
+struct t_atmo_fluxes_view {
+    mdspan_2d_double stress_xw;
+    mdspan_2d_double stress_yw;
+};
+
+struct t_atmos_for_ocean_view {
+    mdspan_2d_double fu10;
+};
+
+struct t_sea_ice_view {
+    mdspan_2d_double concsum;
+};
+
 struct t_cvmix_view p_cvmix_view_l;
 struct t_patch_view p_patch_view_l;
+struct t_ocean_state_view ocean_state_view_l;
+struct t_atmo_fluxes_view atmos_fluxes_view_l;
+struct t_atmos_for_ocean_view p_as_view_l;
+struct t_sea_ice_view p_sea_ice_view_l;
 
 static void fill_struct_view(struct t_cvmix_view *p_cvmix_view_d, struct t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma);
 static void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
                              int nblocks, int nlevs, int nproma);
+static void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocean_state *ocean_state,
+                             int nblocks, int nlevs, int nproma);
+static void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atmo_fluxes *atmos_fluxes,
+                             int nblocks, int nlevs, int nproma);
+static void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_for_ocean *p_as,
+                             int nblocks, int nlevs, int nproma);
+static void fill_struct_view(struct t_sea_ice_view *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
+                             int nblocks, int nlevs, int nproma);
 
 // TKE CUDA kernels functions
 __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
                                  struct t_patch_view p_patch, struct t_cvmix_view p_cvmix,
+                                 struct t_ocean_state_view ocean_state, struct t_atmo_fluxes_view atmos_fluxes,
+                                 struct t_atmos_for_ocean_view p_as, struct t_sea_ice_view p_sea_ice,
                                  mdspan_2d_double tke_old);
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
@@ -172,6 +206,10 @@ void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
     if (!is_view_init) {
         fill_struct_view(&p_cvmix_view_l, &p_cvmix, m_nblocks, m_nlevs, m_nproma);
         fill_struct_view(&p_patch_view_l, &p_patch, m_nblocks, m_nlevs, m_nproma);
+        fill_struct_view(&ocean_state_view_l, &ocean_state, m_nblocks, m_nlevs, m_nproma);
+        fill_struct_view(&atmos_fluxes_view_l, &atmos_fluxes, m_nblocks, m_nlevs, m_nproma);
+        fill_struct_view(&p_as_view_l, &p_as, m_nblocks, m_nlevs, m_nproma);
+        fill_struct_view(&p_sea_ice_view_l, &p_sea_ice, m_nblocks, m_nlevs, m_nproma);
         is_view_init = true;
     }
 
@@ -185,6 +223,8 @@ void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
         dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
         calc_impl_kernel<<<blocksPerGrid, threadsPerBlock>>>(jb, start_index, end_index,
                                                             p_patch_view_l, p_cvmix_view_l,
+                                                            ocean_state_view_l, atmos_fluxes_view_l,
+                                                            p_as_view_l, p_sea_ice_view_l,
                                                             tke_old_view);
     }
                          }
@@ -244,8 +284,34 @@ static void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *
     p_patch_view->edges_cell_blk = mdspan_3d_int{ p_patch->edges_cell_blk, ext3d_t{nblocks, nlevs, nproma} };
 }
 
-__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
-                                 struct t_patch_view p_patch, struct t_cvmix_view p_cvmix,
+static void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocean_state *ocean_state,
+                             int nblocks, int nlevs, int nproma) {
+    ocean_state_view->temp = mdspan_3d_double{ ocean_state->temp, ext3d_t{nblocks, nlevs, nproma} };
+    ocean_state_view->salt = mdspan_3d_double{ ocean_state->salt, ext3d_t{nblocks, nlevs, nproma} };
+    ocean_state_view->stretch_c = mdspan_2d_double{ ocean_state->stretch_c, ext2d_t{nblocks, nproma} };
+    ocean_state_view->eta_c = mdspan_2d_double{ ocean_state->eta_c, ext2d_t{nblocks, nproma} };
+}
+
+static void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atmo_fluxes *atmos_fluxes,
+                             int nblocks, int nlevs, int nproma) {
+    atmos_fluxes_view->stress_xw = mdspan_2d_double{ atmos_fluxes->stress_xw, ext2d_t{nblocks, nproma} };
+    atmos_fluxes_view->stress_yw = mdspan_2d_double{ atmos_fluxes->stress_yw, ext2d_t{nblocks, nproma} };
+}
+
+static void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_for_ocean *p_as,
+                             int nblocks, int nlevs, int nproma) {
+    p_as_view->fu10 = mdspan_2d_double{ p_as->fu10, ext2d_t{nblocks, nproma} };
+}
+
+static void fill_struct_view(struct t_sea_ice_view *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
+                             int nblocks, int nlevs, int nproma) {
+    p_sea_ice_view->concsum = mdspan_2d_double{ p_sea_ice->concsum, ext2d_t{nblocks, nproma} };
+}
+
+__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index, struct t_patch_view p_patch,
+                                 struct t_cvmix_view p_cvmix, struct t_ocean_state_view ocean_state,
+                                 struct t_atmo_fluxes_view atmos_fluxes,
+                                 struct t_atmos_for_ocean_view p_as, struct t_sea_ice_view p_sea_ice,
                                  mdspan_2d_double tke_old) {
     int jc = blockIdx.x * blockDim.x + threadIdx.x + start_index;
     if (jc <= end_index) {
@@ -255,4 +321,4 @@ __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
             p_cvmix.tke(blockNo, level, jc) = p_cvmix.tke(blockNo, level, jc) + 1.0;
         }
     }
-}
+                                 }
