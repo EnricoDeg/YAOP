@@ -24,22 +24,19 @@
 #include "src/utils.hpp"
 #include "src/cuda_check.hpp"
 
-namespace cudastd = cuda::std;
-
 constexpr auto dyn = cuda::std::dynamic_extent;
 using ext1d_t = cuda::std::extents<size_t, dyn>;
 using ext2d_t = cuda::std::extents<size_t, dyn, dyn>;
 using ext3d_t = cuda::std::extents<size_t, dyn, dyn, dyn>;
-using mdspan_1d_double = cudastd::mdspan<double, ext1d_t>;
-using mdspan_2d_double = cudastd::mdspan<double, ext2d_t>;
-using mdspan_3d_double = cudastd::mdspan<double, ext3d_t>;
-using mdspan_2d_int = cudastd::mdspan<int, ext2d_t>;
+using mdspan_1d_double = cuda::std::mdspan<double, ext1d_t>;
+using mdspan_2d_double = cuda::std::mdspan<double, ext2d_t>;
+using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
+using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
 
 // this needs to be defined static or TKE_cuda.hpp can not
 // be included in C++ files (need to think about other solutions)
 static mdspan_1d_double view_cuda_malloc(double *field, size_t dim1);
 static mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2);
-static mdspan_3d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2, size_t dim3);
 
 // TKE internal memory views
 static mdspan_2d_double rho_up_view;
@@ -187,12 +184,6 @@ static mdspan_1d_double view_cuda_malloc(double *field, size_t dim1) {
 static mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2) {
     check( cudaMalloc(&field, dim1*dim2*sizeof(double)) );
     mdspan_2d_double memview{ field, ext2d_t{dim1, dim2} };
-    return memview;
-}
-
-static mdspan_3d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2, size_t dim3) {
-    check( cudaMalloc(&field, dim1*dim2*dim3*sizeof(double)) );
-    mdspan_3d_double memview{ field, ext3d_t{dim1, dim2, dim3} };
     return memview;
 }
 
