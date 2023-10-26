@@ -105,7 +105,7 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     // Initialize internal arrays
     std::cout << "Initializing TKE cuda... " << std::endl;
     rho_up_view = view_cuda_malloc(m_rho_up, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    rho_up_view = view_cuda_malloc(m_rho_down, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
+    rho_down_view = view_cuda_malloc(m_rho_down, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
     forc_tke_surf_2D_view = view_cuda_malloc(m_forc_tke_surf_2D, static_cast<size_t>(nproma));
     forc_rho_surf_2D_view = view_cuda_malloc(m_forc_rho_surf_2D, static_cast<size_t>(nproma));
     bottom_fric_2D_view = view_cuda_malloc(m_bottom_fric_2D, static_cast<size_t>(nproma));
