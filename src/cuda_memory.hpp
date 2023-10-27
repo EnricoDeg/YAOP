@@ -14,6 +14,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef SRC_CUDA_MEMORY_HPP_
+#define SRC_CUDA_MEMORY_HPP_
+
 #include <cuda.h>
 #include <cuda/std/mdspan>
 #include "src/cuda_check.hpp"
@@ -188,3 +191,4 @@ mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2) {
     return memview;
 }
 
+#endif  // SRC_CUDA_MEMORY_HPP_
