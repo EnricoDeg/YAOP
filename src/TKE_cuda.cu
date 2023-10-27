@@ -50,11 +50,14 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view_l.forc_rho_surf_2D = view_cuda_malloc(m_forc_rho_surf_2D, static_cast<size_t>(nproma));
     p_internal_view_l.bottom_fric_2D = view_cuda_malloc(m_bottom_fric_2D, static_cast<size_t>(nproma));
     p_internal_view_l.s_c = view_cuda_malloc(m_s_c, static_cast<size_t>(nproma));
-    p_internal_view_l.dzw_stretched = view_cuda_malloc(m_dzw_stretched, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    p_internal_view_l.dzt_stretched = view_cuda_malloc(m_dzt_stretched, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.dzw_stretched = view_cuda_malloc(m_dzw_stretched,
+                                                       static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
+    p_internal_view_l.dzt_stretched = view_cuda_malloc(m_dzt_stretched,
+                                                       static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.tke_Av = view_cuda_malloc(m_tke_Av, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.tke_kv = view_cuda_malloc(m_tke_kv, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view_l.tke_iw_alpha_c = view_cuda_malloc(m_tke_iw_alpha_c, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_iw_alpha_c = view_cuda_malloc(m_tke_iw_alpha_c,
+                                                        static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.tke_iwe = view_cuda_malloc(m_tke_iwe, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.tke_iwe_forcing = view_cuda_malloc(m_tke_iwe_forcing, static_cast<size_t>(nlevs+1),
                                             static_cast<size_t>(nproma));
