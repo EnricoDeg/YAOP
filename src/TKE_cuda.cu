@@ -30,10 +30,10 @@ struct t_tke_internal_view p_internal_view_l;
 
 // TKE CUDA kernels functions
 __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
-                                 struct t_patch_view p_patch, struct t_cvmix_view p_cvmix,
-                                 struct t_ocean_state_view ocean_state, struct t_atmo_fluxes_view atmos_fluxes,
-                                 struct t_atmos_for_ocean_view p_as, struct t_sea_ice_view p_sea_ice,
-                                 struct t_tke_internal_view p_internal);
+                                 t_patch_view p_patch, t_cvmix_view p_cvmix,
+                                 t_ocean_state_view ocean_state, t_atmo_fluxes_view atmos_fluxes,
+                                 t_atmos_for_ocean_view p_as, t_sea_ice_view p_sea_ice,
+                                 t_tke_internal_view p_internal);
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
@@ -89,9 +89,9 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_Ssqr) );
 }
 
-void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
-                         struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
-                         struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice,
+void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
+                         t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
+                         t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                          int edges_block_size, int edges_start_block, int edges_end_block,
                          int edges_start_index, int edges_end_index, int cells_block_size,
                          int cells_start_block, int cells_end_block, int cells_start_index,
@@ -120,13 +120,14 @@ void TKE_cuda::calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
                                                             p_as_view_l, p_sea_ice_view_l,
                                                             p_internal_view_l);
     }
-                         }
+}
 
-__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index, struct t_patch_view p_patch,
-                                 struct t_cvmix_view p_cvmix, struct t_ocean_state_view ocean_state,
-                                 struct t_atmo_fluxes_view atmos_fluxes,
-                                 struct t_atmos_for_ocean_view p_as, struct t_sea_ice_view p_sea_ice,
-                                 struct t_tke_internal_view p_internal) {
+__global__
+void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view p_patch,
+                      t_cvmix_view p_cvmix, t_ocean_state_view ocean_state,
+                      t_atmo_fluxes_view atmos_fluxes,
+                      t_atmos_for_ocean_view p_as, t_sea_ice_view p_sea_ice,
+                      t_tke_internal_view p_internal) {
     int jc = blockIdx.x * blockDim.x + threadIdx.x + start_index;
     if (jc <= end_index) {
         int levels = p_patch.dolic_c(blockNo, jc);
@@ -135,4 +136,4 @@ __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index, st
             p_cvmix.tke(blockNo, level, jc) = p_cvmix.tke(blockNo, level, jc) + 1.0;
         }
     }
-                                 }
+}
