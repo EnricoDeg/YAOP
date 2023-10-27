@@ -59,7 +59,7 @@ program main
     real(dp), allocatable :: prism_thick_c(:,:,:)
     integer, allocatable :: dolic_e(:,:)
     real(dp), allocatable :: zlev_i(:)
-    real(dp), allocatable :: wet_c(:)
+    real(dp), allocatable :: wet_c(:,:,:)
     integer, allocatable :: edges_cell_idx(:,:,:)
     integer, allocatable :: edges_cell_blk(:,:,:)
     real(dp), allocatable :: temp(:,:,:)
@@ -114,8 +114,51 @@ program main
     ReferencePressureIndbars = 1035.0*grav*1.0e-4
     pi = 3.14159265358979323846264338327950288
 
-    allocate(tke(nproma, nlevs, nblocks))
+    allocate(depth_CellInterface(nproma,nlevs,nblocks))
+    allocate(prism_center_dist_c(nproma,nlevs,nblocks))
+    allocate(inv_prism_center_dist_c(nproma,nlevs,nblocks))
+    allocate(prism_thick_c(nproma,nlevs,nblocks))
     allocate(dolic_c(nproma,nblocks))
+    allocate(dolic_e(nproma,nblocks))
+    allocate(zlev_i(nlevs))
+    allocate(wet_c(nproma,nlevs,nblocks))
+    allocate(edges_cell_idx(nproma,nlevs,nblocks))
+    allocate(edges_cell_blk(nproma,nlevs,nblocks))
+
+    allocate(tke(nproma, nlevs, nblocks))
+    allocate(tke_plc_in(nproma, nlevs, nblocks))
+    allocate(hlc_in(nproma, nblocks))
+    allocate(wlc_in(nproma, nlevs, nblocks))
+    allocate(u_stokes_in(nproma, nblocks))
+    allocate(a_veloc_v(nproma, nlevs, nblocks))
+    allocate(a_temp_v(nproma, nlevs, nblocks))
+    allocate(a_salt_v(nproma, nlevs, nblocks))
+    allocate(iwe_Tdis(nproma, nlevs, nblocks))
+    allocate(cvmix_dummy_1(nproma, nlevs, nblocks))
+    allocate(cvmix_dummy_2(nproma, nlevs, nblocks))
+    allocate(cvmix_dummy_3(nproma, nlevs, nblocks))
+    allocate(tke_Tbpr(nproma, nlevs, nblocks))
+    allocate(tke_Tspr(nproma, nlevs, nblocks))
+    allocate(tke_Tdif(nproma, nlevs, nblocks))
+    allocate(tke_Tdis(nproma, nlevs, nblocks))
+    allocate(tke_Twin(nproma, nlevs, nblocks))
+    allocate(tke_Tiwf(nproma, nlevs, nblocks))
+    allocate(tke_Tbck(nproma, nlevs, nblocks))
+    allocate(tke_Ttot(nproma, nlevs, nblocks))
+    allocate(tke_Lmix(nproma, nlevs, nblocks))
+    allocate(tke_Pr(nproma, nlevs, nblocks))
+
+    allocate(temp(nproma, nlevs, nblocks))
+    allocate(salt(nproma, nlevs, nblocks))
+    allocate(stretch_c(nproma, nblocks))
+    allocate(eta_c(nproma, nblocks))
+
+    allocate(stress_xw(nproma, nblocks))
+    allocate(stress_yw(nproma, nblocks))
+
+    allocate(fu10(nproma, nblocks))
+
+    allocate(concsum(nproma, nblocks))
 
     CALL TKE_Init_f(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
                     vert_cor_type, dtime, OceanReferenceDensity, grav, &
@@ -131,7 +174,15 @@ program main
     end do
 
     dolic_c(:,:) = nlevs;
-    !$ACC ENTER DATA COPYIN(dolic_c, tke)
+    !$ACC ENTER DATA COPYIN(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c, prism_thick_c, &
+    !$ACC                   dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx, edges_cell_blk)
+    !$ACC ENTER DATA COPYIN(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, iwe_Tdis, &
+    !$ACC                   cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
+    !$ACC                   tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
+    !$ACC ENTER DATA COPYIN(temp, salt, stretch_c, eta_c)
+    !$ACC ENTER DATA COPYIN(stress_xw, stress_yw)
+    !$ACC ENTER DATA COPYIN(fu10)
+    !$ACC ENTER DATA COPYIN(concsum)
 
     do t=1,ntimesteps
         !$ACC HOST_DATA USE_DEVICE(tke, dolic_c)
@@ -168,9 +219,24 @@ program main
 
     CALL TKE_Finalize_f()
 
-    !$ACC EXIT DATA DELETE(dolic_c, tke)
+    !$ACC EXIT DATA DELETE(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c, prism_thick_c, &
+    !$ACC                  dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx, edges_cell_blk)
+    !$ACC EXIT DATA DELETE(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, iwe_Tdis, &
+    !$ACC                  cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
+    !$ACC                  tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
+    !$ACC EXIT DATA DELETE(temp, salt, stretch_c, eta_c)
+    !$ACC EXIT DATA DELETE(stress_xw, stress_yw)
+    !$ACC EXIT DATA DELETE(fu10)
+    !$ACC EXIT DATA DELETE(concsum)
 
-    deallocate(dolic_c)
-    deallocate(tke)
+    deallocate(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c, prism_thick_c, &
+               dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx, edges_cell_blk)
+    deallocate(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, iwe_Tdis, &
+               cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
+               tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
+    deallocate(temp, salt, stretch_c, eta_c)
+    deallocate(stress_xw, stress_yw)
+    deallocate(fu10)
+    deallocate(concsum)
 
 end program
