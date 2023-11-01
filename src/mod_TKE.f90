@@ -89,22 +89,22 @@ module mod_TKE
     end subroutine tke_finalize_f
 
     subroutine tke_calc_f(depth_CellInterface, prism_center_dist_c, &
-               inv_prism_center_dist_c, prism_thick_c, &
-               dolic_c, dolic_e, zlev_i, wet_c, &
-               edges_cell_idx, edges_cell_blk, &
-               temp, salt, stretch_c, eta_c, &
-               tke, tke_plc_in, hlc_in, wlc_in, &
-               u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, &
-               iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, &
-               cvmix_dummy_3, tke_Tbpr, tke_Tspr, &
-               tke_Tdif, tke_Tdis, tke_Twin, &
-               tke_Tiwf, tke_Tbck, tke_Ttot, &
-               tke_Lmix, tke_Pr, stress_xw, &
-               stress_yw, fu10, concsum, &
-               edges_block_size, edges_start_block, edges_end_block, &
-               edges_start_index, edges_end_index, cells_block_size, &
-               cells_start_block, cells_end_block, cells_start_index, &
-               cells_end_index)
+                          inv_prism_center_dist_c, prism_thick_c, &
+                          dolic_c, dolic_e, zlev_i, wet_c, &
+                          edges_cell_idx, edges_cell_blk, &
+                          temp, salt, stretch_c, eta_c, &
+                          tke, tke_plc_in, hlc_in, wlc_in, &
+                          u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, &
+                          iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, &
+                          cvmix_dummy_3, tke_Tbpr, tke_Tspr, &
+                          tke_Tdif, tke_Tdis, tke_Twin, &
+                          tke_Tiwf, tke_Tbck, tke_Ttot, &
+                          tke_Lmix, tke_Pr, stress_xw, &
+                          stress_yw, fu10, concsum, &
+                          edges_block_size, edges_start_block, edges_end_block, &
+                          edges_start_index, edges_end_index, cells_block_size, &
+                          cells_start_block, cells_end_block, cells_start_index, &
+                          cells_end_index)
 
         implicit none
 
@@ -291,22 +291,22 @@ module mod_TKE
         concsum_ptr                 = c_loc(concsum(1, 1))
 
         CALL tke_calc_c(depth_CellInterface_ptr, prism_center_dist_c_ptr, &
-                       inv_prism_center_dist_c_ptr, prism_thick_c_ptr, &
-                       dolic_c_ptr, dolic_e_ptr, zlev_i_ptr, wet_c_ptr, &
-                       edges_cell_idx_ptr, edges_cell_blk_ptr, &
-                       temp_ptr, salt_ptr, stretch_c_ptr, eta_c_ptr, &
-                       tke_ptr, tke_plc_in_ptr, hlc_in_ptr, wlc_in_ptr, &
-                       u_stokes_in_ptr, a_veloc_v_ptr, a_temp_v_ptr, a_salt_v_ptr, &
-                       iwe_Tdis_ptr, cvmix_dummy_1_ptr, cvmix_dummy_2_ptr, &
-                       cvmix_dummy_3_ptr, tke_Tbpr_ptr, tke_Tspr_ptr, &
-                       tke_Tdif_ptr, tke_Tdis_ptr, tke_Twin_ptr, &
-                       tke_Tiwf_ptr, tke_Tbck_ptr, tke_Ttot_ptr, &
-                       tke_Lmix_ptr, tke_Pr_ptr, stress_xw_ptr, &
-                       stress_yw_ptr, fu10_ptr, concsum_ptr, &
-                       edges_block_size, edges_start_block-1, edges_end_block-1, &
-                       edges_start_index-1, edges_end_index-1, cells_block_size, &
-                       cells_start_block-1, cells_end_block-1, cells_start_index-1, &
-                       cells_end_index-1)
+                        inv_prism_center_dist_c_ptr, prism_thick_c_ptr, &
+                        dolic_c_ptr, dolic_e_ptr, zlev_i_ptr, wet_c_ptr, &
+                        edges_cell_idx_ptr, edges_cell_blk_ptr, &
+                        temp_ptr, salt_ptr, stretch_c_ptr, eta_c_ptr, &
+                        tke_ptr, tke_plc_in_ptr, hlc_in_ptr, wlc_in_ptr, &
+                        u_stokes_in_ptr, a_veloc_v_ptr, a_temp_v_ptr, a_salt_v_ptr, &
+                        iwe_Tdis_ptr, cvmix_dummy_1_ptr, cvmix_dummy_2_ptr, &
+                        cvmix_dummy_3_ptr, tke_Tbpr_ptr, tke_Tspr_ptr, &
+                        tke_Tdif_ptr, tke_Tdis_ptr, tke_Twin_ptr, &
+                        tke_Tiwf_ptr, tke_Tbck_ptr, tke_Ttot_ptr, &
+                        tke_Lmix_ptr, tke_Pr_ptr, stress_xw_ptr, &
+                        stress_yw_ptr, fu10_ptr, concsum_ptr, &
+                        edges_block_size, edges_start_block-1, edges_end_block-1, &
+                        edges_start_index-1, edges_end_index-1, cells_block_size, &
+                        cells_start_block-1, cells_end_block-1, cells_start_index-1, &
+                        cells_end_index-1)
 
     end subroutine tke_calc_f
 
