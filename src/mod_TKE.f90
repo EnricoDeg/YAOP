@@ -105,57 +105,60 @@ module mod_TKE
                edges_start_index, edges_end_index, cells_block_size, &
                cells_start_block, cells_end_block, cells_start_index, &
                cells_end_index)
+
         implicit none
-        real(c_double), intent(in) :: depth_CellInterface(:,:,:)
-        real(c_double), intent(in) :: prism_center_dist_c(:,:,:)
-        real(c_double), intent(in) :: inv_prism_center_dist_c(:,:,:)
-        real(c_double), intent(in) :: prism_thick_c(:,:,:)
-        integer, intent(in) :: dolic_c(:,:)
-        integer, intent(in) :: dolic_e(:,:)
-        real(c_double), intent(in) :: zlev_i(:)
-        real(c_double), intent(in) :: wet_c(:,:,:)
-        integer, intent(in) :: edges_cell_idx(:,:,:)
-        integer, intent(in) :: edges_cell_blk(:,:,:)
-        real(c_double), intent(in) :: temp(:,:,:)
-        real(c_double), intent(in) :: salt(:,:,:)
-        real(c_double), intent(in) :: stretch_c(:,:)
-        real(c_double), intent(in) :: eta_c(:,:)
-        real(c_double), intent(inout) :: tke(:,:,:)
-        real(c_double), intent(in) :: tke_plc_in(:,:,:)
-        real(c_double), intent(in) :: hlc_in(:,:)
-        real(c_double), intent(in) :: wlc_in(:,:,:)
-        real(c_double), intent(in) :: u_stokes_in(:,:)
-        real(c_double), intent(inout) :: a_veloc_v(:,:,:)
-        real(c_double), intent(inout) :: a_temp_v(:,:,:)
-        real(c_double), intent(inout) :: a_salt_v(:,:,:)
-        real(c_double), intent(in) :: iwe_Tdis(:,:,:)
-        real(c_double), intent(inout) :: cvmix_dummy_1(:,:,:)
-        real(c_double), intent(inout) :: cvmix_dummy_2(:,:,:)
-        real(c_double), intent(inout) :: cvmix_dummy_3(:,:,:)
-        real(c_double), intent(inout) :: tke_Tbpr(:,:,:)
-        real(c_double), intent(inout) :: tke_Tspr(:,:,:)
-        real(c_double), intent(inout) :: tke_Tdif(:,:,:)
-        real(c_double), intent(inout) :: tke_Tdis(:,:,:)
-        real(c_double), intent(inout) :: tke_Twin(:,:,:)
-        real(c_double), intent(inout) :: tke_Tiwf(:,:,:)
-        real(c_double), intent(inout) :: tke_Tbck(:,:,:)
-        real(c_double), intent(inout) :: tke_Ttot(:,:,:)
-        real(c_double), intent(inout) :: tke_Lmix(:,:,:)
-        real(c_double), intent(inout) :: tke_Pr(:,:,:)
-        real(c_double), intent(in) :: stress_xw(:,:)
-        real(c_double), intent(in) :: stress_yw(:,:)
-        real(c_double), intent(in) :: fu10(:,:)
-        real(c_double), intent(in) :: concsum(:,:)
-        integer, intent(in) :: edges_block_size
-        integer, intent(in) :: edges_start_block
-        integer, intent(in) :: edges_end_block
-        integer, intent(in) :: edges_start_index
-        integer, intent(in) :: edges_end_index
-        integer, intent(in) :: cells_block_size
-        integer, intent(in) :: cells_start_block
-        integer, intent(in) :: cells_end_block
-        integer, intent(in) :: cells_start_index
-        integer, intent(in) :: cells_end_index
+
+
+        real(c_double), intent(in),    TARGET :: depth_CellInterface(:,:,:)
+        real(c_double), intent(in),    TARGET :: prism_center_dist_c(:,:,:)
+        real(c_double), intent(in),    TARGET :: inv_prism_center_dist_c(:,:,:)
+        real(c_double), intent(in),    TARGET :: prism_thick_c( :,:,:)
+        integer, intent(in),           TARGET :: dolic_c(:,:)
+        integer, intent(in),           TARGET :: dolic_e(:,:)
+        real(c_double), intent(in),    TARGET :: zlev_i(:)
+        real(c_double), intent(in),    TARGET :: wet_c(:,:,:)
+        integer, intent(in),           TARGET :: edges_cell_idx(:,:,:)
+        integer, intent(in),           TARGET :: edges_cell_blk(:,:,:)
+        real(c_double), intent(in),    TARGET :: temp(:,:,:)
+        real(c_double), intent(in),    TARGET :: salt(:,:,:)
+        real(c_double), intent(in),    TARGET :: stretch_c(:,:)
+        real(c_double), intent(in),    TARGET :: eta_c(:,:)
+        real(c_double), intent(inout), TARGET :: tke(:,:,:)
+        real(c_double), intent(in),    TARGET :: tke_plc_in(:,:,:)
+        real(c_double), intent(in),    TARGET :: hlc_in(:,:)
+        real(c_double), intent(in),    TARGET :: wlc_in(:,:,:)
+        real(c_double), intent(in),    TARGET :: u_stokes_in(:,:)
+        real(c_double), intent(inout), TARGET :: a_veloc_v(:,:,:)
+        real(c_double), intent(inout), TARGET :: a_temp_v(:,:,:)
+        real(c_double), intent(inout), TARGET :: a_salt_v(:,:,:)
+        real(c_double), intent(in),    TARGET :: iwe_Tdis(:,:,:)
+        real(c_double), intent(inout), TARGET :: cvmix_dummy_1(:,:,:)
+        real(c_double), intent(inout), TARGET :: cvmix_dummy_2(:,:,:)
+        real(c_double), intent(inout), TARGET :: cvmix_dummy_3(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Tbpr(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Tspr(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Tdif(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Tdis(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Twin(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Tiwf(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Tbck(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Ttot(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Lmix(:,:,:)
+        real(c_double), intent(inout), TARGET :: tke_Pr(:,:,:)
+        real(c_double), intent(in),    TARGET :: stress_xw(:,:)
+        real(c_double), intent(in),    TARGET :: stress_yw(:,:)
+        real(c_double), intent(in),    TARGET :: fu10(:,:)
+        real(c_double), intent(in),    TARGET :: concsum(:,:)
+        integer, intent(in)                    :: edges_block_size
+        integer, intent(in)                    :: edges_start_block
+        integer, intent(in)                    :: edges_end_block
+        integer, intent(in)                    :: edges_start_index
+        integer, intent(in)                    :: edges_end_index
+        integer, intent(in)                    :: cells_block_size
+        integer, intent(in)                    :: cells_start_block
+        integer, intent(in)                    :: cells_end_block
+        integer, intent(in)                    :: cells_start_index
+        integer, intent(in)                    :: cells_end_index
 
         type(c_ptr) :: depth_CellInterface_ptr, prism_center_dist_c_ptr, &
                        inv_prism_center_dist_c_ptr, prism_thick_c_ptr, &
