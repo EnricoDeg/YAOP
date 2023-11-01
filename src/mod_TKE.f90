@@ -193,47 +193,48 @@ module mod_TKE
                                   cells_start_block_c, cells_end_block_c, cells_start_index_c, &
                                   cells_end_index_c) bind(C, name="TKE_Calc")
                 use iso_c_binding
+
                 implicit none
-                type(c_ptr), value :: depth_CellInterface_c
-                type(c_ptr), value :: prism_center_dist_c_c
-                type(c_ptr), value :: inv_prism_center_dist_c_c
-                type(c_ptr), value :: prism_thick_c_c
-                type(c_ptr), value :: dolic_c_c
-                type(c_ptr), value :: dolic_e_c
-                type(c_ptr), value :: zlev_i_c
-                type(c_ptr), value :: wet_c_c
-                type(c_ptr), value :: edges_cell_idx_c
-                type(c_ptr), value :: edges_cell_blk_c
-                type(c_ptr), value :: temp_c
-                type(c_ptr), value :: salt_c
-                type(c_ptr), value :: stretch_c_c
-                type(c_ptr), value :: eta_c_c
-                type(c_ptr), value :: tke_c
-                type(c_ptr), value :: tke_plc_in_c
-                type(c_ptr), value :: hlc_in_c
-                type(c_ptr), value :: wlc_in_c
-                type(c_ptr), value :: u_stokes_in_c
-                type(c_ptr), value :: a_veloc_v_c
-                type(c_ptr), value :: a_temp_v_c
-                type(c_ptr), value :: a_salt_v_c
-                type(c_ptr), value :: iwe_Tdis_c
-                type(c_ptr), value :: cvmix_dummy_1_c
-                type(c_ptr), value :: cvmix_dummy_2_c
-                type(c_ptr), value :: cvmix_dummy_3_c
-                type(c_ptr), value :: tke_Tbpr_c
-                type(c_ptr), value :: tke_Tspr_c
-                type(c_ptr), value :: tke_Tdif_c
-                type(c_ptr), value :: tke_Tdis_c
-                type(c_ptr), value :: tke_Twin_c
-                type(c_ptr), value :: tke_Tiwf_c
-                type(c_ptr), value :: tke_Tbck_c
-                type(c_ptr), value :: tke_Ttot_c
-                type(c_ptr), value :: tke_Lmix_c
-                type(c_ptr), value :: tke_Pr_c
-                type(c_ptr), value :: stress_xw_c
-                type(c_ptr), value :: stress_yw_c
-                type(c_ptr), value :: fu10_c
-                type(c_ptr), value :: concsum_c
+                type(c_ptr), value    :: depth_CellInterface_c
+                type(c_ptr), value    :: prism_center_dist_c_c
+                type(c_ptr), value    :: inv_prism_center_dist_c_c
+                type(c_ptr), value    :: prism_thick_c_c
+                type(c_ptr), value    :: dolic_c_c
+                type(c_ptr), value    :: dolic_e_c
+                type(c_ptr), value    :: zlev_i_c
+                type(c_ptr), value    :: wet_c_c
+                type(c_ptr), value    :: edges_cell_idx_c
+                type(c_ptr), value    :: edges_cell_blk_c
+                type(c_ptr), value    :: temp_c
+                type(c_ptr), value    :: salt_c
+                type(c_ptr), value    :: stretch_c_c
+                type(c_ptr), value    :: eta_c_c
+                type(c_ptr), value    :: tke_c
+                type(c_ptr), value    :: tke_plc_in_c
+                type(c_ptr), value    :: hlc_in_c
+                type(c_ptr), value    :: wlc_in_c
+                type(c_ptr), value    :: u_stokes_in_c
+                type(c_ptr), value    :: a_veloc_v_c
+                type(c_ptr), value    :: a_temp_v_c
+                type(c_ptr), value    :: a_salt_v_c
+                type(c_ptr), value    :: iwe_Tdis_c
+                type(c_ptr), value    :: cvmix_dummy_1_c
+                type(c_ptr), value    :: cvmix_dummy_2_c
+                type(c_ptr), value    :: cvmix_dummy_3_c
+                type(c_ptr), value    :: tke_Tbpr_c
+                type(c_ptr), value    :: tke_Tspr_c
+                type(c_ptr), value    :: tke_Tdif_c
+                type(c_ptr), value    :: tke_Tdis_c
+                type(c_ptr), value    :: tke_Twin_c
+                type(c_ptr), value    :: tke_Tiwf_c
+                type(c_ptr), value    :: tke_Tbck_c
+                type(c_ptr), value    :: tke_Ttot_c
+                type(c_ptr), value    :: tke_Lmix_c
+                type(c_ptr), value    :: tke_Pr_c
+                type(c_ptr), value    :: stress_xw_c
+                type(c_ptr), value    :: stress_yw_c
+                type(c_ptr), value    :: fu10_c
+                type(c_ptr), value    :: concsum_c
                 integer(c_int), value :: edges_block_size_c
                 integer(c_int), value :: edges_start_block_c
                 integer(c_int), value :: edges_end_block_c
@@ -248,46 +249,46 @@ module mod_TKE
             end subroutine tke_calc_c
         end interface
 
-        depth_CellInterface_ptr = c_loc(depth_CellInterface(1,1,1))
-        prism_center_dist_c_ptr = c_loc(prism_center_dist_c(1,1,1))
-        inv_prism_center_dist_c_ptr = c_loc(inv_prism_center_dist_c(1,1,1))
-        prism_thick_c_ptr = c_loc(prism_thick_c(1,1,1))
-        dolic_c_ptr = c_loc(dolic_c(1,1))
-        dolic_e_ptr = c_loc(dolic_e(1,1))
-        zlev_i_ptr = c_loc(zlev_i(1))
-        wet_c_ptr = c_loc(wet_c(1,1,1))
-        edges_cell_idx_ptr = c_loc(edges_cell_idx(1,1,1))
-        edges_cell_blk_ptr = c_loc(edges_cell_blk(1,1,1))
-        temp_ptr = c_loc(temp(1,1,1))
-        salt_ptr = c_loc(salt(1,1,1))
-        stretch_c_ptr = c_loc(stretch_c(1,1))
-        eta_c_ptr = c_loc(eta_c(1,1))
-        tke_ptr = c_loc(tke(1,1,1))
-        tke_plc_in_ptr = c_loc(tke_plc_in(1,1,1))
-        hlc_in_ptr = c_loc(hlc_in(1,1))
-        wlc_in_ptr = c_loc(wlc_in(1,1,1))
-        u_stokes_in_ptr = c_loc(u_stokes_in(1,1))
-        a_veloc_v_ptr = c_loc(a_veloc_v(1,1,1))
-        a_temp_v_ptr = c_loc(a_temp_v(1,1,1))
-        a_salt_v_ptr = c_loc(a_salt_v(1,1,1))
-        iwe_Tdis_ptr = c_loc(iwe_Tdis(1,1,1))
-        cvmix_dummy_1_ptr = c_loc(cvmix_dummy_1(1,1,1))
-        cvmix_dummy_2_ptr = c_loc(cvmix_dummy_2(1,1,1))
-        cvmix_dummy_3_ptr = c_loc(cvmix_dummy_3(1,1,1))
-        tke_Tbpr_ptr = c_loc(tke_Tbpr(1,1,1))
-        tke_Tspr_ptr = c_loc(tke_Tspr(1,1,1))
-        tke_Tdif_ptr = c_loc(tke_Tdif(1,1,1))
-        tke_Tdis_ptr = c_loc(tke_Tdis(1,1,1))
-        tke_Twin_ptr = c_loc(tke_Twin(1,1,1))
-        tke_Tiwf_ptr = c_loc(tke_Tiwf(1,1,1))
-        tke_Tbck_ptr = c_loc(tke_Tbck(1,1,1))
-        tke_Ttot_ptr = c_loc(tke_Ttot(1,1,1))
-        tke_Lmix_ptr = c_loc(tke_Lmix(1,1,1))
-        tke_Pr_ptr = c_loc(tke_Pr(1,1,1))
-        stress_xw_ptr = c_loc(stress_xw(1,1))
-        stress_yw_ptr = c_loc(stress_yw(1,1))
-        fu10_ptr = c_loc(fu10(1,1))
-        concsum_ptr = c_loc(concsum(1,1))
+        depth_CellInterface_ptr     = c_loc(depth_CellInterface(1, 1, 1))
+        prism_center_dist_c_ptr     = c_loc(prism_center_dist_c(1, 1, 1))
+        inv_prism_center_dist_c_ptr = c_loc(inv_prism_center_dist_c(1, 1, 1))
+        prism_thick_c_ptr           = c_loc(prism_thick_c(1, 1, 1))
+        dolic_c_ptr                 = c_loc(dolic_c(1, 1))
+        dolic_e_ptr                 = c_loc(dolic_e(1, 1))
+        zlev_i_ptr                  = c_loc(zlev_i(1))
+        wet_c_ptr                   = c_loc(wet_c(1, 1, 1))
+        edges_cell_idx_ptr          = c_loc(edges_cell_idx(1, 1, 1))
+        edges_cell_blk_ptr          = c_loc(edges_cell_blk(1, 1, 1))
+        temp_ptr                    = c_loc(temp(1, 1, 1))
+        salt_ptr                    = c_loc(salt(1, 1, 1))
+        stretch_c_ptr               = c_loc(stretch_c(1, 1))
+        eta_c_ptr                   = c_loc(eta_c(1, 1))
+        tke_ptr                     = c_loc(tke(1, 1, 1))
+        tke_plc_in_ptr              = c_loc(tke_plc_in(1, 1, 1))
+        hlc_in_ptr                  = c_loc(hlc_in(1, 1))
+        wlc_in_ptr                  = c_loc(wlc_in(1, 1, 1))
+        u_stokes_in_ptr             = c_loc(u_stokes_in(1, 1))
+        a_veloc_v_ptr               = c_loc(a_veloc_v(1, 1, 1))
+        a_temp_v_ptr                = c_loc(a_temp_v(1, 1, 1))
+        a_salt_v_ptr                = c_loc(a_salt_v(1, 1, 1))
+        iwe_Tdis_ptr                = c_loc(iwe_Tdis(1, 1, 1))
+        cvmix_dummy_1_ptr           = c_loc(cvmix_dummy_1(1, 1, 1))
+        cvmix_dummy_2_ptr           = c_loc(cvmix_dummy_2(1, 1, 1))
+        cvmix_dummy_3_ptr           = c_loc(cvmix_dummy_3(1, 1, 1))
+        tke_Tbpr_ptr                = c_loc(tke_Tbpr(1, 1, 1))
+        tke_Tspr_ptr                = c_loc(tke_Tspr(1, 1, 1))
+        tke_Tdif_ptr                = c_loc(tke_Tdif(1, 1, 1))
+        tke_Tdis_ptr                = c_loc(tke_Tdis(1, 1, 1))
+        tke_Twin_ptr                = c_loc(tke_Twin(1, 1, 1))
+        tke_Tiwf_ptr                = c_loc(tke_Tiwf(1, 1, 1))
+        tke_Tbck_ptr                = c_loc(tke_Tbck(1, 1, 1))
+        tke_Ttot_ptr                = c_loc(tke_Ttot(1, 1, 1))
+        tke_Lmix_ptr                = c_loc(tke_Lmix(1, 1, 1))
+        tke_Pr_ptr                  = c_loc(tke_Pr(1, 1, 1))
+        stress_xw_ptr               = c_loc(stress_xw(1, 1))
+        stress_yw_ptr               = c_loc(stress_yw(1, 1))
+        fu10_ptr                    = c_loc(fu10(1, 1))
+        concsum_ptr                 = c_loc(concsum(1, 1))
 
         CALL tke_calc_c(depth_CellInterface_ptr, prism_center_dist_c_ptr, &
                        inv_prism_center_dist_c_ptr, prism_thick_c_ptr, &
