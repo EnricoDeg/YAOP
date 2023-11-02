@@ -1,4 +1,4 @@
-name: build
+name: Build and Tests
 
 on:
   pull_request:
@@ -31,3 +31,6 @@ jobs:
 
     - name: GCC
       run: cmake --build build
+
+    - name: Tests
+      run: cd build/tests && ctest
