@@ -1,0 +1,33 @@
+name: build
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  gcc-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: GCC installation
+      run: sudo apt -y update && sudo apt -y install gcc
+
+    - name: CMake installation
+      run: sudo apt install -y cmake
+
+    - name: NVHPC installation
+      run: |
+        curl https://developer.download.nvidia.com/hpc-sdk/ubuntu/DEB-GPG-KEY-NVIDIA-HPC-SDK | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpg
+        echo 'deb [signed-by=/usr/share/keyrings/nvidia-hpcsdk-archive-keyring.gpg] https://developer.download.nvidia.com/hpc-sdk/ubuntu/amd64 /' | \
+        sudo tee /etc/apt/sources.list.d/nvhpc.list
+        sudo apt-get update -y
+        sudo apt-get install -y nvhpc-23-9
+
+    - name: CMake
+      run: mkdir build && cmake -S . -B build -DCMAKE_CUDA_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/cuda/12.2/bin/nvcc
+
+    - name: GCC
+      run: cmake --build build
