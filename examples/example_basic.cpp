@@ -199,11 +199,11 @@ int main(int argc, char ** argv) {
 
     for (int t = 0; t < ntimesteps; t++) {
       #pragma acc host_data use_device(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c)
-      #pragma acc           use_device(prism_thick_c, dolic_c, zlev_i, edges_cell_idx, edges_cell_blk, dolic_e, wet_c)
-      #pragma acc           use_device(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v)
-      #pragma acc           use_device(iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr)
-      #pragma acc           use_device(tke_Tdif, tke_Tdis, tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
-      #pragma acc           use_device(temp, salt, stretch_c, eta_c, stress_xw, stress_yw, fu10, concsum)
+      #pragma acc host_data use_device(prism_thick_c, dolic_c, zlev_i, edges_cell_idx, edges_cell_blk, dolic_e, wet_c)
+      #pragma acc host_data use_device(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v)
+      #pragma acc host_data use_device(iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr)
+      #pragma acc host_data use_device(tke_Tdif, tke_Tdis, tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
+      #pragma acc host_data use_device(temp, salt, stretch_c, eta_c, stress_xw, stress_yw, fu10, concsum)
       ocean_physics->calc(depth_CellInterface, prism_center_dist_c,
                           inv_prism_center_dist_c, prism_thick_c,
                           dolic_c, dolic_e, zlev_i, wet_c,
