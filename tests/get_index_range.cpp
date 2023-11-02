@@ -17,38 +17,75 @@
 #include <gtest/gtest.h>
 #include "src/utils.hpp"
 
-// Check the default value assignment for get_index_range
+// Test the default value assignment for start_index and end_index
 TEST(get_index_range, default_value) {
-  int start_index, end_index;
-  start_index = -1;
-  end_index = -1;
+    int start_index = -1;
+    int end_index = -1;
+    int current_block = 1;
 
-  // Assert that the default start and end index values are assigned
-  get_index_range(1, -1, -1, 0, 2, 0, &start_index, &end_index);
-  ASSERT_EQ(start_index, 0);
-  ASSERT_EQ(end_index, 1);
+    // default value that should be assigned to end_index
+    int subset_block_size = 1;
+
+    // These should be different than current_block
+    int subset_start_block = -1;
+    int subset_end_block = -1;
+
+    get_index_range(subset_block_size, subset_start_block, subset_end_block,
+                    -1, -1, current_block, &start_index, &end_index);
+
+    // Assert that the default start and end index values are assigned
+    ASSERT_EQ(start_index, 0);
+    ASSERT_EQ(end_index, subset_block_size);
 }
 
-// Check the default value assignment for get_index_range
+// Test that start_index is correctly assigned to subset_start_index if current_block equals subset_start_block
 TEST(get_index_range, start_index_assignment) {
-  int start_index, end_index;
-  start_index = -1;
-  end_index = -1;
+    int start_index = -1;
+    int end_index = -1;
 
-  // Assert that the default start and end index values are assigned
-  get_index_range(-1, 1, -1, 2, 2, 1, &start_index, &end_index);
-  ASSERT_EQ(start_index, 2);
-  ASSERT_EQ(end_index, -1);
+    // default value that should be assigned to end_index
+    int subset_block_size = 1;
+
+    // value that should be assigned to start_index
+    int subset_start_index = 2;
+
+    // these two values should be equal for the comparison inside get_index_range
+    int current_block = 1;
+    int subset_start_block = 1;
+
+    // This should be different than current_block
+    int subset_end_block = -1;
+
+    get_index_range(subset_block_size, subset_start_block, subset_end_block,
+                    subset_start_index, -1, current_block, &start_index, &end_index);
+
+    // Assert that the start_index was assigned subset_start_index and end_index was assigned the default value
+    ASSERT_EQ(start_index, subset_start_index);
+    ASSERT_EQ(end_index, subset_block_size);
 }
 
-// Check the default value assignment for get_index_range
+// Test that end_index is correctly assigned to subset_end_index if current_block equals subset_end_block
 TEST(get_index_range, end_index_assignment) {
-  int start_index, end_index;
-  start_index = -1;
-  end_index = -1;
+    int start_index = -1;
+    int end_index = -1;
 
-  // Assert that the default start and end index values are assigned
-  get_index_range(1, -1, 2, 0, 2, 2, &start_index, &end_index);
-  ASSERT_EQ(start_index, 0);
-  ASSERT_EQ(end_index, 2);
+    // default value for end_index, should not be assined in this test
+    int subset_block_size = 1;
+
+    // value that should be assigned to end_index
+    int subset_end_index = 2;
+
+    // these two values should be equal for the comparison inside get_index_range
+    int current_block = 1;
+    int subset_end_block = 1;
+
+    // This should be different than current_block
+    int subset_start_block = -1;
+
+    get_index_range(subset_block_size, subset_start_block, subset_end_block,
+                    -1, subset_end_index, current_block, &start_index, &end_index);
+
+    // Assert that the start_index was assigned the default value and end_index was assigned subset_end_index
+    ASSERT_EQ(start_index, 0);
+    ASSERT_EQ(end_index, subset_end_index);
 }
