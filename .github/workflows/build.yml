@@ -27,7 +27,7 @@ jobs:
         sudo apt-get install -y nvhpc-23-9
 
     - name: CMake
-      run: mkdir build && cmake -S . -B build -DCMAKE_CUDA_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/cuda/12.2/bin/nvcc
+      run: mkdir build && cmake -S . -B build -DCMAKE_CUDA_COMPILER=/opt/nvidia/hpc_sdk/Linux_x86_64/23.9/cuda/12.2/bin/nvcc -DENABLE_TESTS=ON
 
     - name: GCC
       run: cmake --build build
