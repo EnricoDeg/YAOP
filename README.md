@@ -1,4 +1,5 @@
 [![build status](https://github.com/enricodeg/TKE/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/enricodeg/TKE/actions/workflows/pre-commit.yml)
+[![build](https://github.com/EnricoDeg/TKE/actions/workflows/build.yml/badge.svg)](https://github.com/EnricoDeg/TKE/actions/workflows/build.yml)
 
 # TKE
 
