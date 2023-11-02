@@ -16,8 +16,12 @@
 
 #include <memory>
 #include <cstdlib>
+#include <fstream>
 
 #include "src/TKE.hpp"
+
+template<typename T>
+void read_input(T *data, const std::string &filename);
 
 int main(int argc, char ** argv) {
     int nproma = 25;
@@ -52,54 +56,122 @@ int main(int argc, char ** argv) {
                                 vert_cor_type, dtime, OceanReferenceDensity, grav,
                                 l_lc, clc, ReferencePressureIndbars, pi));
 
-    double *depth_CellInterface = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *prism_center_dist_c = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *inv_prism_center_dist_c = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+    double *depth_CellInterface = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(depth_CellInterface, "examples/input/depth_CellInterface");
+
+    double *prism_center_dist_c = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(prism_center_dist_c, "examples/input/prism_center_dist_c");
+
+    double *inv_prism_center_dist_c = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(inv_prism_center_dist_c, "examples/input/inv_prism_center_dist_c");
+
     double *prism_thick_c = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+    read_input<double>(prism_thick_c, "examples/input/prism_thick_c");
+
     int *dolic_c = reinterpret_cast<int *>(malloc(nproma * nblocks * sizeof(int)));
+    read_input<int>(dolic_c, "examples/input/dolic_c");
+
     int *dolic_e = reinterpret_cast<int *>(malloc(nproma * nblocks * sizeof(int)));
+    read_input<int>(dolic_e, "examples/input/dolic_e");
+
     double *zlev_i = reinterpret_cast<double *>(malloc(nlevs * sizeof(double)));
+    read_input<double>(zlev_i, "examples/input/zlev_i");
+
     double *wet_c = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+    read_input<double>(wet_c, "examples/input/wet_c");
+
     int *edges_cell_idx = reinterpret_cast<int *>(malloc(nproma * nlevs * nblocks * sizeof(int)));
+
     int *edges_cell_blk = reinterpret_cast<int *>(malloc(nproma * nlevs * nblocks * sizeof(int)));
 
     double *temp = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *salt = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *stretch_c = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
-    double *eta_c = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
+    read_input<double>(temp, "examples/input/to");
 
-    double *tke = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+    double *salt = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+    read_input<double>(salt, "examples/input/so");
+
+    double *stretch_c = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
+    for (int i=0; i < nblocks; i++)
+        for (int j=0; j < nproma; j++)
+            stretch_c[j+i*nproma] = 1.0;
+
+    double *eta_c = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
+    for (int i=0; i < nblocks; i++)
+        for (int j=0; j < nproma; j++)
+            eta_c[j+i*nproma] = 1.0;
+
+    double *tke = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke, "examples/input/tke");
+
     double *tke_plc_in = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+
     double *hlc_in = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
+
     double *wlc_in = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+
     double *u_stokes_in = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
-    double *a_veloc_v = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *a_temp_v = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *a_salt_v = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *iwe_Tdis = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *cvmix_dummy_1 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *cvmix_dummy_2 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *cvmix_dummy_3 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Tbpr = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Tspr = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Tdif = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Tdis = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Twin = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Tiwf = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Tbck = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Ttot = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Lmix = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
-    double *tke_Pr = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+
+    double *a_veloc_v = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(a_veloc_v, "examples/input/A_veloc_v");
+
+    double *a_temp_v = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(a_temp_v, "examples/input/A_tracer_v_to");
+
+    double *a_salt_v = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(a_salt_v, "examples/input/A_tracer_v_so");
+
+    double *iwe_Tdis = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+
+    double *cvmix_dummy_1 = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(cvmix_dummy_1, "examples/input/cvmix_dummy_1");
+
+    double *cvmix_dummy_2 = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(cvmix_dummy_2, "examples/input/cvmix_dummy_2");
+
+    double *cvmix_dummy_3 = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(cvmix_dummy_3, "examples/input/cvmix_dummy_3");
+
+    double *tke_Tbpr = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Tbpr, "examples/input/tke_Tbpr");
+
+    double *tke_Tspr = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Tspr, "examples/input/tke_Tspr");
+
+    double *tke_Tdif = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Tdif, "examples/input/tke_Tdif");
+
+    double *tke_Tdis = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Tdis, "examples/input/tke_Tdis");
+
+    double *tke_Twin = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Twin, "examples/input/tke_Twin");
+
+    double *tke_Tiwf = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Tiwf, "examples/input/tke_Tiwf");
+
+    double *tke_Tbck = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Tbck, "examples/input/tke_Tbck");
+
+    double *tke_Ttot = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Ttot, "examples/input/tke_Ttot");
+
+    double *tke_Lmix = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Lmix, "examples/input/tke_Lmix");
+
+    double *tke_Pr = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
+    read_input<double>(tke_Pr, "examples/input/tke_Pr");
 
     double *stress_xw = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
+    read_input<double>(stress_xw, "examples/input/atmos_fluxes_stress_xw");
+
     double *stress_yw = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
+    read_input<double>(stress_yw, "examples/input/atmos_fluxes_stress_yw");
 
     double *fu10 = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
+    read_input<double>(fu10, "examples/input/Wind_Speed_10m");
 
     double *concsum = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
-
-    // Read initial values from files
-
+    read_input<double>(concsum, "examples/input/conc");
 
     #pragma acc enter data copyin(depth_CellInterface[0:nproma*nlevs*nblocks-1])
     #pragma acc enter data copyin(prism_center_dist_c[0:nproma*nlevs*nblocks-1])
@@ -126,7 +198,12 @@ int main(int argc, char ** argv) {
     #pragma acc enter data copyin(concsum[0:nproma*nblocks-1])
 
     for (int t = 0; t < ntimesteps; t++) {
-      #pragma acc host_data use_device(tke, dolic_c)
+      #pragma acc host_data use_device(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c)
+      #pragma acc           use_device(prism_thick_c, dolic_c, zlev_i, edges_cell_idx, edges_cell_blk, dolic_e, wet_c)
+      #pragma acc           use_device(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v)
+      #pragma acc           use_device(iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr)
+      #pragma acc           use_device(tke_Tdif, tke_Tdis, tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
+      #pragma acc           use_device(temp, salt, stretch_c, eta_c, stress_xw, stress_yw, fu10, concsum)
       ocean_physics->calc(depth_CellInterface, prism_center_dist_c,
                           inv_prism_center_dist_c, prism_thick_c,
                           dolic_c, dolic_e, zlev_i, wet_c,
@@ -144,7 +221,6 @@ int main(int argc, char ** argv) {
                           edges_start_index, edges_end_index, cells_block_size,
                           cells_start_block, cells_end_block, cells_start_index,
                           cells_end_index);
-
       #pragma acc wait
     }
 
@@ -209,4 +285,13 @@ int main(int argc, char ** argv) {
     free(concsum);
 
     return 0;
+}
+
+template<typename T>
+void read_input(T *data, const std::string &filename) {
+    std::ifstream ifile;
+    ifile.open(filename);
+    int k = 0;
+    while (ifile >> data[k]) k++;
+    ifile.close();
 }
