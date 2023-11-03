@@ -21,8 +21,8 @@ program main
     integer, parameter :: rd = 307
     integer, parameter :: dp = selected_real_kind(pd,rd)
 
-    integer :: nproma = 10240
-    integer :: nlevs = 56
+    integer :: nproma = 25
+    integer :: nlevs = 40
     integer :: nblocks = 1
     integer :: ntimesteps = 10
 
@@ -114,39 +114,39 @@ program main
     ReferencePressureIndbars = 1035.0*grav*1.0e-4
     pi = 3.14159265358979323846264338327950288
 
-    allocate(depth_CellInterface(nproma,nlevs,nblocks))
-    allocate(prism_center_dist_c(nproma,nlevs,nblocks))
-    allocate(inv_prism_center_dist_c(nproma,nlevs,nblocks))
+    allocate(depth_CellInterface(nproma,nlevs+1,nblocks))
+    allocate(prism_center_dist_c(nproma,nlevs+1,nblocks))
+    allocate(inv_prism_center_dist_c(nproma,nlevs+1,nblocks))
     allocate(prism_thick_c(nproma,nlevs,nblocks))
     allocate(dolic_c(nproma,nblocks))
     allocate(dolic_e(nproma,nblocks))
     allocate(zlev_i(nlevs))
     allocate(wet_c(nproma,nlevs,nblocks))
-    allocate(edges_cell_idx(nproma,nlevs,nblocks))
-    allocate(edges_cell_blk(nproma,nlevs,nblocks))
+    allocate(edges_cell_idx(nproma,nblocks,2))
+    allocate(edges_cell_blk(nproma,nblocks,2))
 
-    allocate(tke(nproma, nlevs, nblocks))
-    allocate(tke_plc_in(nproma, nlevs, nblocks))
+    allocate(tke(nproma, nlevs+1, nblocks))
+    allocate(tke_plc_in(nproma, nlevs+1, nblocks))
     allocate(hlc_in(nproma, nblocks))
-    allocate(wlc_in(nproma, nlevs, nblocks))
+    allocate(wlc_in(nproma, nlevs+1, nblocks))
     allocate(u_stokes_in(nproma, nblocks))
-    allocate(a_veloc_v(nproma, nlevs, nblocks))
-    allocate(a_temp_v(nproma, nlevs, nblocks))
-    allocate(a_salt_v(nproma, nlevs, nblocks))
-    allocate(iwe_Tdis(nproma, nlevs, nblocks))
-    allocate(cvmix_dummy_1(nproma, nlevs, nblocks))
-    allocate(cvmix_dummy_2(nproma, nlevs, nblocks))
-    allocate(cvmix_dummy_3(nproma, nlevs, nblocks))
-    allocate(tke_Tbpr(nproma, nlevs, nblocks))
-    allocate(tke_Tspr(nproma, nlevs, nblocks))
-    allocate(tke_Tdif(nproma, nlevs, nblocks))
-    allocate(tke_Tdis(nproma, nlevs, nblocks))
-    allocate(tke_Twin(nproma, nlevs, nblocks))
-    allocate(tke_Tiwf(nproma, nlevs, nblocks))
-    allocate(tke_Tbck(nproma, nlevs, nblocks))
-    allocate(tke_Ttot(nproma, nlevs, nblocks))
-    allocate(tke_Lmix(nproma, nlevs, nblocks))
-    allocate(tke_Pr(nproma, nlevs, nblocks))
+    allocate(a_veloc_v(nproma, nlevs+1, nblocks))
+    allocate(a_temp_v(nproma, nlevs+1, nblocks))
+    allocate(a_salt_v(nproma, nlevs+1, nblocks))
+    allocate(iwe_Tdis(nproma, nlevs+1, nblocks))
+    allocate(cvmix_dummy_1(nproma, nlevs+1, nblocks))
+    allocate(cvmix_dummy_2(nproma, nlevs+1, nblocks))
+    allocate(cvmix_dummy_3(nproma, nlevs+1, nblocks))
+    allocate(tke_Tbpr(nproma, nlevs+1, nblocks))
+    allocate(tke_Tspr(nproma, nlevs+1, nblocks))
+    allocate(tke_Tdif(nproma, nlevs+1, nblocks))
+    allocate(tke_Tdis(nproma, nlevs+1, nblocks))
+    allocate(tke_Twin(nproma, nlevs+1, nblocks))
+    allocate(tke_Tiwf(nproma, nlevs+1, nblocks))
+    allocate(tke_Tbck(nproma, nlevs+1, nblocks))
+    allocate(tke_Ttot(nproma, nlevs+1, nblocks))
+    allocate(tke_Lmix(nproma, nlevs+1, nblocks))
+    allocate(tke_Pr(nproma, nlevs+1, nblocks))
 
     allocate(temp(nproma, nlevs, nblocks))
     allocate(salt(nproma, nlevs, nblocks))
@@ -166,9 +166,9 @@ program main
 
     ! Fill array
     do k=1,nblocks
-        do j=1,nlevs
+        do j=1,nlevs+1
             do i=1,nproma
-                tke(i,j,k) = 1.0_dp * ((i-1) + (j-1) * nproma + (k-1) * nproma * nlevs)
+                tke(i,j,k) = 1.0_dp * ((i-1) + (j-1) * nproma + (k-1) * nproma * (nlevs+1))
             end do
         end do
     end do
@@ -185,7 +185,15 @@ program main
     !$ACC ENTER DATA COPYIN(concsum)
 
     do t=1,ntimesteps
-        !$ACC HOST_DATA USE_DEVICE(tke, dolic_c)
+        !$ACC HOST_DATA USE_DEVICE(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c, prism_thick_c, &
+        !$ACC                      dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx, edges_cell_blk, &
+        !$ACC                      tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, iwe_Tdis, &
+        !$ACC                      cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
+        !$ACC                      tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr, &
+        !$ACC                      temp, salt, stretch_c, eta_c, &
+        !$ACC                      stress_xw, stress_yw, &
+        !$ACC                      fu10, &
+        !$ACC                      concsum)
         CALL TKE_Calc_f(depth_CellInterface, prism_center_dist_c, &
                         inv_prism_center_dist_c, prism_thick_c, &
                         dolic_c, dolic_e, zlev_i, wet_c, &
@@ -205,16 +213,6 @@ program main
                         cells_end_index)
         !$ACC END HOST_DATA
         !$ACC WAIT
-    end do
-
-    !$ACC UPDATE HOST(tke)
-
-    do k=1,nblocks
-        do j=1,nlevs
-            do i=1,nproma
-                write(*,*) "tke(i,j,k)", tke(i,j,k)
-            end do
-        end do
     end do
 
     CALL TKE_Finalize_f()

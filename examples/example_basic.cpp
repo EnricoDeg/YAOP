@@ -80,9 +80,9 @@ int main(int argc, char ** argv) {
     double *wet_c = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
     read_input<double>(wet_c, "examples/input/wet_c");
 
-    int *edges_cell_idx = reinterpret_cast<int *>(malloc(nproma * nlevs * nblocks * sizeof(int)));
+    int *edges_cell_idx = reinterpret_cast<int *>(malloc(nproma * 2 * nblocks * sizeof(int)));
 
-    int *edges_cell_blk = reinterpret_cast<int *>(malloc(nproma * nlevs * nblocks * sizeof(int)));
+    int *edges_cell_blk = reinterpret_cast<int *>(malloc(nproma * 2 * nblocks * sizeof(int)));
 
     double *temp = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
     read_input<double>(temp, "examples/input/to");
@@ -103,11 +103,11 @@ int main(int argc, char ** argv) {
     double *tke = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
     read_input<double>(tke, "examples/input/tke");
 
-    double *tke_plc_in = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+    double *tke_plc_in = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
 
     double *hlc_in = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
 
-    double *wlc_in = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks * sizeof(double)));
+    double *wlc_in = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks * sizeof(double)));
 
     double *u_stokes_in = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
 
@@ -173,24 +173,25 @@ int main(int argc, char ** argv) {
     double *concsum = reinterpret_cast<double *>(malloc(nproma * nblocks * sizeof(double)));
     read_input<double>(concsum, "examples/input/conc");
 
-    #pragma acc enter data copyin(depth_CellInterface[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(prism_center_dist_c[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(inv_prism_center_dist_c[0:nproma*nlevs*nblocks-1])
+    #pragma acc enter data copyin(depth_CellInterface[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(prism_center_dist_c[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(inv_prism_center_dist_c[0:nproma*(nlevs+1)*nblocks-1])
     #pragma acc enter data copyin(prism_thick_c[0:nproma*nlevs*nblocks-1])
     #pragma acc enter data copyin(dolic_c[0:nproma*nblocks-1], dolic_e[0:nproma*nblocks-1])
     #pragma acc enter data copyin(zlev_i[0:nlevs-1], wet_c[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(edges_cell_idx[0:nproma*nlevs*nblocks-1], edges_cell_blk[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke[0:nproma*nlevs*nblocks-1], tke_plc_in[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(hlc_in[0:nproma*nblocks-1], wlc_in[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(u_stokes_in[0:nproma*nblocks-1], a_veloc_v[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(a_temp_v[0:nproma*nlevs*nblocks-1], a_salt_v[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(iwe_Tdis[0:nproma*nlevs*nblocks-1], cvmix_dummy_1[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(cvmix_dummy_2[0:nproma*nlevs*nblocks-1], cvmix_dummy_3[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Tbpr[0:nproma*nlevs*nblocks-1], tke_Tspr[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Tdif[0:nproma*nlevs*nblocks-1], tke_Tdis[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Twin[0:nproma*nlevs*nblocks-1], tke_Tiwf[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Tbck[0:nproma*nlevs*nblocks-1], tke_Ttot[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Lmix[0:nproma*nlevs*nblocks-1], tke_Pr[0:nproma*nlevs*nblocks-1])
+    #pragma acc enter data copyin(edges_cell_idx[0:nproma*2*nblocks-1], edges_cell_blk[0:nproma*2*nblocks-1])
+    #pragma acc enter data copyin(tke[0:nproma*(nlevs+1)*nblocks-1], tke_plc_in[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(hlc_in[0:nproma*nblocks-1], wlc_in[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(u_stokes_in[0:nproma*nblocks-1], a_veloc_v[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(a_temp_v[0:nproma*(nlevs+1)*nblocks-1], a_salt_v[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(iwe_Tdis[0:nproma*(nlevs+1)*nblocks-1], cvmix_dummy_1[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(cvmix_dummy_2[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(cvmix_dummy_3[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Tbpr[0:nproma*(nlevs+1)*nblocks-1], tke_Tspr[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Tdif[0:nproma*(nlevs+1)*nblocks-1], tke_Tdis[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Twin[0:nproma*(nlevs+1)*nblocks-1], tke_Tiwf[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Tbck[0:nproma*(nlevs+1)*nblocks-1], tke_Ttot[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Lmix[0:nproma*(nlevs+1)*nblocks-1], tke_Pr[0:nproma*(nlevs+1)*nblocks-1])
     #pragma acc enter data copyin(temp[0:nproma*nlevs*nblocks-1], salt[0:nproma*nlevs*nblocks-1])
     #pragma acc enter data copyin(stretch_c[0:nproma*nblocks-1], eta_c[0:nproma*nblocks-1])
     #pragma acc enter data copyin(stress_xw[0:nproma*nblocks-1], stress_yw[0:nproma*nblocks-1])

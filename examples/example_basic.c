@@ -19,8 +19,8 @@
 #include "src/TKE.h"
 
 int main(int argc, char ** argv) {
-    int nproma = 10240;
-    int nlevs = 56;
+    int nproma = 25;
+    int nlevs = 40;
     int nblocks = 1;
     int ntimesteps = 10;
 
@@ -50,44 +50,44 @@ int main(int argc, char ** argv) {
              vert_cor_type, dtime, OceanReferenceDensity, grav,
              l_lc, clc, ReferencePressureIndbars, pi);
 
-    double *depth_CellInterface = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *prism_center_dist_c = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *inv_prism_center_dist_c = malloc(nproma * nlevs * nblocks * sizeof(double));
+    double *depth_CellInterface = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *prism_center_dist_c = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *inv_prism_center_dist_c = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
     double *prism_thick_c = malloc(nproma * nlevs * nblocks * sizeof(double));
     int *dolic_c = malloc(nproma * nblocks * sizeof(int));
     int *dolic_e = malloc(nproma * nblocks * sizeof(int));
     double *zlev_i = malloc(nlevs * sizeof(double));
     double *wet_c = malloc(nproma * nlevs * nblocks * sizeof(double));
-    int *edges_cell_idx = malloc(nproma * nlevs * nblocks * sizeof(int));
-    int *edges_cell_blk = malloc(nproma * nlevs * nblocks * sizeof(int));
+    int *edges_cell_idx = malloc(nproma * nblocks * 2 * sizeof(int));
+    int *edges_cell_blk = malloc(nproma * nblocks * 2 * sizeof(int));
 
     double *temp = malloc(nproma * nlevs * nblocks * sizeof(double));
     double *salt = malloc(nproma * nlevs * nblocks * sizeof(double));
     double *stretch_c = malloc(nproma * nblocks * sizeof(double));
     double *eta_c = malloc(nproma * nblocks * sizeof(double));
 
-    double * tke = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_plc_in = malloc(nproma * nlevs * nblocks * sizeof(double));
+    double * tke = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_plc_in = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
     double *hlc_in = malloc(nproma * nblocks * sizeof(double));
-    double *wlc_in = malloc(nproma * nlevs * nblocks * sizeof(double));
+    double *wlc_in = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
     double *u_stokes_in = malloc(nproma * nblocks * sizeof(double));
-    double *a_veloc_v = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *a_temp_v = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *a_salt_v = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *iwe_Tdis = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *cvmix_dummy_1 = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *cvmix_dummy_2 = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *cvmix_dummy_3 = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Tbpr = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Tspr = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Tdif = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Tdis = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Twin = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Tiwf = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Tbck = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Ttot = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Lmix = malloc(nproma * nlevs * nblocks * sizeof(double));
-    double *tke_Pr = malloc(nproma * nlevs * nblocks * sizeof(double));
+    double *a_veloc_v = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *a_temp_v = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *a_salt_v = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *iwe_Tdis = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *cvmix_dummy_1 = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *cvmix_dummy_2 = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *cvmix_dummy_3 = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Tbpr = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Tspr = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Tdif = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Tdis = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Twin = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Tiwf = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Tbck = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Ttot = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Lmix = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
+    double *tke_Pr = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
 
     double *stress_xw = malloc(nproma * nblocks * sizeof(double));
     double *stress_yw = malloc(nproma * nblocks * sizeof(double));
@@ -98,32 +98,33 @@ int main(int argc, char ** argv) {
 
     // fill array
     for (int i = 0; i < nblocks; ++i)
-        for (int j = 0; j < nlevs; ++j)
+        for (int j = 0; j < nlevs+1; ++j)
             for (int k = 0; k < nproma; ++k)
-                tke[k + j * nproma + i * nproma * nlevs] = 1.0 * (k + j * nproma + i * nproma * nlevs);
+                tke[k + j * nproma + i * nproma * (nlevs+1)] = 1.0 * (k + j * nproma + i * nproma * (nlevs+1));
 
     for (int i = 0; i < nblocks; ++i)
         for (int k = 0; k < nproma; ++k)
             dolic_c[k + i * nproma] = nlevs;
 
-    #pragma acc enter data copyin(depth_CellInterface[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(prism_center_dist_c[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(inv_prism_center_dist_c[0:nproma*nlevs*nblocks-1])
+    #pragma acc enter data copyin(depth_CellInterface[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(prism_center_dist_c[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(inv_prism_center_dist_c[0:nproma*(nlevs+1)*nblocks-1])
     #pragma acc enter data copyin(prism_thick_c[0:nproma*nlevs*nblocks-1])
     #pragma acc enter data copyin(dolic_c[0:nproma*nblocks-1], dolic_e[0:nproma*nblocks-1])
     #pragma acc enter data copyin(zlev_i[0:nlevs-1], wet_c[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(edges_cell_idx[0:nproma*nlevs*nblocks-1], edges_cell_blk[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke[0:nproma*nlevs*nblocks-1], tke_plc_in[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(hlc_in[0:nproma*nblocks-1], wlc_in[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(u_stokes_in[0:nproma*nblocks-1], a_veloc_v[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(a_temp_v[0:nproma*nlevs*nblocks-1], a_salt_v[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(iwe_Tdis[0:nproma*nlevs*nblocks-1], cvmix_dummy_1[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(cvmix_dummy_2[0:nproma*nlevs*nblocks-1], cvmix_dummy_3[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Tbpr[0:nproma*nlevs*nblocks-1], tke_Tspr[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Tdif[0:nproma*nlevs*nblocks-1], tke_Tdis[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Twin[0:nproma*nlevs*nblocks-1], tke_Tiwf[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Tbck[0:nproma*nlevs*nblocks-1], tke_Ttot[0:nproma*nlevs*nblocks-1])
-    #pragma acc enter data copyin(tke_Lmix[0:nproma*nlevs*nblocks-1], tke_Pr[0:nproma*nlevs*nblocks-1])
+    #pragma acc enter data copyin(edges_cell_idx[0:nproma*2*nblocks-1], edges_cell_blk[0:nproma*2*nblocks-1])
+    #pragma acc enter data copyin(tke[0:nproma*(nlevs+1)*nblocks-1], tke_plc_in[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(hlc_in[0:nproma*nblocks-1], wlc_in[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(u_stokes_in[0:nproma*nblocks-1], a_veloc_v[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(a_temp_v[0:nproma*(nlevs+1)*nblocks-1], a_salt_v[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(iwe_Tdis[0:nproma*(nlevs+1)*nblocks-1], cvmix_dummy_1[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(cvmix_dummy_2[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(cvmix_dummy_3[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Tbpr[0:nproma*(nlevs+1)*nblocks-1], tke_Tspr[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Tdif[0:nproma*(nlevs+1)*nblocks-1], tke_Tdis[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Twin[0:nproma*(nlevs+1)*nblocks-1], tke_Tiwf[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Tbck[0:nproma*(nlevs+1)*nblocks-1], tke_Ttot[0:nproma*(nlevs+1)*nblocks-1])
+    #pragma acc enter data copyin(tke_Lmix[0:nproma*(nlevs+1)*nblocks-1], tke_Pr[0:nproma*(nlevs+1)*nblocks-1])
     #pragma acc enter data copyin(temp[0:nproma*nlevs*nblocks-1], salt[0:nproma*nlevs*nblocks-1])
     #pragma acc enter data copyin(stretch_c[0:nproma*nblocks-1], eta_c[0:nproma*nblocks-1])
     #pragma acc enter data copyin(stress_xw[0:nproma*nblocks-1], stress_yw[0:nproma*nblocks-1])
@@ -131,7 +132,13 @@ int main(int argc, char ** argv) {
     #pragma acc enter data copyin(concsum[0:nproma*nblocks-1])
 
     for (int t = 0; t < ntimesteps; t++) {
-      #pragma acc host_data use_device(tke, dolic_c)
+      #pragma acc host_data use_device(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c)
+      #pragma acc host_data use_device(prism_thick_c, dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx)
+      #pragma acc host_data use_device(edges_cell_blk, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v)
+      #pragma acc host_data use_device(a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2)
+      #pragma acc host_data use_device(cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin)
+      #pragma acc host_data use_device(tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr, temp, salt)
+      #pragma acc host_data use_device(stretch_c, eta_c, stress_xw, stress_yw, fu10, concsum)
       TKE_Calc(depth_CellInterface, prism_center_dist_c,
                inv_prism_center_dist_c, prism_thick_c,
                dolic_c, dolic_e, zlev_i, wet_c,
@@ -152,13 +159,6 @@ int main(int argc, char ** argv) {
 
       #pragma acc wait
     }
-
-    #pragma acc update host(tke[0:nproma*nlevs*nblocks-1])
-
-    for (int i = 0; i < nblocks; ++i)
-        for (int j = 0; j < nlevs; ++j)
-            for (int k = 0; k < nproma; ++k)
-                printf("tke[%d] = %e\n", k + j * nproma + i * nproma * nlevs, tke[k + j * nproma + i * nproma * nlevs]);
 
     TKE_Finalize();
 
