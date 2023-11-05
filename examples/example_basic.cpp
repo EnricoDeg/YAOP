@@ -113,6 +113,12 @@ int main(int argc, char ** argv) {
         for (int j=0; j < nproma; j++)
             eta_c[j+i*nproma] = 0.0;
 
+    double *p_vn_x1 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks_cells * sizeof(double)));
+
+    double *p_vn_x2 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks_cells * sizeof(double)));
+
+    double *p_vn_x3 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks_cells * sizeof(double)));
+
     double *tke = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks_cells * sizeof(double)));
     read_input<double>(tke, "examples/input/tke", ncells, nproma, (nlevs+1), nblocks_cells, npromz_cells);
 
@@ -225,6 +231,9 @@ int main(int argc, char ** argv) {
     #pragma acc enter data copyin(tke_Pr[0:nproma*(nlevs+1)*nblocks_cells-1])
     #pragma acc enter data copyin(temp[0:nproma*nlevs*nblocks_cells-1], salt[0:nproma*nlevs*nblocks_cells-1])
     #pragma acc enter data copyin(stretch_c[0:nproma*nblocks_cells-1], eta_c[0:nproma*nblocks_cells-1])
+    #pragma acc enter data copyin(p_vn_x1[0:nproma*nlevs*nblocks_cells-1])
+    #pragma acc enter data copyin(p_vn_x2[0:nproma*nlevs*nblocks_cells-1])
+    #pragma acc enter data copyin(p_vn_x3[0:nproma*nlevs*nblocks_cells-1])
     #pragma acc enter data copyin(stress_xw[0:nproma*nblocks_cells-1], stress_yw[0:nproma*nblocks_cells-1])
     #pragma acc enter data copyin(fu10[0:nproma*nblocks_cells-1])
     #pragma acc enter data copyin(concsum[0:nproma*nblocks_cells-1])
@@ -236,11 +245,13 @@ int main(int argc, char ** argv) {
       #pragma acc host_data use_device(iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr)
       #pragma acc host_data use_device(tke_Tdif, tke_Tdis, tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
       #pragma acc host_data use_device(temp, salt, stretch_c, eta_c, stress_xw, stress_yw, fu10, concsum)
+      #pragma acc host_data use_device(p_vn_x1, p_vn_x2, p_vn_x3)
       ocean_physics->calc(depth_CellInterface, prism_center_dist_c,
                           inv_prism_center_dist_c, prism_thick_c,
                           dolic_c, dolic_e, zlev_i, wet_c,
                           edges_cell_idx, edges_cell_blk,
                           temp, salt, stretch_c, eta_c,
+                          p_vn_x1, p_vn_x2, p_vn_x3,
                           tke, tke_plc_in, hlc_in, wlc_in,
                           u_stokes_in, a_veloc_v, a_temp_v, a_salt_v,
                           iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
@@ -264,6 +275,7 @@ int main(int argc, char ** argv) {
     #pragma acc exit data delete(iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr)
     #pragma acc exit data delete(tke_Tdif, tke_Tdis, tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
     #pragma acc exit data delete(temp, salt, stretch_c, eta_c)
+    #pragma acc exit data delete(p_vn_x1, p_vn_x2, p_vn_x3)
     #pragma acc exit data delete(stress_xw, stress_yw)
     #pragma acc exit data delete(fu10)
     #pragma acc exit data delete(concsum)
@@ -306,6 +318,9 @@ int main(int argc, char ** argv) {
     free(salt);
     free(stretch_c);
     free(eta_c);
+    free(p_vn_x1);
+    free(p_vn_x2);
+    free(p_vn_x3);
 
     free(stress_xw);
     free(stress_yw);

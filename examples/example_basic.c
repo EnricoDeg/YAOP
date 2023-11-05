@@ -65,6 +65,9 @@ int main(int argc, char ** argv) {
     double *salt = malloc(nproma * nlevs * nblocks * sizeof(double));
     double *stretch_c = malloc(nproma * nblocks * sizeof(double));
     double *eta_c = malloc(nproma * nblocks * sizeof(double));
+    double *p_vn_x1 = malloc(nproma * nlevs * nblocks * sizeof(double));
+    double *p_vn_x2 = malloc(nproma * nlevs * nblocks * sizeof(double));
+    double *p_vn_x3 = malloc(nproma * nlevs * nblocks * sizeof(double));
 
     double * tke = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
     double *tke_plc_in = malloc(nproma * (nlevs+1) * nblocks * sizeof(double));
@@ -126,6 +129,9 @@ int main(int argc, char ** argv) {
     #pragma acc enter data copyin(tke_Tbck[0:nproma*(nlevs+1)*nblocks-1], tke_Ttot[0:nproma*(nlevs+1)*nblocks-1])
     #pragma acc enter data copyin(tke_Lmix[0:nproma*(nlevs+1)*nblocks-1], tke_Pr[0:nproma*(nlevs+1)*nblocks-1])
     #pragma acc enter data copyin(temp[0:nproma*nlevs*nblocks-1], salt[0:nproma*nlevs*nblocks-1])
+    #pragma acc enter data copyin(p_vn_x1[0:nproma*nlevs*nblocks-1])
+    #pragma acc enter data copyin(p_vn_x2[0:nproma*nlevs*nblocks-1])
+    #pragma acc enter data copyin(p_vn_x3[0:nproma*nlevs*nblocks-1])
     #pragma acc enter data copyin(stretch_c[0:nproma*nblocks-1], eta_c[0:nproma*nblocks-1])
     #pragma acc enter data copyin(stress_xw[0:nproma*nblocks-1], stress_yw[0:nproma*nblocks-1])
     #pragma acc enter data copyin(fu10[0:nproma*nblocks-1])
@@ -139,11 +145,13 @@ int main(int argc, char ** argv) {
       #pragma acc host_data use_device(cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin)
       #pragma acc host_data use_device(tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr, temp, salt)
       #pragma acc host_data use_device(stretch_c, eta_c, stress_xw, stress_yw, fu10, concsum)
+      #pragma acc host_data use_device(p_vn_x1, p_vn_x2, p_vn_x3)
       TKE_Calc(depth_CellInterface, prism_center_dist_c,
                inv_prism_center_dist_c, prism_thick_c,
                dolic_c, dolic_e, zlev_i, wet_c,
                edges_cell_idx, edges_cell_blk,
                temp, salt, stretch_c, eta_c,
+               p_vn_x1, p_vn_x2, p_vn_x3,
                tke, tke_plc_in, hlc_in, wlc_in,
                u_stokes_in, a_veloc_v, a_temp_v, a_salt_v,
                iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
@@ -168,6 +176,7 @@ int main(int argc, char ** argv) {
     #pragma acc exit data delete(iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr)
     #pragma acc exit data delete(tke_Tdif, tke_Tdis, tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
     #pragma acc exit data delete(temp, salt, stretch_c, eta_c)
+    #pragma acc exit data delete(p_vn_x1, p_vn_x2, p_vn_x3)
     #pragma acc exit data delete(stress_xw, stress_yw)
     #pragma acc exit data delete(fu10)
     #pragma acc exit data delete(concsum)
@@ -210,6 +219,9 @@ int main(int argc, char ** argv) {
     free(salt);
     free(stretch_c);
     free(eta_c);
+    free(p_vn_x1);
+    free(p_vn_x2);
+    free(p_vn_x3);
 
     free(stress_xw);
     free(stress_yw);

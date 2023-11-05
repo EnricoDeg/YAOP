@@ -66,6 +66,9 @@ program main
     real(dp), allocatable :: salt(:,:,:)
     real(dp), allocatable :: stretch_c(:,:)
     real(dp), allocatable :: eta_c(:,:)
+    real(dp), allocatable :: p_vn_x1(:,:,:)
+    real(dp), allocatable :: p_vn_x2(:,:,:)
+    real(dp), allocatable :: p_vn_x3(:,:,:)
     real(dp), allocatable :: tke_plc_in(:,:,:)
     real(dp), allocatable :: hlc_in(:,:)
     real(dp), allocatable :: wlc_in(:,:,:)
@@ -152,6 +155,9 @@ program main
     allocate(salt(nproma, nlevs, nblocks))
     allocate(stretch_c(nproma, nblocks))
     allocate(eta_c(nproma, nblocks))
+    allocate(p_vn_x1(nproma, nlevs, nblocks))
+    allocate(p_vn_x1(nproma, nlevs, nblocks))
+    allocate(p_vn_x3(nproma, nlevs, nblocks))
 
     allocate(stress_xw(nproma, nblocks))
     allocate(stress_yw(nproma, nblocks))
@@ -179,7 +185,7 @@ program main
     !$ACC ENTER DATA COPYIN(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, iwe_Tdis, &
     !$ACC                   cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
     !$ACC                   tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
-    !$ACC ENTER DATA COPYIN(temp, salt, stretch_c, eta_c)
+    !$ACC ENTER DATA COPYIN(temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3)
     !$ACC ENTER DATA COPYIN(stress_xw, stress_yw)
     !$ACC ENTER DATA COPYIN(fu10)
     !$ACC ENTER DATA COPYIN(concsum)
@@ -191,6 +197,7 @@ program main
         !$ACC                      cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
         !$ACC                      tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr, &
         !$ACC                      temp, salt, stretch_c, eta_c, &
+        !$ACC                      p_vn_x1, p_vn_x2, p_vn_x3, &
         !$ACC                      stress_xw, stress_yw, &
         !$ACC                      fu10, &
         !$ACC                      concsum)
@@ -199,6 +206,7 @@ program main
                         dolic_c, dolic_e, zlev_i, wet_c, &
                         edges_cell_idx, edges_cell_blk, &
                         temp, salt, stretch_c, eta_c, &
+                        p_vn_x1, p_vn_x2, p_vn_x3, &
                         tke, tke_plc_in, hlc_in, wlc_in, &
                         u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, &
                         iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, &
@@ -222,7 +230,7 @@ program main
     !$ACC EXIT DATA DELETE(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, iwe_Tdis, &
     !$ACC                  cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
     !$ACC                  tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
-    !$ACC EXIT DATA DELETE(temp, salt, stretch_c, eta_c)
+    !$ACC EXIT DATA DELETE(temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3)
     !$ACC EXIT DATA DELETE(stress_xw, stress_yw)
     !$ACC EXIT DATA DELETE(fu10)
     !$ACC EXIT DATA DELETE(concsum)
@@ -232,7 +240,7 @@ program main
     deallocate(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, iwe_Tdis, &
                cvmix_dummy_1, cvmix_dummy_2, cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, &
                tke_Twin, tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr)
-    deallocate(temp, salt, stretch_c, eta_c)
+    deallocate(temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3)
     deallocate(stress_xw, stress_yw)
     deallocate(fu10)
     deallocate(concsum)
