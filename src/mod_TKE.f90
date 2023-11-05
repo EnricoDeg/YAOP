@@ -93,6 +93,7 @@ module mod_TKE
                           dolic_c, dolic_e, zlev_i, wet_c, &
                           edges_cell_idx, edges_cell_blk, &
                           temp, salt, stretch_c, eta_c, &
+                          p_vn_x1, p_vn_x2, p_vn_x3, &
                           tke, tke_plc_in, hlc_in, wlc_in, &
                           u_stokes_in, a_veloc_v, a_temp_v, a_salt_v, &
                           iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2, &
@@ -123,6 +124,9 @@ module mod_TKE
         real(c_double), intent(in),    TARGET :: salt(:,:,:)
         real(c_double), intent(in),    TARGET :: stretch_c(:,:)
         real(c_double), intent(in),    TARGET :: eta_c(:,:)
+        real(c_double), intent(in),    TARGET :: p_vn_x1(:,:,:)
+        real(c_double), intent(in),    TARGET :: p_vn_x2(:,:,:)
+        real(c_double), intent(in),    TARGET :: p_vn_x3(:,:,:)
         real(c_double), intent(inout), TARGET :: tke(:,:,:)
         real(c_double), intent(in),    TARGET :: tke_plc_in(:,:,:)
         real(c_double), intent(in),    TARGET :: hlc_in(:,:)
@@ -165,6 +169,7 @@ module mod_TKE
                        dolic_c_ptr, dolic_e_ptr, zlev_i_ptr, wet_c_ptr, &
                        edges_cell_idx_ptr, edges_cell_blk_ptr, &
                        temp_ptr, salt_ptr, stretch_c_ptr, eta_c_ptr, &
+                       p_vn_x1_ptr, p_vn_x2_ptr, p_vn_x3_ptr, &
                        tke_ptr, tke_plc_in_ptr, hlc_in_ptr, wlc_in_ptr, &
                        u_stokes_in_ptr, a_veloc_v_ptr, a_temp_v_ptr, a_salt_v_ptr, &
                        iwe_Tdis_ptr, cvmix_dummy_1_ptr, cvmix_dummy_2_ptr, &
@@ -180,6 +185,7 @@ module mod_TKE
                                   dolic_c_c, dolic_e_c, zlev_i_c, wet_c_c, &
                                   edges_cell_idx_c, edges_cell_blk_c, &
                                   temp_c, salt_c, stretch_c_c, eta_c_c, &
+                                  p_vn_x1_c, p_vn_x2_c, p_vn_x3_c, &
                                   tke_c, tke_plc_in_c, hlc_in_c, wlc_in_c, &
                                   u_stokes_in_c, a_veloc_v_c, a_temp_v_c, a_salt_v_c, &
                                   iwe_Tdis_c, cvmix_dummy_1_c, cvmix_dummy_2_c, &
@@ -209,6 +215,9 @@ module mod_TKE
                 type(c_ptr), value    :: salt_c
                 type(c_ptr), value    :: stretch_c_c
                 type(c_ptr), value    :: eta_c_c
+                type(c_ptr), value    :: p_vn_x1_c
+                type(c_ptr), value    :: p_vn_x2_c
+                type(c_ptr), value    :: p_vn_x3_c
                 type(c_ptr), value    :: tke_c
                 type(c_ptr), value    :: tke_plc_in_c
                 type(c_ptr), value    :: hlc_in_c
@@ -263,6 +272,9 @@ module mod_TKE
         salt_ptr                    = c_loc(salt(1, 1, 1))
         stretch_c_ptr               = c_loc(stretch_c(1, 1))
         eta_c_ptr                   = c_loc(eta_c(1, 1))
+        p_vn_x1_ptr                 = c_loc(p_vn_x1(1, 1, 1))
+        p_vn_x2_ptr                 = c_loc(p_vn_x2(1, 1, 1))
+        p_vn_x3_ptr                 = c_loc(p_vn_x3(1, 1, 1))
         tke_ptr                     = c_loc(tke(1, 1, 1))
         tke_plc_in_ptr              = c_loc(tke_plc_in(1, 1, 1))
         hlc_in_ptr                  = c_loc(hlc_in(1, 1))
@@ -295,6 +307,7 @@ module mod_TKE
                         dolic_c_ptr, dolic_e_ptr, zlev_i_ptr, wet_c_ptr, &
                         edges_cell_idx_ptr, edges_cell_blk_ptr, &
                         temp_ptr, salt_ptr, stretch_c_ptr, eta_c_ptr, &
+                        p_vn_x1_ptr, p_vn_x2_ptr, p_vn_x3_ptr, &
                         tke_ptr, tke_plc_in_ptr, hlc_in_ptr, wlc_in_ptr, &
                         u_stokes_in_ptr, a_veloc_v_ptr, a_temp_v_ptr, a_salt_v_ptr, &
                         iwe_Tdis_ptr, cvmix_dummy_1_ptr, cvmix_dummy_2_ptr, &
