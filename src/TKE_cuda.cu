@@ -183,6 +183,13 @@ void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view 
         p_internal.pressure(0, jc) = 1.0;
         for (int level = 1; level < levels; level++)
             p_internal.pressure(level, jc) = p_patch.zlev_i(level) * p_constant.ReferencePressureIndbars;
+        for (int level = 0; level < levels; level++)
+            p_internal.dzw_stretched(level, jc) = p_patch.prism_thick_c(blockNo, level, jc) *
+                                                  ocean_state.stretch_c(blockNo, jc);
+
+        for (int level = 0; level < levels + 1; level++)
+            p_internal.dzt_stretched(level, jc) = p_patch.prism_center_dist_c(blockNo, level, jc) *
+                                                  ocean_state.stretch_c(blockNo, jc);
 
         // pre-integration
         levels = p_patch.dolic_c(blockNo, jc);
@@ -200,6 +207,33 @@ void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view 
                              * sqrt(pow(atmos_fluxes.stress_xw(blockNo, jc), 2.0)
                                   + pow(atmos_fluxes.stress_yw(blockNo, jc), 2.0));
             p_internal.forc_tke_surf_2D(jc) = tau_abs / p_constant.OceanReferenceDensity;
+
+            for (int level = 0; level < levels-1; level++)
+                p_internal.rho_up(level, jc) = calculate_density(ocean_state.temp(blockNo, level, jc),
+                                                                 ocean_state.salt(blockNo, level, jc),
+                                                                 p_internal.pressure(level+1, jc));
+            for (int level = 1; level < levels; level++)
+                p_internal.rho_down(level, jc) = calculate_density(ocean_state.temp(blockNo, level, jc),
+                                                                   ocean_state.salt(blockNo, level, jc),
+                                                                   p_internal.pressure(level, jc));
+            for (int level = 1; level < levels; level++)
+                p_internal.Nsqr(level, jc) = p_constant.grav / p_constant.OceanReferenceDensity *
+                                             (p_internal.rho_down(level, jc) - p_internal.rho_up(level-1, jc));
+
+
+            for (int level = 1; level < levels; level++)
+                p_internal.Ssqr(level, jc) = pow((ocean_state.p_vn_x1(blockNo, level-1, jc) -
+                                             ocean_state.p_vn_x1(blockNo, level, jc) ) *
+                                             p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
+                                             ocean_state.stretch_c(blockNo, jc) , 2.0) +
+                                             pow((ocean_state.p_vn_x2(blockNo, level-1, jc) -
+                                             ocean_state.p_vn_x2(blockNo, level, jc) ) *
+                                             p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
+                                             ocean_state.stretch_c(blockNo, jc) , 2.0) +
+                                             pow((ocean_state.p_vn_x3(blockNo, level-1, jc) -
+                                             ocean_state.p_vn_x3(blockNo, level, jc) ) *
+                                             p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
+                                             ocean_state.stretch_c(blockNo, jc) , 2.0);
         }
 
         // integration
