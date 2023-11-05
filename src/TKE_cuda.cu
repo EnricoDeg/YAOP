@@ -35,6 +35,26 @@ struct t_constant {
     int nlevs;
 };
 
+struct t_constant_tke {
+    double c_k;
+    double c_eps;
+    double cd;
+    double alpha_tke;
+    double clc;
+    double mxl_min;
+    double KappaM_min;
+    double KappaH_min;
+    double KappaM_max;
+    double tke_surf_min;
+    double tke_min;
+    int tke_mxl_choice;
+    int handle_old_vals;
+    bool only_tke;
+    bool use_Kappa_min;
+    bool use_ubound_dirichlet;
+    bool use_lbound_dirichlet;
+};
+
 // Structures with memory views
 struct t_cvmix_view p_cvmix_view_l;
 struct t_patch_view p_patch_view_l;
@@ -43,14 +63,23 @@ struct t_atmo_fluxes_view atmos_fluxes_view_l;
 struct t_atmos_for_ocean_view p_as_view_l;
 struct t_sea_ice_view p_sea_ice_view_l;
 struct t_tke_internal_view p_internal_view_l;
+
+// Structures with parameters
 struct t_constant p_constant;
+struct t_constant_tke p_constant_tke;
 
 // TKE CUDA kernels functions
 __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
                                  t_patch_view p_patch, t_cvmix_view p_cvmix,
                                  t_ocean_state_view ocean_state, t_atmo_fluxes_view atmos_fluxes,
                                  t_atmos_for_ocean_view p_as, t_sea_ice_view p_sea_ice,
-                                 t_tke_internal_view p_internal, t_constant p_constant);
+                                 t_tke_internal_view p_internal, t_constant p_constant,
+                                 t_constant_tke p_constant_tke);
+
+__device__
+void integrate(t_patch_view p_patch, t_cvmix_view p_cvmix,
+               t_tke_internal_view p_internal, t_constant p_constant,
+               t_constant_tke p_constant_tke);
 
 __device__
 double  calculate_density(double temp, double salt, double pressure);
@@ -123,6 +152,7 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
         fill_struct_view(&atmos_fluxes_view_l, &atmos_fluxes, m_nblocks, m_nlevs, m_nproma);
         fill_struct_view(&p_as_view_l, &p_as, m_nblocks, m_nlevs, m_nproma);
         fill_struct_view(&p_sea_ice_view_l, &p_sea_ice, m_nblocks, m_nlevs, m_nproma);
+
         p_constant.vert_mix_type = m_vert_mix_type;
         p_constant.vmix_idemix_tke = m_vmix_idemix_tke;
         p_constant.vert_cor_type = m_vert_cor_type;
@@ -134,6 +164,25 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
         p_constant.ReferencePressureIndbars = m_ReferencePressureIndbars;
         p_constant.pi = m_pi;
         p_constant.nlevs = m_nlevs;
+
+        p_constant_tke.c_k = 0.1;
+        p_constant_tke.c_eps = 0.7;
+        p_constant_tke.cd = 3.75;
+        p_constant_tke.alpha_tke = 30.0;
+        p_constant_tke.clc = 0.15;
+        p_constant_tke.mxl_min = 1.0e-8;
+        p_constant_tke.KappaM_min = 1.0e-4;
+        p_constant_tke.KappaH_min = 1.0e-5;
+        p_constant_tke.KappaM_max = 100.0;
+        p_constant_tke.tke_surf_min = 1.0e-4;
+        p_constant_tke.tke_min = 1.0e-6;
+        p_constant_tke.tke_mxl_choice = 2;
+        p_constant_tke.handle_old_vals = 1;
+        p_constant_tke.only_tke = true;
+        p_constant_tke.use_Kappa_min = false;
+        p_constant_tke.use_ubound_dirichlet = false;
+        p_constant_tke.use_lbound_dirichlet = false;
+
         is_view_init = true;
     }
 
@@ -149,7 +198,8 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                                             p_patch_view_l, p_cvmix_view_l,
                                                             ocean_state_view_l, atmos_fluxes_view_l,
                                                             p_as_view_l, p_sea_ice_view_l,
-                                                            p_internal_view_l, p_constant);
+                                                            p_internal_view_l, p_constant,
+                                                            p_constant_tke);
     }
 }
 
@@ -158,7 +208,8 @@ void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view 
                       t_cvmix_view p_cvmix, t_ocean_state_view ocean_state,
                       t_atmo_fluxes_view atmos_fluxes,
                       t_atmos_for_ocean_view p_as, t_sea_ice_view p_sea_ice,
-                      t_tke_internal_view p_internal, t_constant p_constant) {
+                      t_tke_internal_view p_internal, t_constant p_constant,
+                      t_constant_tke p_constant_tke) {
     int jc = blockIdx.x * blockDim.x + threadIdx.x + start_index;
     if (jc <= end_index) {
         int levels = p_constant.nlevs;
@@ -234,12 +285,20 @@ void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view 
                                              ocean_state.p_vn_x3(blockNo, level, jc) ) *
                                              p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
                                              ocean_state.stretch_c(blockNo, jc) , 2.0);
+
+            integrate(p_patch, p_cvmix, p_internal, p_constant, p_constant_tke);
         }
 
         // integration
 
         // post-integration
     }
+}
+
+__device__
+void integrate(t_patch_view p_patch, t_cvmix_view p_cvmix,
+               t_tke_internal_view p_internal, t_constant p_constant,
+               t_constant_tke p_constant_tke) {
 }
 
 __device__
