@@ -23,6 +23,9 @@
 template<typename T>
 void read_input(T *data, const std::string &filename, int npoints, int nproma, int nlevs, int nblocks, int npromz);
 
+template<typename T>
+void init_fix(T *data, int nproma, int nlevs, int nblocks, T value);
+
 int main(int argc, char ** argv) {
     int nproma = 15117;
     int nlevs = 40;
@@ -58,10 +61,12 @@ int main(int argc, char ** argv) {
     double pi = 3.14159265358979323846264338327950288;
 
     std::shared_ptr<TKE> ocean_physics;
+    // Initialize TKE
     ocean_physics.reset(new TKE(nproma, nlevs, nblocks_cells, vert_mix_type, vmix_idemix_tke,
                                 vert_cor_type, dtime, OceanReferenceDensity, grav,
                                 l_lc, clc, ReferencePressureIndbars, pi));
 
+    // Allocate arrays
     double *depth_CellInterface = reinterpret_cast<double *>(
                                   malloc(nproma * (nlevs+1) * nblocks_cells * sizeof(double)));
     read_input<double>(depth_CellInterface, "examples/input/depth_CellInterface",
@@ -85,7 +90,6 @@ int main(int argc, char ** argv) {
     read_input<int>(dolic_c, "examples/input/dolic_c", ncells, nproma, 1, nblocks_cells, npromz_cells);
 
     int *dolic_e = reinterpret_cast<int *>(malloc(nproma * nblocks_edges * sizeof(int)));
-//    read_input<int>(dolic_e, "examples/input/dolic_e", nedges, nproma, 1, nblocks_edges, npromz_edges);
 
     double *zlev_i = reinterpret_cast<double *>(malloc(nlevs * sizeof(double)));
     read_input<double>(zlev_i, "examples/input/zlev_i", 1, 1, nlevs, 1, 1);
@@ -104,20 +108,19 @@ int main(int argc, char ** argv) {
     read_input<double>(salt, "examples/input/so", ncells, nproma, nlevs, nblocks_cells, npromz_cells);
 
     double *stretch_c = reinterpret_cast<double *>(malloc(nproma * nblocks_cells * sizeof(double)));
-    for (int i=0; i < nblocks_cells; i++)
-        for (int j=0; j < nproma; j++)
-            stretch_c[j+i*nproma] = 1.0;
+    init_fix<double>(stretch_c, nproma, 1, nblocks_cells, 1.0);
 
     double *eta_c = reinterpret_cast<double *>(malloc(nproma * nblocks_cells * sizeof(double)));
-    for (int i=0; i < nblocks_cells; i++)
-        for (int j=0; j < nproma; j++)
-            eta_c[j+i*nproma] = 0.0;
+    init_fix<double>(eta_c, nproma, 1, nblocks_cells, 0.0);
 
     double *p_vn_x1 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks_cells * sizeof(double)));
+    init_fix<double>(p_vn_x1, nproma, nlevs, nblocks_cells, 0.0);
 
     double *p_vn_x2 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks_cells * sizeof(double)));
+    init_fix<double>(p_vn_x2, nproma, nlevs, nblocks_cells, 0.0);
 
     double *p_vn_x3 = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks_cells * sizeof(double)));
+    init_fix<double>(p_vn_x3, nproma, nlevs, nblocks_cells, 0.0);
 
     double *tke = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks_cells * sizeof(double)));
     read_input<double>(tke, "examples/input/tke", ncells, nproma, (nlevs+1), nblocks_cells, npromz_cells);
@@ -269,6 +272,7 @@ int main(int argc, char ** argv) {
 
     ocean_physics.reset();
 
+    // Deallocate arrays on host and device
     #pragma acc exit data delete(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c)
     #pragma acc exit data delete(prism_thick_c, dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx, edges_cell_blk)
     #pragma acc exit data delete(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v, a_temp_v, a_salt_v)
@@ -354,4 +358,12 @@ void read_input(T *data, const std::string &filename, int npoints, int nproma, i
     }
 
     free(buffer);
+}
+
+template<typename T>
+void init_fix(T *data, int nproma, int nlevs, int nblocks, T value) {
+    for (int jb = 0; jb < nblocks; jb++)
+        for (int level = 0; level < nlevs; level++)
+            for (int jc = 0; jc < nproma; jc++)
+                data[jc+level*nproma+jb*nproma*nlevs] = value;
 }
