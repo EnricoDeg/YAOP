@@ -27,18 +27,18 @@ class TKE_backend {
                 int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
                 int l_lc, double clc, double ReferencePressureIndbars, double pi);
     virtual ~TKE_backend() = default;
-    void calc(struct t_patch p_patch, struct t_cvmix p_cvmix,
-              struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
-              struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice,
+    void calc(t_patch p_patch, t_cvmix p_cvmix,
+              t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
+              t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
               int edges_block_size, int edges_start_block, int edges_end_block,
               int edges_start_index, int edges_end_index, int cells_block_size,
               int cells_start_block, int cells_end_block, int cells_start_index,
               int cells_end_index);
 
  protected:
-    virtual void calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
-                           struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
-                           struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice,
+    virtual void calc_impl(t_patch p_patch, t_cvmix p_cvmix,
+                           t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
+                           t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                            int edges_block_size, int edges_start_block, int edges_end_block,
                            int edges_start_index, int edges_end_index, int cells_block_size,
                            int cells_start_block, int cells_end_block, int cells_start_index,

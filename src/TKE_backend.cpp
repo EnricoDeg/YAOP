@@ -26,9 +26,9 @@ TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int vert_mix_type, 
       m_ReferencePressureIndbars(ReferencePressureIndbars), m_pi(pi) {
 }
 
-void TKE_backend::calc(struct t_patch p_patch, struct t_cvmix p_cvmix,
-                       struct t_ocean_state ocean_state, struct t_atmo_fluxes atmos_fluxes,
-                       struct t_atmos_for_ocean p_as, struct t_sea_ice p_sea_ice,
+void TKE_backend::calc(t_patch p_patch, t_cvmix p_cvmix,
+                       t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
+                       t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                        int edges_block_size, int edges_start_block, int edges_end_block,
                        int edges_start_index, int edges_end_index, int cells_block_size,
                        int cells_start_block, int cells_end_block, int cells_start_index,
@@ -38,4 +38,4 @@ void TKE_backend::calc(struct t_patch p_patch, struct t_cvmix p_cvmix,
                     edges_start_index, edges_end_index, cells_block_size,
                     cells_start_block, cells_end_block, cells_start_index,
                     cells_end_index);
-                       }
+}
