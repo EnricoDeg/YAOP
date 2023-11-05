@@ -96,6 +96,9 @@ struct t_ocean_state_view {
     mdspan_3d_double salt;
     mdspan_2d_double stretch_c;
     mdspan_2d_double eta_c;
+    mdspan_3d_double p_vn_x1;
+    mdspan_3d_double p_vn_x2;
+    mdspan_3d_double p_vn_x3;
 };
 
 struct t_atmo_fluxes_view {
@@ -161,6 +164,9 @@ static void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct
     ocean_state_view->salt = mdspan_3d_double{ ocean_state->salt, ext3d_t{nblocks, nlevs, nproma} };
     ocean_state_view->stretch_c = mdspan_2d_double{ ocean_state->stretch_c, ext2d_t{nblocks, nproma} };
     ocean_state_view->eta_c = mdspan_2d_double{ ocean_state->eta_c, ext2d_t{nblocks, nproma} };
+    ocean_state_view->p_vn_x1 = mdspan_3d_double{ ocean_state->p_vn_x1, ext3d_t{nblocks, nlevs, nproma} };
+    ocean_state_view->p_vn_x2 = mdspan_3d_double{ ocean_state->p_vn_x2, ext3d_t{nblocks, nlevs, nproma} };
+    ocean_state_view->p_vn_x3 = mdspan_3d_double{ ocean_state->p_vn_x3, ext3d_t{nblocks, nlevs, nproma} };
 }
 
 static void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atmo_fluxes *atmos_fluxes,

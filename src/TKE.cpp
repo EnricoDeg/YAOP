@@ -68,7 +68,7 @@ void TKE::calc(double *depth_CellInterface, double *prism_center_dist_c,
                     a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
                     cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
                     tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
-        fill_struct(&ocean_state, temp, salt, stretch_c, eta_c);
+        fill_struct(&ocean_state, temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3);
         fill_struct(&atmos_fluxes, stress_xw, stress_yw);
         fill_struct(&p_as, fu10);
         fill_struct(&p_sea_ice, concsum);

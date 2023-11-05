@@ -60,6 +60,9 @@ struct t_ocean_state {
     double *salt;
     double *stretch_c;
     double *eta_c;
+    double *p_vn_x1;
+    double *p_vn_x2;
+    double *p_vn_x3;
 };
 
 struct t_atmo_fluxes {
@@ -86,7 +89,7 @@ void fill_struct(struct t_cvmix * p_cvmix, double *tke, double *tke_plc, double 
                  double *tke_Tbck, double *tke_Ttot, double *tke_Lmix, double *tke_Pr);
 
 void fill_struct(struct t_ocean_state * ocean_state, double *temp, double *salt, double *stretch_c,
-                 double *eta_c);
+                 double *eta_c, double *p_vn_x1, double *p_vn_x2, double *p_vn_x3);
 
 void fill_struct(struct t_atmo_fluxes *atmo_fluxes, double *stress_xw, double *stress_yw);
 
