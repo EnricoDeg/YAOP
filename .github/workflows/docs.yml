@@ -21,7 +21,7 @@ jobs:
       run: sudo apt-get install doxygen -y
 
     - name: Requirements
-      run: | 
+      run: |
        pip3 install sphinx
        pip3 install sphinx_rtd_theme
        pip3 install breathe
