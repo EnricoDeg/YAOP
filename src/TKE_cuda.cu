@@ -77,7 +77,7 @@ __global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
                                  t_constant_tke p_constant_tke);
 
 __device__
-void integrate(t_patch_view p_patch, t_cvmix_view p_cvmix,
+void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
                t_tke_internal_view p_internal, t_constant p_constant,
                t_constant_tke p_constant_tke);
 
@@ -113,29 +113,47 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view_l.pressure = view_cuda_malloc(m_pressure, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
     p_internal_view_l.Nsqr = view_cuda_malloc(m_Nsqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.Ssqr = view_cuda_malloc(m_Ssqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.a_dif = view_cuda_malloc(m_a_dif, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.b_dif = view_cuda_malloc(m_b_dif, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.c_dif = view_cuda_malloc(m_c_dif, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.a_tri = view_cuda_malloc(m_a_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.b_tri = view_cuda_malloc(m_b_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.c_tri = view_cuda_malloc(m_c_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.d_tri = view_cuda_malloc(m_d_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.mxl = view_cuda_malloc(m_mxl, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.sqrttke = view_cuda_malloc(m_sqrttke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     is_view_init = false;
 }
 
 TKE_cuda::~TKE_cuda() {
     // Free internal arrays memory
     std::cout << "Finalizing TKE cuda... " << std::endl;
-    check(cudaFree(m_rho_up) );
-    check(cudaFree(m_rho_down) );
-    check(cudaFree(m_forc_tke_surf_2D) );
-    check(cudaFree(m_forc_rho_surf_2D) );
-    check(cudaFree(m_bottom_fric_2D) );
-    check(cudaFree(m_s_c) );
-    check(cudaFree(m_dzw_stretched) );
-    check(cudaFree(m_dzt_stretched) );
-    check(cudaFree(m_tke_old) );
-    check(cudaFree(m_tke_Av) );
-    check(cudaFree(m_tke_kv) );
-    check(cudaFree(m_tke_iw_alpha_c) );
-    check(cudaFree(m_tke_iwe) );
-    check(cudaFree(m_tke_iwe_forcing) );
-    check(cudaFree(m_pressure) );
-    check(cudaFree(m_Nsqr) );
-    check(cudaFree(m_Ssqr) );
+    check(cudaFree(m_rho_up));
+    check(cudaFree(m_rho_down));
+    check(cudaFree(m_forc_tke_surf_2D));
+    check(cudaFree(m_forc_rho_surf_2D));
+    check(cudaFree(m_bottom_fric_2D));
+    check(cudaFree(m_s_c));
+    check(cudaFree(m_dzw_stretched));
+    check(cudaFree(m_dzt_stretched));
+    check(cudaFree(m_tke_old));
+    check(cudaFree(m_tke_Av));
+    check(cudaFree(m_tke_kv));
+    check(cudaFree(m_tke_iw_alpha_c));
+    check(cudaFree(m_tke_iwe));
+    check(cudaFree(m_tke_iwe_forcing));
+    check(cudaFree(m_pressure));
+    check(cudaFree(m_Nsqr));
+    check(cudaFree(m_Ssqr));
+    check(cudaFree(m_a_dif));
+    check(cudaFree(m_b_dif));
+    check(cudaFree(m_c_dif));
+    check(cudaFree(m_a_tri));
+    check(cudaFree(m_b_tri));
+    check(cudaFree(m_c_tri));
+    check(cudaFree(m_d_tri));
+    check(cudaFree(m_mxl));
+    check(cudaFree(m_sqrttke));
 }
 
 void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
@@ -286,19 +304,63 @@ void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view 
                                              p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
                                              ocean_state.stretch_c(blockNo, jc) , 2.0);
 
-            integrate(p_patch, p_cvmix, p_internal, p_constant, p_constant_tke);
+            // integration
+            integrate(jc, p_constant.nlevs, blockNo, p_patch, p_cvmix, p_internal, p_constant, p_constant_tke);
         }
-
-        // integration
 
         // post-integration
     }
 }
 
 __device__
-void integrate(t_patch_view p_patch, t_cvmix_view p_cvmix,
+void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
                t_tke_internal_view p_internal, t_constant p_constant,
                t_constant_tke p_constant_tke) {
+
+    // Initialize diagnostics
+    for (int level = 0; level < nlevels+1; level++) {
+        p_cvmix.tke_Tbpr(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Tspr(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Tdif(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Tdis(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Twin(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Tiwf(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Tbck(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Ttot(blockNo, level, jc) = 0.0;
+        p_internal.a_dif(level, jc) = 0.0;
+        p_internal.b_dif(level, jc) = 0.0;
+        p_internal.c_dif(level, jc) = 0.0;
+        p_internal.a_tri(level, jc) = 0.0;
+        p_internal.b_tri(level, jc) = 0.0;
+        p_internal.c_tri(level, jc) = 0.0;
+    }
+
+    // calculate mixing length scale
+    for (int level = 0; level < nlevels+1; level++) {
+        p_internal.sqrttke(level, jc) = sqrt(max(0.0, p_internal.tke_old(level, jc)));
+        p_internal.mxl(level, jc) = sqrt(2.0) * p_internal.sqrttke(level, jc) / 
+                                    sqrt(max(1.0e-12, p_internal.Nsqr(level, jc)));
+    }
+
+    if (p_constant_tke.tke_mxl_choice == 2) {
+        p_internal.mxl(0, jc) = 0.0;
+        p_internal.mxl(nlevels, jc) = 0.0;
+        for (int level = 1; level < nlevels; level++)
+            p_internal.mxl(level, jc) = min(p_internal.mxl(level, jc),
+                                        p_internal.mxl(level-1, jc) + p_internal.dzw_stretched(level-1, jc));
+        p_internal.mxl(nlevels-1, jc) = min(p_internal.mxl(nlevels-1, jc),
+                                        p_constant_tke.mxl_min +  p_internal.dzw_stretched(nlevels-1, jc));
+        for (int level = nlevels-2; level>0; level--)
+            p_internal.mxl(level, jc) = min(p_internal.mxl(level, jc),
+                                            p_internal.mxl(level+1, jc) +  p_internal.dzw_stretched(level, jc));
+        for (int level = 0; level < nlevels+1; level++)
+            p_internal.mxl(level, jc) = max(p_internal.mxl(level, jc), p_constant_tke.mxl_min);
+    } else if (p_constant_tke.tke_mxl_choice == 3) {
+        // TODO        
+    } else {
+        // Error
+    }
+        
 }
 
 __device__

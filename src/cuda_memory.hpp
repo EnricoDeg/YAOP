@@ -50,6 +50,15 @@ struct t_tke_internal_view {
     mdspan_2d_double pressure;
     mdspan_2d_double Nsqr;
     mdspan_2d_double Ssqr;
+    mdspan_2d_double a_dif;
+    mdspan_2d_double b_dif;
+    mdspan_2d_double c_dif;
+    mdspan_2d_double a_tri;
+    mdspan_2d_double b_tri;
+    mdspan_2d_double c_tri;
+    mdspan_2d_double d_tri;
+    mdspan_2d_double mxl;
+    mdspan_2d_double sqrttke;
 };
 
 // TKE interface memory views

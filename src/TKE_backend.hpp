@@ -76,6 +76,15 @@ class TKE_backend {
     double *m_pressure;
     double *m_Nsqr;
     double *m_Ssqr;
+    double *m_a_dif;
+    double *m_b_dif;
+    double *m_c_dif;
+    double *m_a_tri;
+    double *m_b_tri;
+    double *m_c_tri;
+    double *m_d_tri;
+    double *m_mxl;
+    double *m_sqrttke;
 };
 
 #endif  // SRC_TKE_BACKEND_HPP_
