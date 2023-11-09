@@ -5,11 +5,16 @@ repos:
     rev: v4.5.0
     hooks:
     -   id: trailing-whitespace
+        types_or: [c, c++, fortran]
+        verbose: true
     -   id: end-of-file-fixer
+        types_or: [c, c++, fortran]
     -   id: check-yaml
     -   id: check-added-large-files
+        types_or: [c, c++, fortran]
 -   repo: https://github.com/pocc/pre-commit-hooks.git
     rev: v1.3.5
     hooks:
     -   id: cpplint
         args: [--linelength=120]
+        types_or: [c, c++]
