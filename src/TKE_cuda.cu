@@ -141,6 +141,8 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view_l.ke = view_cuda_malloc(m_ke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.cp = view_cuda_malloc(m_cp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.dp = view_cuda_malloc(m_dp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_upd = view_cuda_malloc(m_tke_upd,
+                                                  static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     is_view_init = false;
 }
 
@@ -181,6 +183,7 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_ke));
     check(cudaFree(m_cp));
     check(cudaFree(m_dp));
+    check(cudaFree(m_tke_upd));
 }
 
 void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
@@ -426,7 +429,35 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     }
 
     // vertical diffusion and dissipation is solved implicitely
+    for (int level = 0; level < nlevels; level++) {
+        int kp1 = min(level+1, nlevels-1);
+        int kk = max(level, 1);
+        p_internal.ke(level, jc) = 0.5 * p_constant_tke.alpha_tke *
+                                   (p_internal.KappaM_out(kp1, jc) + p_internal.KappaM_out(kk, jc));
+    }
+    p_internal.ke(nlevels, jc) = 0.0;
 
+    // a is upper diagonal of matrix
+    // b is main diagonal of matrix
+    // c is lower diagonal of matrix
+    p_internal.a_dif(0, jc) = 0.0;
+    p_internal.c_dif(0, jc) = p_internal.ke(0, jc) /
+                              (p_internal.dzt_stretched(0, jc) * p_internal.dzw_stretched(0, jc));
+
+    for (int level = 1; level < nlevels; level++) {
+        p_internal.a_dif(level, jc) = p_internal.ke(level-1, jc) /
+                                      (p_internal.dzt_stretched(level, jc) * p_internal.dzw_stretched(level-1, jc));
+        p_internal.b_dif(level, jc) = p_internal.ke(level-1, jc) /
+                                      (p_internal.dzt_stretched(level, jc) * p_internal.dzw_stretched(level-1, jc)) +
+                                      p_internal.ke(level, jc) /
+                                      (p_internal.dzt_stretched(level, jc) * p_internal.dzw_stretched(level, jc));
+        p_internal.c_dif(level, jc) = p_internal.ke(level, jc) /
+                              (p_internal.dzt_stretched(level, jc) * p_internal.dzw_stretched(level, jc));
+    }
+
+    p_internal.a_dif(nlevels, jc) = p_internal.ke(nlevels-1, jc) /
+                                    (p_internal.dzt_stretched(nlevels, jc) * p_internal.dzw_stretched(nlevels-1, jc));
+    p_internal.c_dif(nlevels, jc) = 0.0;
 
 
 
