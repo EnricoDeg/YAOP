@@ -85,6 +85,10 @@ class TKE_backend {
     double *m_d_tri;
     double *m_mxl;
     double *m_sqrttke;
+    double *m_KappaM_out;
+    double *m_Rinum;
+    double *m_prandtl;
+    double *m_KappaH_out;
 };
 
 #endif  // SRC_TKE_BACKEND_HPP_

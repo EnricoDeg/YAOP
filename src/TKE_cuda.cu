@@ -122,6 +122,12 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view_l.d_tri = view_cuda_malloc(m_d_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.mxl = view_cuda_malloc(m_mxl, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.sqrttke = view_cuda_malloc(m_sqrttke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.KappaM_out = view_cuda_malloc(m_KappaM_out,
+                                                    static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.Rinum = view_cuda_malloc(m_Rinum, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.prandtl = view_cuda_malloc(m_prandtl, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.KappaH_out = view_cuda_malloc(m_KappaH_out,
+                                                    static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     is_view_init = false;
 }
 
@@ -154,6 +160,10 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_d_tri));
     check(cudaFree(m_mxl));
     check(cudaFree(m_sqrttke));
+    check(cudaFree(m_KappaM_out));
+    check(cudaFree(m_Rinum));
+    check(cudaFree(m_prandtl));
+    check(cudaFree(m_KappaH_out));
 }
 
 void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
@@ -358,6 +368,24 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
         // TODO(EnricoDeg): not default
     } else {
         // Error
+    }
+
+    // calculate diffusivities
+    for (int level = 0; level < nlevels+1; level++) {
+        p_internal.KappaM_out(level, jc) = min(p_constant_tke.KappaM_max,
+                                               p_constant_tke.c_k * p_internal.mxl(level, jc) *
+                                               p_internal.sqrttke(level, jc));
+        if (!p_constant_tke.only_tke)
+            p_internal.Rinum(level, jc) = min(p_internal.Rinum(level, jc),
+                                              p_internal.KappaM_out(level, jc) * p_internal.Nsqr(level, jc) /
+                                              max(1.0e-12, p_internal.tke_iw_alpha_c(level, jc) *
+                                              pow(p_internal.tke_iwe(level, jc), 2.0)));
+        p_internal.prandtl(level, jc) = max(1.0, min(10.0, 6.6 * p_internal.Rinum(level, jc)));
+        p_internal.KappaH_out(level, jc) = p_internal.KappaM_out(level, jc) / p_internal.prandtl(level, jc);
+        if (p_constant_tke.use_Kappa_min) {
+            p_internal.KappaM_out(level, jc) = max(p_constant_tke.KappaM_min, p_internal.KappaM_out(level, jc));
+            p_internal.KappaH_out(level, jc) = max(p_constant_tke.KappaH_min, p_internal.KappaH_out(level, jc));
+        }
     }
 }
 
