@@ -89,6 +89,9 @@ class TKE_backend {
     double *m_Rinum;
     double *m_prandtl;
     double *m_KappaH_out;
+    double *m_forc;
+    double *m_K_diss_v;
+    double *m_P_diss_v;
 };
 
 #endif  // SRC_TKE_BACKEND_HPP_

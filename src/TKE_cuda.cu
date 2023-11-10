@@ -128,6 +128,11 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view_l.prandtl = view_cuda_malloc(m_prandtl, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.KappaH_out = view_cuda_malloc(m_KappaH_out,
                                                     static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.forc = view_cuda_malloc(m_forc, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.K_diss_v = view_cuda_malloc(m_K_diss_v,
+                                                  static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.P_diss_v = view_cuda_malloc(m_P_diss_v,
+                                                  static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     is_view_init = false;
 }
 
@@ -164,6 +169,7 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_Rinum));
     check(cudaFree(m_prandtl));
     check(cudaFree(m_KappaH_out));
+    check(cudaFree(m_forc));
 }
 
 void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
@@ -386,6 +392,22 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
             p_internal.KappaM_out(level, jc) = max(p_constant_tke.KappaM_min, p_internal.KappaM_out(level, jc));
             p_internal.KappaH_out(level, jc) = max(p_constant_tke.KappaH_min, p_internal.KappaH_out(level, jc));
         }
+    }
+
+    // tke forcing
+    p_internal.K_diss_v(0, jc) = p_internal.Ssqr(0, jc) * p_internal.KappaM_out(0, jc);
+    p_internal.P_diss_v(0, jc) = p_internal.forc_rho_surf_2D(jc) * p_constant.grav * p_constant.OceanReferenceDensity;
+    for (int level = 1; level < nlevels+1; level++) {
+        p_internal.K_diss_v(level, jc) = p_internal.Ssqr(level, jc) * p_internal.KappaM_out(level, jc);
+        p_internal.P_diss_v(level, jc) = p_internal.Nsqr(level, jc) * p_internal.KappaH_out(level, jc);
+    }
+
+    for (int level = 0; level < nlevels+1; level++) {
+        p_internal.forc(level, jc) = p_internal.K_diss_v(level, jc) - p_internal.P_diss_v(level, jc);
+        if (p_constant.l_lc)
+            p_internal.forc(level, jc) += p_cvmix.tke_plc(blockNo, level, jc);
+        if (!p_constant_tke.only_tke)
+            p_internal.forc(level, jc) += p_internal.tke_iwe_forcing(level, jc);
     }
 }
 
