@@ -92,6 +92,9 @@ class TKE_backend {
     double *m_forc;
     double *m_K_diss_v;
     double *m_P_diss_v;
+    double *m_ke;
+    double *m_cp;
+    double *m_dp;
 };
 
 #endif  // SRC_TKE_BACKEND_HPP_

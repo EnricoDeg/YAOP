@@ -82,6 +82,11 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                t_constant_tke p_constant_tke);
 
 __device__
+void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
+                   mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
+                   mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp);
+
+__device__
 double  calculate_density(double temp, double salt, double pressure);
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
@@ -133,6 +138,9 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
                                                   static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.P_diss_v = view_cuda_malloc(m_P_diss_v,
                                                   static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.ke = view_cuda_malloc(m_ke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.cp = view_cuda_malloc(m_cp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.dp = view_cuda_malloc(m_dp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     is_view_init = false;
 }
 
@@ -170,6 +178,9 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_prandtl));
     check(cudaFree(m_KappaH_out));
     check(cudaFree(m_forc));
+    check(cudaFree(m_ke));
+    check(cudaFree(m_cp));
+    check(cudaFree(m_dp));
 }
 
 void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
@@ -235,6 +246,7 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                                             p_internal_view_l, p_constant,
                                                             p_constant_tke);
     }
+    check(cudaDeviceSynchronize());
 }
 
 __global__
@@ -395,6 +407,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     }
 
     // tke forcing
+    // forcing by shear and buoycancy production
     p_internal.K_diss_v(0, jc) = p_internal.Ssqr(0, jc) * p_internal.KappaM_out(0, jc);
     p_internal.P_diss_v(0, jc) = p_internal.forc_rho_surf_2D(jc) * p_constant.grav * p_constant.OceanReferenceDensity;
     for (int level = 1; level < nlevels+1; level++) {
@@ -404,11 +417,43 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     for (int level = 0; level < nlevels+1; level++) {
         p_internal.forc(level, jc) = p_internal.K_diss_v(level, jc) - p_internal.P_diss_v(level, jc);
+        // additional langmuir turbulence term
         if (p_constant.l_lc)
             p_internal.forc(level, jc) += p_cvmix.tke_plc(blockNo, level, jc);
+        // forcing by internal wave dissipation
         if (!p_constant_tke.only_tke)
             p_internal.forc(level, jc) += p_internal.tke_iwe_forcing(level, jc);
     }
+
+    // vertical diffusion and dissipation is solved implicitely
+
+
+
+
+    // solve the tri-diag matrix
+//    solve_tridiag(jc, nlevels, blockNo, p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
+//                  p_internal.d_tri, p_cvmix.tke, p_internal.cp, p_internal.dp);
+}
+
+__device__
+void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
+                   mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
+                   mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp) {
+    // initialize c-prime and d-prime
+    cp(0, jc) = c(0, jc) / b(0, jc);
+    dp(0, jc) = d(0, jc) / b(0, jc);
+    // solve for vectors c-prime and d-prime
+    for (int level = 1; level < nlevels+1; level++) {
+        double m = b(level, jc) - cp(level-1, jc) * a(level, jc);
+        double fxa = 1.0 / m;
+        cp(level, jc) = c(level, jc) * fxa;
+        dp(level, jc) = (d(level, jc) - dp(level-1, jc) * a(level, jc))*fxa;
+    }
+    // initialize solution x
+    x(blockNo, nlevels, jc) = dp(nlevels, jc);
+    // solve for x from the vectors c-prime and d-prime
+    for (int level = nlevels-1; level >=0; level--)
+        x(blockNo, level, jc) = dp(level, jc) - cp(level, jc) * x(blockNo, level+1, jc);
 }
 
 __device__
