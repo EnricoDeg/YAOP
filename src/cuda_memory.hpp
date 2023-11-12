@@ -42,7 +42,7 @@ struct t_tke_internal_view {
     mdspan_2d_double dzw_stretched;
     mdspan_2d_double dzt_stretched;
     mdspan_2d_double tke_old;
-    mdspan_2d_double tke_Av;
+    mdspan_3d_double tke_Av;
     mdspan_2d_double tke_kv;
     mdspan_2d_double tke_iw_alpha_c;
     mdspan_2d_double tke_iwe;
@@ -174,8 +174,8 @@ void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch
     p_patch_view->dolic_e = mdspan_2d_int{ p_patch->dolic_e, ext2d_t{nblocks, nproma} };
     p_patch_view->zlev_i = mdspan_1d_double{ p_patch->zlev_i, ext1d_t{nlevs} };
     p_patch_view->wet_c = mdspan_3d_double{ p_patch->wet_c, ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->edges_cell_idx = mdspan_3d_int{ p_patch->edges_cell_idx, ext3d_t{nblocks, nlevs, nproma} };
-    p_patch_view->edges_cell_blk = mdspan_3d_int{ p_patch->edges_cell_blk, ext3d_t{nblocks, nlevs, nproma} };
+    p_patch_view->edges_cell_idx = mdspan_3d_int{ p_patch->edges_cell_idx, ext3d_t{2, nlevs, nproma} };
+    p_patch_view->edges_cell_blk = mdspan_3d_int{ p_patch->edges_cell_blk, ext3d_t{2, nlevs, nproma} };
 }
 
 
@@ -215,6 +215,12 @@ mdspan_1d_double view_cuda_malloc(double *field, size_t dim1) {
 mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2) {
     check( cudaMalloc(&field, dim1*dim2*sizeof(double)) );
     mdspan_2d_double memview{ field, ext2d_t{dim1, dim2} };
+    return memview;
+}
+
+mdspan_3d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2, size_t dim3) {
+    check( cudaMalloc(&field, dim1*dim2*dim3*sizeof(double)) );
+    mdspan_3d_double memview{ field, ext3d_t{dim1, dim2, dim3} };
     return memview;
 }
 
