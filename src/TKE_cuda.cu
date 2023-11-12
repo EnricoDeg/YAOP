@@ -573,6 +573,42 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
             p_cvmix.tke(blockNo, level, jc) = max(p_cvmix.tke(blockNo, level, jc), p_constant_tke.tke_min);
         }
     }
+
+    // Part 6: Assign diagnostic variables
+    for (int level = 0; level < nlevels+1; level++) {
+        p_cvmix.tke_Tbpr(blockNo, level, jc) = - p_internal.P_diss_v(level, jc);
+        p_cvmix.tke_Tspr(blockNo, level, jc) = p_internal.K_diss_v(level, jc);
+        p_cvmix.tke_Tbck(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
+                                                p_internal.tke_unrest(level, jc)) /
+                                                p_constant.dtime;
+    }
+
+    if (p_constant_tke.use_ubound_dirichlet) {
+        p_cvmix.tke_Twin(blockNo, 0, jc) = (p_cvmix.tke(blockNo, 0, jc) - p_internal.tke_old(0, jc)) /
+                                           p_constant.dtime - p_cvmix.tke_Tdif(blockNo, 0, jc);
+        p_cvmix.tke_Tbck(blockNo, 0, jc) = 0.0;
+    } else {
+        p_cvmix.tke_Twin(blockNo, 0, jc) = (p_constant_tke.cd * pow(p_internal.forc_tke_surf_2D(jc), 1.5)) /
+                                           p_internal.dzt_stretched(0, jc);
+    }
+
+    if (p_constant_tke.use_lbound_dirichlet) {
+        p_cvmix.tke_Twin(blockNo, nlevels, jc) = (p_cvmix.tke(blockNo, nlevels, jc) -
+                                                  p_internal.tke_old(nlevels, jc)) /
+                                                  p_constant.dtime -
+                                                  p_cvmix.tke_Tdif(blockNo, nlevels, jc);
+        p_cvmix.tke_Tbck(blockNo, nlevels, jc) = 0.0;
+    } else {
+        p_cvmix.tke_Twin(blockNo, nlevels, jc) = 0.0;
+    }
+
+    for (int level = 0; level < nlevels+1; level++) {
+        p_cvmix.tke_Tiwf(blockNo, level, jc) = p_internal.tke_iwe_forcing(level, jc);
+        p_cvmix.tke_Ttot(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
+                                                p_internal.tke_old(level, jc)) / p_constant.dtime;
+        p_cvmix.tke_Lmix(blockNo, level, jc) = p_internal.mxl(level, jc);
+        p_cvmix.tke_Pr(blockNo, level, jc) = p_internal.prandtl(level, jc);
+    }
 }
 
 __device__
