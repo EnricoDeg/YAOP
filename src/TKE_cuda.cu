@@ -69,7 +69,7 @@ struct t_constant p_constant;
 struct t_constant_tke p_constant_tke;
 
 // TKE CUDA kernels functions
-__global__ void calc_impl_kernel(int blockNo, int start_index, int end_index,
+__global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
                                  t_patch_view p_patch, t_cvmix_view p_cvmix,
                                  t_ocean_state_view ocean_state, t_atmo_fluxes_view atmos_fluxes,
                                  t_atmos_for_ocean_view p_as, t_sea_ice_view p_sea_ice,
@@ -245,7 +245,7 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
         int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
         dim3 blocksPerGrid(blocksPerGridI, 1, 1);
         dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
-        calc_impl_kernel<<<blocksPerGrid, threadsPerBlock>>>(jb, start_index, end_index,
+        calc_impl_cells<<<blocksPerGrid, threadsPerBlock>>>(jb, start_index, end_index,
                                                             p_patch_view_l, p_cvmix_view_l,
                                                             ocean_state_view_l, atmos_fluxes_view_l,
                                                             p_as_view_l, p_sea_ice_view_l,
@@ -256,7 +256,7 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
 }
 
 __global__
-void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view p_patch,
+void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p_patch,
                       t_cvmix_view p_cvmix, t_ocean_state_view ocean_state,
                       t_atmo_fluxes_view atmos_fluxes,
                       t_atmos_for_ocean_view p_as, t_sea_ice_view p_sea_ice,
@@ -340,9 +340,13 @@ void calc_impl_kernel(int blockNo, int start_index, int end_index, t_patch_view 
 
             // integration
             integrate(jc, p_constant.nlevs, blockNo, p_patch, p_cvmix, p_internal, p_constant, p_constant_tke);
-        }
 
-        // post-integration
+            //  write tke vert. diffusivity to vert tracer diffusivities
+            for (int level = 0; level < p_constant.nlevs+1; level++) {
+                p_cvmix.a_temp_v(blockNo, level, jc) = p_internal.tke_kv(level, jc);
+                p_cvmix.a_salt_v(blockNo, level, jc) = p_internal.tke_kv(level, jc);
+            }
+        }
     }
 }
 
