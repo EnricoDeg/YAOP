@@ -524,6 +524,33 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     // solve the tri-diag matrix
     solve_tridiag(jc, nlevels, blockNo, p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
                   p_internal.d_tri, p_cvmix.tke, p_internal.cp, p_internal.dp);
+
+    // diagnose implicit tendencies (only for diagnostics)
+    // vertical diffusion of TKE
+    for (int level = 1; level < nlevels; level++)
+        p_cvmix.tke_Tdif(blockNo, level, jc) = p_internal.a_dif(level, jc) * p_cvmix.tke(blockNo, level-1, jc) -
+                                               p_internal.b_dif(level, jc) * p_cvmix.tke(blockNo, level, jc) +
+                                               p_internal.c_dif(level, jc) * p_cvmix.tke(blockNo, level+1, jc);
+
+    p_cvmix.tke_Tdif(blockNo, 0, jc) = - p_internal.b_dif(0, jc) * p_cvmix.tke(blockNo, 0, jc) +
+                                         p_internal.c_dif(0, jc) * p_cvmix.tke(blockNo, 1, jc);
+    p_cvmix.tke_Tdif(blockNo, nlevels, jc) = p_internal.a_dif(nlevels, jc) * p_cvmix.tke(blockNo, nlevels-1, jc) -
+                                             p_internal.b_dif(nlevels, jc) * p_cvmix.tke(blockNo, nlevels, jc);
+    p_cvmix.tke_Tdif(blockNo, 1, jc) += diff_surf_forc;
+    p_cvmix.tke_Tdif(blockNo, nlevels-1, jc) += diff_bott_forc;
+
+    // flux out of first box due to diffusion with Dirichlet boundary value of TKE
+    // (tke_surf=tke_upd(0)) and TKE of box below (tke_new(1))
+    if (p_constant_tke.use_ubound_dirichlet)
+        p_cvmix.tke_Tdif(blockNo, 0, jc) = - p_internal.ke(0, jc) / p_internal.dzw_stretched(0, jc) /
+                                           p_internal.dzt_stretched(0, jc) *
+                                           (tke_surf - p_cvmix.tke(blockNo, 1, jc));
+
+    if (p_constant_tke.use_lbound_dirichlet)
+        p_cvmix.tke_Tdif(blockNo, nlevels, jc) = p_internal.ke(nlevels-1, jc) /
+                                                 p_internal.dzw_stretched(nlevels-1, jc) /
+                                                 p_internal.dzt_stretched(nlevels, jc) *
+                                                 (p_cvmix.tke(blockNo, nlevels-1, jc) - tke_bott);
 }
 
 __device__
