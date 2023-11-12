@@ -609,6 +609,13 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
         p_cvmix.tke_Lmix(blockNo, level, jc) = p_internal.mxl(level, jc);
         p_cvmix.tke_Pr(blockNo, level, jc) = p_internal.prandtl(level, jc);
     }
+
+    // the rest is for debugging
+    for (int level = 0; level < nlevels+1; level++) {
+        p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.KappaH_out(level, jc);
+        p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.KappaM_out(level, jc);
+        p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
+    }
 }
 
 __device__
