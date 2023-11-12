@@ -76,6 +76,10 @@ __global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
                                  t_tke_internal_view p_internal, t_constant p_constant,
                                  t_constant_tke p_constant_tke);
 
+__global__
+void calc_impl_edges(int blockNo, int start_index, int end_index, t_patch_view p_patch,
+                      t_cvmix_view p_cvmix, t_tke_internal_view p_internal, t_constant p_constant);
+
 __device__
 void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
                t_tke_internal_view p_internal, t_constant p_constant,
@@ -108,7 +112,9 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
                                                        static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
     p_internal_view_l.dzt_stretched = view_cuda_malloc(m_dzt_stretched,
                                                        static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view_l.tke_Av = view_cuda_malloc(m_tke_Av, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_Av = view_cuda_malloc(m_tke_Av,
+                               static_cast<size_t>(nblocks), static_cast<size_t>(nlevs+1),
+                               static_cast<size_t>(nproma));
     p_internal_view_l.tke_kv = view_cuda_malloc(m_tke_kv, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.tke_iw_alpha_c = view_cuda_malloc(m_tke_iw_alpha_c,
                                                         static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
@@ -252,6 +258,20 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                                             p_internal_view_l, p_constant,
                                                             p_constant_tke);
     }
+/*
+    for (int jb = edges_start_block; jb <= edges_end_block; jb++) {
+        int start_index, end_index;
+        get_index_range(edges_block_size, edges_start_block, edges_end_block,
+                        edges_start_index, edges_end_index, jb, &start_index, &end_index);
+        int threadsPerBlockI = 512;
+        int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
+        dim3 blocksPerGrid(blocksPerGridI, 1, 1);
+        dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
+        calc_impl_edges<<<blocksPerGrid, threadsPerBlock>>>(jb, start_index, end_index,
+                                                            p_patch_view_l, p_cvmix_view_l,
+                                                            p_internal_view_l, p_constant);
+    }
+*/
     check(cudaDeviceSynchronize());
 }
 
@@ -268,7 +288,7 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
         // initialization
         for (int level = 0; level < levels+1; level++) {
             p_internal.tke_kv(level, jc) = 0.0;
-            p_internal.tke_Av(level, jc) = 0.0;
+            p_internal.tke_Av(blockNo, level, jc) = 0.0;
             p_internal.tke_iw_alpha_c(level, jc) = 0.0;
             p_internal.tke_iwe(level, jc) = 0.0;
             if (p_constant.vert_mix_type == p_constant.vmix_idemix_tke) {
@@ -641,6 +661,26 @@ void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
     // solve for x from the vectors c-prime and d-prime
     for (int level = nlevels-1; level >=0; level--)
         x(blockNo, level, jc) = dp(level, jc) - cp(level, jc) * x(blockNo, level+1, jc);
+}
+
+__global__
+void calc_impl_edges(int blockNo, int start_index, int end_index, t_patch_view p_patch,
+                      t_cvmix_view p_cvmix, t_tke_internal_view p_internal, t_constant p_constant) {
+    int je = blockIdx.x * blockDim.x + threadIdx.x + start_index;
+    if (je <= end_index) {
+        int levels = p_constant.nlevs;
+        for (int level = 0; level < levels+1; level++)
+            p_cvmix.a_veloc_v(blockNo, level, je) = 0.0;
+
+        levels = p_patch.dolic_e(blockNo, je);
+        int cell_1_idx = p_patch.edges_cell_idx(0, blockNo, je);
+        int cell_1_block = p_patch.edges_cell_blk(0, blockNo, je);
+        int cell_2_idx = p_patch.edges_cell_idx(1, blockNo, je);
+        int cell_2_block = p_patch.edges_cell_blk(1, blockNo, je);
+        for (int level = 1; level < levels; level++)
+            p_cvmix.a_veloc_v(blockNo, level, je) = 0.5 * (p_internal.tke_Av(cell_1_block, level, cell_1_idx) +
+                                                  p_internal.tke_Av(cell_2_block, level, cell_2_idx));
+    }
 }
 
 __device__
