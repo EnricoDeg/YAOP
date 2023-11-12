@@ -551,6 +551,13 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                                                  p_internal.dzw_stretched(nlevels-1, jc) /
                                                  p_internal.dzt_stretched(nlevels, jc) *
                                                  (p_cvmix.tke(blockNo, nlevels-1, jc) - tke_bott);
+
+    // dissipation of TKE
+    p_cvmix.tke_Tdis(blockNo, 0, jc) = 0.0;
+    p_cvmix.tke_Tdis(blockNo, nlevels, jc) = 0.0;
+    for (int level = 1; level < nlevels; level++)
+        p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_internal.mxl(level, jc) *
+                                                 p_internal.sqrttke(level, jc) * p_cvmix.tke(blockNo, level, jc);
 }
 
 __device__
