@@ -70,6 +70,7 @@ struct t_tke_internal_view {
     mdspan_2d_double cp;
     mdspan_2d_double dp;
     mdspan_2d_double tke_upd;
+    mdspan_2d_double tke_unrest;
 };
 
 // TKE interface memory views

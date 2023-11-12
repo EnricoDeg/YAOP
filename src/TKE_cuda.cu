@@ -142,7 +142,9 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view_l.cp = view_cuda_malloc(m_cp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.dp = view_cuda_malloc(m_dp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view_l.tke_upd = view_cuda_malloc(m_tke_upd,
-                                                  static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+                                                 static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+    p_internal_view_l.tke_unrest = view_cuda_malloc(m_tke_unrest,
+                                                    static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     is_view_init = false;
 }
 
@@ -184,6 +186,7 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_cp));
     check(cudaFree(m_dp));
     check(cudaFree(m_tke_upd));
+    check(cudaFree(m_tke_unrest));
 }
 
 void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
@@ -558,6 +561,18 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     for (int level = 1; level < nlevels; level++)
         p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_internal.mxl(level, jc) *
                                                  p_internal.sqrttke(level, jc) * p_cvmix.tke(blockNo, level, jc);
+
+    // Part 5: reset tke to bounding values
+    // copy of unrestored tke to diagnose energy input by restoring
+    for (int level = 0; level < nlevels+1; level++)
+        p_internal.tke_unrest(level, jc) = p_cvmix.tke(blockNo, level, jc);
+
+    // restrict values of TKE to tke_min, if IDEMIX is not used
+    if (p_constant_tke.only_tke) {
+        for (int level = 0; level < nlevels+1; level++) {
+            p_cvmix.tke(blockNo, level, jc) = max(p_cvmix.tke(blockNo, level, jc), p_constant_tke.tke_min);
+        }
+    }
 }
 
 __device__
