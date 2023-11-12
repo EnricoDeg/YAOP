@@ -347,6 +347,8 @@ __device__
 void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
                t_tke_internal_view p_internal, t_constant p_constant,
                t_constant_tke p_constant_tke) {
+    double tke_surf, diff_surf_forc, tke_bott, diff_bott_forc;
+
     // Initialize diagnostics
     for (int level = 0; level < nlevels+1; level++) {
         p_cvmix.tke_Tbpr(blockNo, level, jc) = 0.0;
@@ -363,6 +365,8 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
         p_internal.a_tri(level, jc) = 0.0;
         p_internal.b_tri(level, jc) = 0.0;
         p_internal.c_tri(level, jc) = 0.0;
+        p_internal.tke_upd(level, jc) = 0.0;
+        p_cvmix.tke(blockNo, level, jc) = 0.0;
     }
 
     // calculate mixing length scale
@@ -459,11 +463,67 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                                     (p_internal.dzt_stretched(nlevels, jc) * p_internal.dzw_stretched(nlevels-1, jc));
     p_internal.c_dif(nlevels, jc) = 0.0;
 
+    // copy tke_old
+    for (int level = 0; level < nlevels+1; level++)
+        p_internal.tke_upd(level, jc) = p_internal.tke_old(level, jc);
 
+    // upper boundary condition
+    if (p_constant_tke.use_ubound_dirichlet) {
+        p_internal.sqrttke(0, jc) = 0.0;
+        p_internal.forc(0, jc) = 0.0;
+        tke_surf = max(p_constant_tke.tke_surf_min,
+                       p_constant_tke.cd * p_internal.forc_tke_surf_2D(jc));
+        p_internal.tke_upd(0, jc) = tke_surf;
+        diff_surf_forc = p_internal.a_dif(1, jc) * tke_surf;
+        p_internal.forc(1, jc) += diff_surf_forc;
+        p_internal.a_dif(1, jc) = 0.0;
+        p_internal.b_dif(0, jc) = 0.0;
+        p_internal.c_dif(0, jc) = 0.0;
+    } else {
+        p_internal.forc(0, jc) += (p_constant_tke.cd * pow(p_internal.forc_tke_surf_2D(jc), 1.5)) /
+                                  p_internal.dzt_stretched(0, jc);
+        p_internal.b_dif(0, jc) = p_internal.ke(0, jc) /
+                                  (p_internal.dzt_stretched(0, jc) * p_internal.dzw_stretched(0, jc));
+        diff_surf_forc = 0.0;
+    }
+
+    // lower boundary condition
+    if (p_constant_tke.use_lbound_dirichlet) {
+        p_internal.sqrttke(nlevels, jc) = 0.0;
+        p_internal.forc(nlevels, jc) = 0.0;
+        tke_bott = p_constant_tke.tke_min;
+        p_internal.tke_upd(nlevels, jc) = tke_bott;
+        diff_bott_forc = p_internal.c_dif(nlevels-1, jc) * tke_bott;
+        p_internal.forc(nlevels-1, jc) += diff_bott_forc;
+        p_internal.c_dif(nlevels-1, jc) = 0.0;
+        p_internal.b_dif(nlevels, jc) = 0.0;
+        p_internal.a_dif(nlevels, jc) = 0.0;
+    } else {
+        p_internal.b_dif(nlevels, jc) = p_internal.ke(nlevels-1, jc) /
+                                        (p_internal.dzt_stretched(nlevels, jc) *
+                                        p_internal.dzw_stretched(nlevels-1, jc));
+        diff_bott_forc = 0.0;
+    }
+
+    // construct tridiagonal matrix to solve diffusion and dissipation implicitely
+    for (int level = 0; level < nlevels+1; level++) {
+        p_internal.a_tri(level, jc) = - p_constant.dtime * p_internal.a_dif(level, jc);
+        p_internal.b_tri(level, jc) = 1.0 + p_constant.dtime * p_internal.b_dif(level, jc);
+        p_internal.c_tri(level, jc) = - p_constant.dtime * p_internal.c_dif(level, jc);
+    }
+
+    for (int level = 1; level < nlevels; level++)
+        p_internal.b_tri(level, jc) += p_constant.dtime * p_constant_tke.c_eps *
+                                       p_internal.sqrttke(level, jc) / p_internal.mxl(level, jc);
+
+    // d is r.h.s. of implicite equation (d: new tke with only explicite tendencies included)
+    for (int level = 0; level < nlevels+1; level++)
+        p_internal.d_tri(level, jc) = p_internal.tke_upd(level, jc) +
+                                      p_constant.dtime * p_internal.forc(level, jc);
 
     // solve the tri-diag matrix
-//    solve_tridiag(jc, nlevels, blockNo, p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
-//                  p_internal.d_tri, p_cvmix.tke, p_internal.cp, p_internal.dp);
+    solve_tridiag(jc, nlevels, blockNo, p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
+                  p_internal.d_tri, p_cvmix.tke, p_internal.cp, p_internal.dp);
 }
 
 __device__
