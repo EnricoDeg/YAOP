@@ -16,6 +16,7 @@ Table of Contents
    :maxdepth: 2
 
    installation
+   library
    interface
    implementation
    development
