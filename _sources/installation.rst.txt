@@ -12,3 +12,4 @@ The installation is straightforeward::
   make install
 
 It is then possible to run different examples from the ``examples`` folder.
+

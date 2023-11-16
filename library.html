@@ -4,11 +4,11 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Testing &mdash; TKE  documentation</title>
+  <title>Library &mdash; TKE  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
-    <link rel="canonical" href="_build/testing.html" />
+    <link rel="canonical" href="_build/library.html" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Continuous Integration" href="CI.html" />
-    <link rel="prev" title="Documentation" href="documentation.html" /> 
+    <link rel="next" title="TKE" href="cpp_doxygen_sphinx.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -46,17 +46,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
-<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="development.html">Development</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="workflow.html">Workflow</a></li>
-<li class="toctree-l2"><a class="reference internal" href="documentation.html">Documentation</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Testing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CI.html">Continuous Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="devinterface.html">Interface</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_doxygen_sphinx.html">TKE</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
 </ul>
 
         </div>
@@ -73,10 +69,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="development.html">Development</a></li>
-      <li class="breadcrumb-item active">Testing</li>
+      <li class="breadcrumb-item active">Library</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/testing.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/library.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -84,17 +79,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="testing">
-<span id="id1"></span><h1>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h1>
-<p>How to contribute to the testing of new or untested features</p>
+  <section id="library">
+<span id="id1"></span><h1>Library<a class="headerlink" href="#library" title="Link to this heading"></a></h1>
+<p>The library is designed to have three steps:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Initialization: this happens before the time loop and it provides the main information about the model which are needed inside the library. Internally all the arrays are allocated.</p></li>
+<li><p>Computation: this happens inside the time loop. The provided pointers are not expected to change during the time loop.</p></li>
+<li><p>Finalization: this happens after the time loop. The internal memory is cleaned.</p></li>
+</ul>
+</div></blockquote>
+<p>The library is written in C++ but C and Fortran interfaces are provided. The <cite>examples</cite> folder provides simple benchmarks of the vertical mixing scheme running standalone and with different drivers written in the supported languages.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_doxygen_sphinx.html">TKE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cpp_doxygen_sphinx.html#_CPPv43TKE"><code class="docutils literal notranslate"><span class="pre">TKE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="documentation.html" class="btn btn-neutral float-left" title="Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="CI.html" class="btn btn-neutral float-right" title="Continuous Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cpp_doxygen_sphinx.html" class="btn btn-neutral float-right" title="TKE" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
