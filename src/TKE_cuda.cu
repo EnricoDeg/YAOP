@@ -202,7 +202,7 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                                             p_internal_view, p_constant,
                                                             p_constant_tke);
     }
-/*
+
     // over edges
     for (int jb = edges_start_block; jb <= edges_end_block; jb++) {
         int start_index, end_index;
@@ -216,6 +216,6 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                                             p_patch_view, p_cvmix_view,
                                                             p_internal_view, p_constant);
     }
-*/
+
     check(cudaDeviceSynchronize());
 }
