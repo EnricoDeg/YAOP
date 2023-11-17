@@ -26,6 +26,9 @@ void read_input(T *data, const std::string &filename, int npoints, int nproma, i
 template<typename T>
 void init_fix(T *data, int nproma, int nlevs, int nblocks, T value);
 
+template<typename T>
+void read_input_raw(T *data, const std::string &filename, int npoints);
+
 int main(int argc, char ** argv) {
     int nproma = 15117;
     int nlevs = 40;
@@ -90,6 +93,7 @@ int main(int argc, char ** argv) {
     read_input<int>(dolic_c, "examples/input/dolic_c", ncells, nproma, 1, nblocks_cells, npromz_cells);
 
     int *dolic_e = reinterpret_cast<int *>(malloc(nproma * nblocks_edges * sizeof(int)));
+    read_input_raw<int>(dolic_e, "dolic_e", nproma*nblocks_edges);
 
     double *zlev_i = reinterpret_cast<double *>(malloc(nlevs * sizeof(double)));
     read_input<double>(zlev_i, "examples/input/zlev_i", 1, 1, nlevs, 1, 1);
@@ -98,8 +102,10 @@ int main(int argc, char ** argv) {
     read_input<double>(wet_c, "examples/input/wet_c", ncells, nproma, nlevs, nblocks_cells, npromz_cells);
 
     int *edges_cell_idx = reinterpret_cast<int *>(malloc(nproma * 2 * nblocks_edges * sizeof(int)));
+    read_input_raw<int>(edges_cell_idx, "edges_cell_idx", 2*nproma*nblocks_edges);
 
     int *edges_cell_blk = reinterpret_cast<int *>(malloc(nproma * 2 * nblocks_edges * sizeof(int)));
+    read_input_raw<int>(edges_cell_blk, "edges_cell_blk", 2*nproma*nblocks_edges);
 
     double *temp = reinterpret_cast<double *>(malloc(nproma * nlevs * nblocks_cells * sizeof(double)));
     read_input<double>(temp, "examples/input/to", ncells, nproma, nlevs, nblocks_cells, npromz_cells);
@@ -134,7 +140,6 @@ int main(int argc, char ** argv) {
     double *u_stokes_in = reinterpret_cast<double *>(malloc(nproma * nblocks_cells * sizeof(double)));
 
     double *a_veloc_v = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks_edges * sizeof(double)));
-//    read_input<double>(a_veloc_v, "examples/input/A_veloc_v");
 
     double *a_temp_v = reinterpret_cast<double *>(malloc(nproma * (nlevs+1) * nblocks_cells * sizeof(double)));
     read_input<double>(a_temp_v, "examples/input/A_tracer_v_to",
@@ -366,4 +371,15 @@ void init_fix(T *data, int nproma, int nlevs, int nblocks, T value) {
         for (int level = 0; level < nlevs; level++)
             for (int jc = 0; jc < nproma; jc++)
                 data[jc+level*nproma+jb*nproma*nlevs] = value;
+}
+
+template<typename T>
+void read_input_raw(T *data, const std::string &filename, int npoints) {
+    std::ifstream ifile;
+    ifile.open(filename);
+    int k = 0;
+    while (ifile >> data[k]) k++;
+    ifile.close();
+    for (int i = k; i < npoints; i++)
+        data[i] = 0;
 }
