@@ -32,7 +32,6 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
         for (int level = 0; level < levels+1; level++) {
             p_internal.tke_kv(level, jc) = 0.0;
             p_internal.tke_Av(blockNo, level, jc) = 0.0;
-            p_internal.tke_iwe(level, jc) = 0.0;
             if (p_constant.vert_mix_type == p_constant.vmix_idemix_tke) {
                 p_internal.tke_iwe_forcing(level, jc) = -1.0 * p_cvmix.iwe_Tdis(blockNo, level, jc);
             } else {

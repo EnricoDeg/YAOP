@@ -64,7 +64,6 @@ class TKE_backend {
     double *m_tke_old;
     double *m_tke_Av;
     double *m_tke_kv;
-    double *m_tke_iwe;
     double *m_tke_iwe_forcing;
     double *m_forc_tke_surf_2D;
     double *m_forc_rho_surf_2D;

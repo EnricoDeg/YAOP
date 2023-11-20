@@ -80,7 +80,6 @@ struct t_tke_internal_view {
     mdspan_2d_double tke_old;
     mdspan_3d_double tke_Av;
     mdspan_2d_double tke_kv;
-    mdspan_2d_double tke_iwe;
     mdspan_2d_double tke_iwe_forcing;
     mdspan_2d_double pressure;
     mdspan_2d_double Nsqr;
