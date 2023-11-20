@@ -33,9 +33,9 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
             p_internal.tke_kv(level, jc) = 0.0;
             p_internal.tke_Av(blockNo, level, jc) = 0.0;
             if (p_constant.vert_mix_type == p_constant.vmix_idemix_tke) {
-                p_internal.tke_iwe_forcing(level, jc) = -1.0 * p_cvmix.iwe_Tdis(blockNo, level, jc);
+                p_cvmix.tke_Tiwf(blockNo, level, jc) = -1.0 * p_cvmix.iwe_Tdis(blockNo, level, jc);
             } else {
-                p_internal.tke_iwe_forcing(level, jc) = 0.0;
+                p_cvmix.tke_Tiwf(blockNo, level, jc) = 0.0;
             }
         }
         p_internal.forc_rho_surf_2D(jc) = 0.0;
@@ -181,7 +181,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
             p_internal.forc(level, jc) += p_cvmix.tke_plc(blockNo, level, jc);
         // forcing by internal wave dissipation
         if (!p_constant_tke.only_tke)
-            p_internal.forc(level, jc) += p_internal.tke_iwe_forcing(level, jc);
+            p_internal.forc(level, jc) += p_cvmix.tke_Tiwf(blockNo, level, jc);
     }
 
     // vertical diffusion and dissipation is solved implicitely
@@ -352,7 +352,6 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     }
 
     for (int level = 0; level < nlevels+1; level++) {
-        p_cvmix.tke_Tiwf(blockNo, level, jc) = p_internal.tke_iwe_forcing(level, jc);
         p_cvmix.tke_Ttot(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
                                                 p_internal.tke_old(level, jc)) / p_constant.dtime;
         p_cvmix.tke_Lmix(blockNo, level, jc) = p_internal.mxl(level, jc);
