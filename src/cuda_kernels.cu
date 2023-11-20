@@ -168,14 +168,15 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     // tke forcing
     // forcing by shear and buoycancy production
     p_cvmix.tke_Tspr(blockNo, 0, jc) = p_internal.Ssqr(0, jc) * p_internal.KappaM_out(0, jc);
-    p_internal.P_diss_v(0, jc) = p_internal.forc_rho_surf_2D(jc) * p_constant.grav * p_constant.OceanReferenceDensity;
+    p_cvmix.tke_Tbpr(blockNo, 0, jc) = p_internal.forc_rho_surf_2D(jc) *
+                                       p_constant.grav * p_constant.OceanReferenceDensity;
     for (int level = 1; level < nlevels+1; level++) {
         p_cvmix.tke_Tspr(blockNo, level, jc) = p_internal.Ssqr(level, jc) * p_internal.KappaM_out(level, jc);
-        p_internal.P_diss_v(level, jc) = p_internal.Nsqr(level, jc) * p_internal.KappaH_out(level, jc);
+        p_cvmix.tke_Tbpr(blockNo, level, jc) = p_internal.Nsqr(level, jc) * p_internal.KappaH_out(level, jc);
     }
 
     for (int level = 0; level < nlevels+1; level++) {
-        p_internal.forc(level, jc) = p_cvmix.tke_Tspr(blockNo, level, jc) - p_internal.P_diss_v(level, jc);
+        p_internal.forc(level, jc) = p_cvmix.tke_Tspr(blockNo, level, jc) - p_cvmix.tke_Tbpr(blockNo, level, jc);
         // additional langmuir turbulence term
         if (p_constant.l_lc)
             p_internal.forc(level, jc) += p_cvmix.tke_plc(blockNo, level, jc);
@@ -325,7 +326,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     // Part 6: Assign diagnostic variables
     for (int level = 0; level < nlevels+1; level++) {
-        p_cvmix.tke_Tbpr(blockNo, level, jc) = - p_internal.P_diss_v(level, jc);
+        p_cvmix.tke_Tbpr(blockNo, level, jc) *= -1.0;
         p_cvmix.tke_Tbck(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
                                                 p_internal.tke_unrest(level, jc)) /
                                                 p_constant.dtime;
