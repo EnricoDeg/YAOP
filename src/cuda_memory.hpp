@@ -95,7 +95,6 @@ struct t_tke_internal_view {
     mdspan_2d_double sqrttke;
     mdspan_2d_double KappaM_out;
     mdspan_2d_double Rinum;
-    mdspan_2d_double prandtl;
     mdspan_2d_double KappaH_out;
     mdspan_2d_double forc;
     mdspan_2d_double K_diss_v;

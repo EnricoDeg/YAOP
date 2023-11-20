@@ -157,8 +157,8 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
             p_internal.Rinum(level, jc) = min(p_internal.Rinum(level, jc),
                                               p_internal.KappaM_out(level, jc) * p_internal.Nsqr(level, jc) /
                                               1.0e-12);
-        p_internal.prandtl(level, jc) = max(1.0, min(10.0, 6.6 * p_internal.Rinum(level, jc)));
-        p_internal.KappaH_out(level, jc) = p_internal.KappaM_out(level, jc) / p_internal.prandtl(level, jc);
+        p_cvmix.tke_Pr(blockNo, level, jc) = max(1.0, min(10.0, 6.6 * p_internal.Rinum(level, jc)));
+        p_internal.KappaH_out(level, jc) = p_internal.KappaM_out(level, jc) / p_cvmix.tke_Pr(blockNo, level, jc);
         if (p_constant_tke.use_Kappa_min) {
             p_internal.KappaM_out(level, jc) = max(p_constant_tke.KappaM_min, p_internal.KappaM_out(level, jc));
             p_internal.KappaH_out(level, jc) = max(p_constant_tke.KappaH_min, p_internal.KappaH_out(level, jc));
@@ -356,7 +356,6 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
         p_cvmix.tke_Ttot(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
                                                 p_internal.tke_old(level, jc)) / p_constant.dtime;
         p_cvmix.tke_Lmix(blockNo, level, jc) = p_internal.mxl(level, jc);
-        p_cvmix.tke_Pr(blockNo, level, jc) = p_internal.prandtl(level, jc);
     }
 
     // the rest is for debugging

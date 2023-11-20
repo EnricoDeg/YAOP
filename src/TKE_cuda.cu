@@ -105,7 +105,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view.KappaM_out = view_cuda_malloc(m_KappaM_out,
                                                     static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.Rinum = view_cuda_malloc(m_Rinum, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.prandtl = view_cuda_malloc(m_prandtl, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.KappaH_out = view_cuda_malloc(m_KappaH_out,
                                                     static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.forc = view_cuda_malloc(m_forc, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
@@ -152,7 +151,6 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_sqrttke));
     check(cudaFree(m_KappaM_out));
     check(cudaFree(m_Rinum));
-    check(cudaFree(m_prandtl));
     check(cudaFree(m_KappaH_out));
     check(cudaFree(m_forc));
     check(cudaFree(m_ke));
