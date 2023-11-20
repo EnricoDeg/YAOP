@@ -32,7 +32,6 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
         for (int level = 0; level < levels+1; level++) {
             p_internal.tke_kv(level, jc) = 0.0;
             p_internal.tke_Av(blockNo, level, jc) = 0.0;
-            p_internal.tke_iw_alpha_c(level, jc) = 0.0;
             p_internal.tke_iwe(level, jc) = 0.0;
             if (p_constant.vert_mix_type == p_constant.vmix_idemix_tke) {
                 p_internal.tke_iwe_forcing(level, jc) = -1.0 * p_cvmix.iwe_Tdis(blockNo, level, jc);
@@ -173,8 +172,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
         if (!p_constant_tke.only_tke)
             p_internal.Rinum(level, jc) = min(p_internal.Rinum(level, jc),
                                               p_internal.KappaM_out(level, jc) * p_internal.Nsqr(level, jc) /
-                                              max(1.0e-12, p_internal.tke_iw_alpha_c(level, jc) *
-                                              pow(p_internal.tke_iwe(level, jc), 2.0)));
+                                              1.0e-12);
         p_internal.prandtl(level, jc) = max(1.0, min(10.0, 6.6 * p_internal.Rinum(level, jc)));
         p_internal.KappaH_out(level, jc) = p_internal.KappaM_out(level, jc) / p_internal.prandtl(level, jc);
         if (p_constant_tke.use_Kappa_min) {

@@ -88,8 +88,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
                                static_cast<size_t>(nblocks), static_cast<size_t>(nlevs+1),
                                static_cast<size_t>(nproma));
     p_internal_view.tke_kv = view_cuda_malloc(m_tke_kv, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.tke_iw_alpha_c = view_cuda_malloc(m_tke_iw_alpha_c,
-                                                        static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.tke_iwe = view_cuda_malloc(m_tke_iwe, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.tke_iwe_forcing = view_cuda_malloc(m_tke_iwe_forcing, static_cast<size_t>(nlevs+1),
                                             static_cast<size_t>(nproma));
@@ -140,7 +138,6 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_tke_old));
     check(cudaFree(m_tke_Av));
     check(cudaFree(m_tke_kv));
-    check(cudaFree(m_tke_iw_alpha_c));
     check(cudaFree(m_tke_iwe));
     check(cudaFree(m_tke_iwe_forcing));
     check(cudaFree(m_pressure));
