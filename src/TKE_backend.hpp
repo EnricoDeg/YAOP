@@ -86,7 +86,6 @@ class TKE_backend {
     double *m_Rinum;
     double *m_KappaH_out;
     double *m_forc;
-    double *m_K_diss_v;
     double *m_P_diss_v;
     double *m_ke;
     double *m_cp;

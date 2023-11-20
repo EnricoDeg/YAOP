@@ -106,8 +106,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view.KappaH_out = view_cuda_malloc(m_KappaH_out,
                                                     static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.forc = view_cuda_malloc(m_forc, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.K_diss_v = view_cuda_malloc(m_K_diss_v,
-                                                  static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.P_diss_v = view_cuda_malloc(m_P_diss_v,
                                                   static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.ke = view_cuda_malloc(m_ke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
