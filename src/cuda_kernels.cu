@@ -125,23 +125,23 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     // calculate mixing length scale
     for (int level = 0; level < nlevels+1; level++) {
         p_internal.sqrttke(level, jc) = sqrt(max(0.0, p_internal.tke_old(level, jc)));
-        p_internal.mxl(level, jc) = sqrt(2.0) * p_internal.sqrttke(level, jc) /
+        p_cvmix.tke_Lmix(blockNo, level, jc) = sqrt(2.0) * p_internal.sqrttke(level, jc) /
                                     sqrt(max(1.0e-12, p_internal.Nsqr(level, jc)));
     }
 
     if (p_constant_tke.tke_mxl_choice == 2) {
-        p_internal.mxl(0, jc) = 0.0;
-        p_internal.mxl(nlevels, jc) = 0.0;
+        p_cvmix.tke_Lmix(blockNo, 0, jc) = 0.0;
+        p_cvmix.tke_Lmix(blockNo, nlevels, jc) = 0.0;
         for (int level = 1; level < nlevels; level++)
-            p_internal.mxl(level, jc) = min(p_internal.mxl(level, jc),
-                                        p_internal.mxl(level-1, jc) + p_internal.dzw_stretched(level-1, jc));
-        p_internal.mxl(nlevels-1, jc) = min(p_internal.mxl(nlevels-1, jc),
+            p_cvmix.tke_Lmix(blockNo, level, jc) = min(p_cvmix.tke_Lmix(blockNo, level, jc),
+                                        p_cvmix.tke_Lmix(blockNo, level-1, jc) + p_internal.dzw_stretched(level-1, jc));
+        p_cvmix.tke_Lmix(blockNo, nlevels-1, jc) = min(p_cvmix.tke_Lmix(blockNo, nlevels-1, jc),
                                         p_constant_tke.mxl_min +  p_internal.dzw_stretched(nlevels-1, jc));
         for (int level = nlevels-2; level > 0; level--)
-            p_internal.mxl(level, jc) = min(p_internal.mxl(level, jc),
-                                            p_internal.mxl(level+1, jc) +  p_internal.dzw_stretched(level, jc));
+            p_cvmix.tke_Lmix(blockNo, level, jc) = min(p_cvmix.tke_Lmix(blockNo, level, jc),
+                                        p_cvmix.tke_Lmix(blockNo, level+1, jc) +  p_internal.dzw_stretched(level, jc));
         for (int level = 0; level < nlevels+1; level++)
-            p_internal.mxl(level, jc) = max(p_internal.mxl(level, jc), p_constant_tke.mxl_min);
+            p_cvmix.tke_Lmix(blockNo, level, jc) = max(p_cvmix.tke_Lmix(blockNo, level, jc), p_constant_tke.mxl_min);
     } else if (p_constant_tke.tke_mxl_choice == 3) {
         // TODO(EnricoDeg): not default
     } else {
@@ -151,7 +151,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     // calculate diffusivities
     for (int level = 0; level < nlevels+1; level++) {
         p_internal.KappaM_out(level, jc) = min(p_constant_tke.KappaM_max,
-                                               p_constant_tke.c_k * p_internal.mxl(level, jc) *
+                                               p_constant_tke.c_k * p_cvmix.tke_Lmix(blockNo, level, jc) *
                                                p_internal.sqrttke(level, jc));
         if (!p_constant_tke.only_tke)
             p_internal.Rinum(level, jc) = min(p_internal.Rinum(level, jc),
@@ -267,7 +267,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     for (int level = 1; level < nlevels; level++)
         p_internal.b_tri(level, jc) += p_constant.dtime * p_constant_tke.c_eps *
-                                       p_internal.sqrttke(level, jc) / p_internal.mxl(level, jc);
+                                       p_internal.sqrttke(level, jc) / p_cvmix.tke_Lmix(blockNo, level, jc);
 
     // d is r.h.s. of implicite equation (d: new tke with only explicite tendencies included)
     for (int level = 0; level < nlevels+1; level++)
@@ -309,7 +309,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     p_cvmix.tke_Tdis(blockNo, 0, jc) = 0.0;
     p_cvmix.tke_Tdis(blockNo, nlevels, jc) = 0.0;
     for (int level = 1; level < nlevels; level++)
-        p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_internal.mxl(level, jc) *
+        p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_cvmix.tke_Lmix(blockNo, level, jc) *
                                                  p_internal.sqrttke(level, jc) * p_cvmix.tke(blockNo, level, jc);
 
     // Part 5: reset tke to bounding values
@@ -354,7 +354,6 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     for (int level = 0; level < nlevels+1; level++) {
         p_cvmix.tke_Ttot(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
                                                 p_internal.tke_old(level, jc)) / p_constant.dtime;
-        p_cvmix.tke_Lmix(blockNo, level, jc) = p_internal.mxl(level, jc);
     }
 
     // the rest is for debugging

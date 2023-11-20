@@ -98,7 +98,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     p_internal_view.b_tri = view_cuda_malloc(m_b_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.c_tri = view_cuda_malloc(m_c_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.d_tri = view_cuda_malloc(m_d_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.mxl = view_cuda_malloc(m_mxl, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.sqrttke = view_cuda_malloc(m_sqrttke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.KappaM_out = view_cuda_malloc(m_KappaM_out,
                                                     static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
@@ -140,7 +139,6 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_b_tri));
     check(cudaFree(m_c_tri));
     check(cudaFree(m_d_tri));
-    check(cudaFree(m_mxl));
     check(cudaFree(m_sqrttke));
     check(cudaFree(m_KappaM_out));
     check(cudaFree(m_Rinum));

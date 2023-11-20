@@ -80,7 +80,6 @@ class TKE_backend {
     double *m_b_tri;
     double *m_c_tri;
     double *m_d_tri;
-    double *m_mxl;
     double *m_sqrttke;
     double *m_KappaM_out;
     double *m_Rinum;
