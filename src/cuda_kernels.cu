@@ -119,22 +119,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     // Initialize diagnostics
     for (int level = 0; level < nlevels+1; level++) {
-        p_cvmix.tke_Tbpr(blockNo, level, jc) = 0.0;
-        p_cvmix.tke_Tspr(blockNo, level, jc) = 0.0;
-        p_cvmix.tke_Tdif(blockNo, level, jc) = 0.0;
-        p_cvmix.tke_Tdis(blockNo, level, jc) = 0.0;
         p_cvmix.tke_Twin(blockNo, level, jc) = 0.0;
-        p_cvmix.tke_Tiwf(blockNo, level, jc) = 0.0;
-        p_cvmix.tke_Tbck(blockNo, level, jc) = 0.0;
-        p_cvmix.tke_Ttot(blockNo, level, jc) = 0.0;
-        p_internal.a_dif(level, jc) = 0.0;
-        p_internal.b_dif(level, jc) = 0.0;
-        p_internal.c_dif(level, jc) = 0.0;
-        p_internal.a_tri(level, jc) = 0.0;
-        p_internal.b_tri(level, jc) = 0.0;
-        p_internal.c_tri(level, jc) = 0.0;
-        p_internal.tke_upd(level, jc) = 0.0;
-        p_cvmix.tke(blockNo, level, jc) = 0.0;
     }
 
     // calculate mixing length scale
