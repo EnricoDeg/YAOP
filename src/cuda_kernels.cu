@@ -150,28 +150,29 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     // calculate diffusivities
     for (int level = 0; level < nlevels+1; level++) {
-        p_internal.KappaM_out(level, jc) = min(p_constant_tke.KappaM_max,
+        p_internal.tke_Av(blockNo, level, jc) = min(p_constant_tke.KappaM_max,
                                                p_constant_tke.c_k * p_cvmix.tke_Lmix(blockNo, level, jc) *
                                                p_internal.sqrttke(level, jc));
         if (!p_constant_tke.only_tke)
             p_internal.Rinum(level, jc) = min(p_internal.Rinum(level, jc),
-                                              p_internal.KappaM_out(level, jc) * p_internal.Nsqr(level, jc) /
+                                              p_internal.tke_Av(blockNo, level, jc) * p_internal.Nsqr(level, jc) /
                                               1.0e-12);
         p_cvmix.tke_Pr(blockNo, level, jc) = max(1.0, min(10.0, 6.6 * p_internal.Rinum(level, jc)));
-        p_internal.KappaH_out(level, jc) = p_internal.KappaM_out(level, jc) / p_cvmix.tke_Pr(blockNo, level, jc);
+        p_internal.KappaH_out(level, jc) = p_internal.tke_Av(blockNo, level, jc) / p_cvmix.tke_Pr(blockNo, level, jc);
         if (p_constant_tke.use_Kappa_min) {
-            p_internal.KappaM_out(level, jc) = max(p_constant_tke.KappaM_min, p_internal.KappaM_out(level, jc));
+            p_internal.tke_Av(blockNo, level, jc) = max(p_constant_tke.KappaM_min,
+                                                        p_internal.tke_Av(blockNo, level, jc));
             p_internal.KappaH_out(level, jc) = max(p_constant_tke.KappaH_min, p_internal.KappaH_out(level, jc));
         }
     }
 
     // tke forcing
     // forcing by shear and buoycancy production
-    p_cvmix.tke_Tspr(blockNo, 0, jc) = p_internal.Ssqr(0, jc) * p_internal.KappaM_out(0, jc);
+    p_cvmix.tke_Tspr(blockNo, 0, jc) = p_internal.Ssqr(0, jc) * p_internal.tke_Av(blockNo, 0, jc);
     p_cvmix.tke_Tbpr(blockNo, 0, jc) = p_internal.forc_rho_surf_2D(jc) *
                                        p_constant.grav * p_constant.OceanReferenceDensity;
     for (int level = 1; level < nlevels+1; level++) {
-        p_cvmix.tke_Tspr(blockNo, level, jc) = p_internal.Ssqr(level, jc) * p_internal.KappaM_out(level, jc);
+        p_cvmix.tke_Tspr(blockNo, level, jc) = p_internal.Ssqr(level, jc) * p_internal.tke_Av(blockNo, level, jc);
         p_cvmix.tke_Tbpr(blockNo, level, jc) = p_internal.Nsqr(level, jc) * p_internal.KappaH_out(level, jc);
     }
 
@@ -190,7 +191,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
         int kp1 = min(level+1, nlevels-1);
         int kk = max(level, 1);
         p_internal.ke(level, jc) = 0.5 * p_constant_tke.alpha_tke *
-                                   (p_internal.KappaM_out(kp1, jc) + p_internal.KappaM_out(kk, jc));
+                                   (p_internal.tke_Av(blockNo, kp1, jc) + p_internal.tke_Av(blockNo, kk, jc));
     }
     p_internal.ke(nlevels, jc) = 0.0;
 
@@ -359,7 +360,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     // the rest is for debugging
     for (int level = 0; level < nlevels+1; level++) {
         p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.KappaH_out(level, jc);
-        p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.KappaM_out(level, jc);
+        p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.tke_Av(blockNo, level, jc);
         p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
     }
 }
