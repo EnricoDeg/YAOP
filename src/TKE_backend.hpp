@@ -76,7 +76,6 @@ class TKE_backend {
     double *m_c_tri;
     double *m_d_tri;
     double *m_sqrttke;
-    double *m_Rinum;
     double *m_forc;
     double *m_ke;
     double *m_cp;
