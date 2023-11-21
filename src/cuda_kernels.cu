@@ -142,6 +142,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
         p_internal.tke_Av(blockNo, level, jc) = min(p_constant_tke.KappaM_max,
                                                p_constant_tke.c_k * p_cvmix.tke_Lmix(blockNo, level, jc) *
                                                p_internal.sqrttke(level, jc));
+        p_internal.Rinum(level, jc) = p_internal.Nsqr(level, jc) / max(p_internal.Ssqr(level, jc), 1.0e-12);
         if (!p_constant_tke.only_tke)
             p_internal.Rinum(level, jc) = min(p_internal.Rinum(level, jc),
                                               p_internal.tke_Av(blockNo, level, jc) * p_internal.Nsqr(level, jc) /
