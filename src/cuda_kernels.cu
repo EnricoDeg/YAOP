@@ -37,28 +37,26 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
             } else {
                 p_cvmix.tke_Tiwf(blockNo, level, jc) = 0.0;
             }
-        }
-        for (int level = 0; level < levels; level++)
-            p_internal.dzw_stretched(level, jc) = p_patch.prism_thick_c(blockNo, level, jc) *
-                                                  ocean_state.stretch_c(blockNo, jc);
-
-        for (int level = 0; level < levels + 1; level++)
+            if (level < levels)
+                p_internal.dzw_stretched(level, jc) = p_patch.prism_thick_c(blockNo, level, jc) *
+                                                      ocean_state.stretch_c(blockNo, jc);
             p_internal.dzt_stretched(level, jc) = p_patch.prism_center_dist_c(blockNo, level, jc) *
                                                   ocean_state.stretch_c(blockNo, jc);
+        }
 
         // pre-integration
         levels = p_patch.dolic_c(blockNo, jc);
         if (levels > 0) {
-            for (int level = 0; level < p_constant.nlevs+1; level++) {
+            for (int level = 0; level < p_constant.nlevs+1; level++)
                 p_internal.tke_old(level, jc) = p_cvmix.tke(blockNo, level, jc);
-                p_internal.Nsqr(level, jc) = 0.0;
-                p_internal.Ssqr(level, jc) = 0.0;
-            }
+
             double tau_abs = (1.0 - p_sea_ice.concsum(blockNo, jc))
                              * sqrt(pow(atmos_fluxes.stress_xw(blockNo, jc), 2.0)
                                   + pow(atmos_fluxes.stress_yw(blockNo, jc), 2.0));
             p_internal.forc_tke_surf_2D(jc) = tau_abs / p_constant.OceanReferenceDensity;
 
+            p_internal.Nsqr(0, jc) = 0.0;
+            p_internal.Ssqr(0, jc) = 0.0;
             for (int level = 1; level < levels; level++) {
                 double rho_down = calculate_density(ocean_state.temp(blockNo, level, jc),
                                                     ocean_state.salt(blockNo, level, jc),
@@ -72,9 +70,6 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                                              (rho_down - rho_up) *
                                              p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
                                              ocean_state.stretch_c(blockNo, jc);
-            }
-
-            for (int level = 1; level < levels; level++)
                 p_internal.Ssqr(level, jc) = pow((ocean_state.p_vn_x1(blockNo, level-1, jc) -
                                              ocean_state.p_vn_x1(blockNo, level, jc) ) *
                                              p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
@@ -87,6 +82,11 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                                              ocean_state.p_vn_x3(blockNo, level, jc) ) *
                                              p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
                                              ocean_state.stretch_c(blockNo, jc) , 2.0);
+            }
+            for (int level = levels; level < p_constant.nlevs+1; level++) {
+                p_internal.Nsqr(level, jc) = 0.0;
+                p_internal.Ssqr(level, jc) = 0.0;
+            }
 
             // integration
             integrate(jc, p_constant.nlevs, blockNo, p_patch, p_cvmix, p_internal, p_constant, p_constant_tke);
