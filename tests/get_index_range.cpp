@@ -35,7 +35,7 @@ TEST(get_index_range, default_value) {
 
     // Assert that the default start and end index values are assigned
     ASSERT_EQ(start_index, 0);
-    ASSERT_EQ(end_index, subset_block_size);
+    ASSERT_EQ(end_index, subset_block_size-1);
 }
 
 // Test that start_index is correctly assigned to subset_start_index if current_block equals subset_start_block
@@ -61,7 +61,7 @@ TEST(get_index_range, start_index_assignment) {
 
     // Assert that the start_index was assigned subset_start_index and end_index was assigned the default value
     ASSERT_EQ(start_index, subset_start_index);
-    ASSERT_EQ(end_index, subset_block_size);
+    ASSERT_EQ(end_index, subset_block_size-1);
 }
 
 // Test that end_index is correctly assigned to subset_end_index if current_block equals subset_end_block
