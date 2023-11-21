@@ -104,6 +104,8 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                t_constant_tke p_constant_tke) {
     double tke_surf, diff_surf_forc, tke_bott, diff_bott_forc;
 
+    int dolic = p_patch.dolic_c(blockNo, jc);
+
     // Initialize diagnostics
     for (int level = 0; level < nlevels+1; level++) {
         p_cvmix.tke_Twin(blockNo, level, jc) = 0.0;
@@ -118,13 +120,13 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     if (p_constant_tke.tke_mxl_choice == 2) {
         p_cvmix.tke_Lmix(blockNo, 0, jc) = 0.0;
-        p_cvmix.tke_Lmix(blockNo, nlevels, jc) = 0.0;
-        for (int level = 1; level < nlevels; level++)
+        p_cvmix.tke_Lmix(blockNo, dolic, jc) = 0.0;
+        for (int level = 1; level < dolic; level++)
             p_cvmix.tke_Lmix(blockNo, level, jc) = min(p_cvmix.tke_Lmix(blockNo, level, jc),
                                         p_cvmix.tke_Lmix(blockNo, level-1, jc) + p_internal.dzw_stretched(level-1, jc));
-        p_cvmix.tke_Lmix(blockNo, nlevels-1, jc) = min(p_cvmix.tke_Lmix(blockNo, nlevels-1, jc),
-                                        p_constant_tke.mxl_min +  p_internal.dzw_stretched(nlevels-1, jc));
-        for (int level = nlevels-2; level > 0; level--)
+        p_cvmix.tke_Lmix(blockNo, dolic-1, jc) = min(p_cvmix.tke_Lmix(blockNo, dolic-1, jc),
+                                        p_constant_tke.mxl_min +  p_internal.dzw_stretched(dolic-1, jc));
+        for (int level = dolic-2; level > 0; level--)
             p_cvmix.tke_Lmix(blockNo, level, jc) = min(p_cvmix.tke_Lmix(blockNo, level, jc),
                                         p_cvmix.tke_Lmix(blockNo, level+1, jc) +  p_internal.dzw_stretched(level, jc));
         for (int level = 0; level < nlevels+1; level++)
@@ -174,13 +176,15 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     }
 
     // vertical diffusion and dissipation is solved implicitely
-    for (int level = 0; level < nlevels; level++) {
-        int kp1 = min(level+1, nlevels-1);
+    for (int level = 0; level < nlevels+1; level++)
+        p_internal.ke(level, jc) = 0.0;
+
+    for (int level = 0; level < dolic; level++) {
+        int kp1 = min(level+1, dolic-1);
         int kk = max(level, 1);
         p_internal.ke(level, jc) = 0.5 * p_constant_tke.alpha_tke *
                                    (p_internal.tke_Av(blockNo, kp1, jc) + p_internal.tke_Av(blockNo, kk, jc));
     }
-    p_internal.ke(nlevels, jc) = 0.0;
 
     // a is upper diagonal of matrix
     // b is main diagonal of matrix
@@ -189,7 +193,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     p_internal.c_dif(0, jc) = p_internal.ke(0, jc) /
                               (p_internal.dzt_stretched(0, jc) * p_internal.dzw_stretched(0, jc));
 
-    for (int level = 1; level < nlevels; level++) {
+    for (int level = 1; level < dolic; level++) {
         p_internal.a_dif(level, jc) = p_internal.ke(level-1, jc) /
                                       (p_internal.dzt_stretched(level, jc) * p_internal.dzw_stretched(level-1, jc));
         p_internal.b_dif(level, jc) = p_internal.ke(level-1, jc) /
@@ -200,12 +204,12 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                               (p_internal.dzt_stretched(level, jc) * p_internal.dzw_stretched(level, jc));
     }
 
-    p_internal.a_dif(nlevels, jc) = p_internal.ke(nlevels-1, jc) /
-                                    (p_internal.dzt_stretched(nlevels, jc) * p_internal.dzw_stretched(nlevels-1, jc));
-    p_internal.c_dif(nlevels, jc) = 0.0;
+    p_internal.a_dif(dolic, jc) = p_internal.ke(dolic-1, jc) /
+                                    (p_internal.dzt_stretched(dolic, jc) * p_internal.dzw_stretched(dolic-1, jc));
+    p_internal.c_dif(dolic, jc) = 0.0;
 
     // copy tke_old
-    for (int level = 0; level < nlevels+1; level++)
+    for (int level = 0; level < dolic+1; level++)
         p_internal.tke_upd(level, jc) = p_internal.tke_old(level, jc);
 
     // upper boundary condition
@@ -230,55 +234,55 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     // lower boundary condition
     if (p_constant_tke.use_lbound_dirichlet) {
-        p_internal.sqrttke(nlevels, jc) = 0.0;
-        p_internal.forc(nlevels, jc) = 0.0;
+        p_internal.sqrttke(dolic, jc) = 0.0;
+        p_internal.forc(dolic, jc) = 0.0;
         tke_bott = p_constant_tke.tke_min;
-        p_internal.tke_upd(nlevels, jc) = tke_bott;
-        diff_bott_forc = p_internal.c_dif(nlevels-1, jc) * tke_bott;
-        p_internal.forc(nlevels-1, jc) += diff_bott_forc;
-        p_internal.c_dif(nlevels-1, jc) = 0.0;
-        p_internal.b_dif(nlevels, jc) = 0.0;
-        p_internal.a_dif(nlevels, jc) = 0.0;
+        p_internal.tke_upd(dolic, jc) = tke_bott;
+        diff_bott_forc = p_internal.c_dif(dolic-1, jc) * tke_bott;
+        p_internal.forc(dolic-1, jc) += diff_bott_forc;
+        p_internal.c_dif(dolic-1, jc) = 0.0;
+        p_internal.b_dif(dolic, jc) = 0.0;
+        p_internal.a_dif(dolic, jc) = 0.0;
     } else {
-        p_internal.b_dif(nlevels, jc) = p_internal.ke(nlevels-1, jc) /
-                                        (p_internal.dzt_stretched(nlevels, jc) *
-                                        p_internal.dzw_stretched(nlevels-1, jc));
+        p_internal.b_dif(dolic, jc) = p_internal.ke(dolic-1, jc) /
+                                        (p_internal.dzt_stretched(dolic, jc) *
+                                        p_internal.dzw_stretched(dolic-1, jc));
         diff_bott_forc = 0.0;
     }
 
     // construct tridiagonal matrix to solve diffusion and dissipation implicitely
-    for (int level = 0; level < nlevels+1; level++) {
+    for (int level = 0; level < dolic+1; level++) {
         p_internal.a_tri(level, jc) = - p_constant.dtime * p_internal.a_dif(level, jc);
         p_internal.b_tri(level, jc) = 1.0 + p_constant.dtime * p_internal.b_dif(level, jc);
         p_internal.c_tri(level, jc) = - p_constant.dtime * p_internal.c_dif(level, jc);
     }
 
-    for (int level = 1; level < nlevels; level++)
+    for (int level = 1; level < dolic; level++)
         p_internal.b_tri(level, jc) += p_constant.dtime * p_constant_tke.c_eps *
                                        p_internal.sqrttke(level, jc) / p_cvmix.tke_Lmix(blockNo, level, jc);
 
     // d is r.h.s. of implicite equation (d: new tke with only explicite tendencies included)
-    for (int level = 0; level < nlevels+1; level++)
+    for (int level = 0; level < dolic+1; level++)
         p_internal.d_tri(level, jc) = p_internal.tke_upd(level, jc) +
                                       p_constant.dtime * p_internal.forc(level, jc);
 
     // solve the tri-diag matrix
-    solve_tridiag(jc, nlevels, blockNo, p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
+    solve_tridiag(jc, dolic, blockNo, p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
                   p_internal.d_tri, p_cvmix.tke, p_internal.cp, p_internal.dp);
 
     // diagnose implicit tendencies (only for diagnostics)
     // vertical diffusion of TKE
-    for (int level = 1; level < nlevels; level++)
+    for (int level = 1; level < dolic; level++)
         p_cvmix.tke_Tdif(blockNo, level, jc) = p_internal.a_dif(level, jc) * p_cvmix.tke(blockNo, level-1, jc) -
                                                p_internal.b_dif(level, jc) * p_cvmix.tke(blockNo, level, jc) +
                                                p_internal.c_dif(level, jc) * p_cvmix.tke(blockNo, level+1, jc);
 
     p_cvmix.tke_Tdif(blockNo, 0, jc) = - p_internal.b_dif(0, jc) * p_cvmix.tke(blockNo, 0, jc) +
                                          p_internal.c_dif(0, jc) * p_cvmix.tke(blockNo, 1, jc);
-    p_cvmix.tke_Tdif(blockNo, nlevels, jc) = p_internal.a_dif(nlevels, jc) * p_cvmix.tke(blockNo, nlevels-1, jc) -
-                                             p_internal.b_dif(nlevels, jc) * p_cvmix.tke(blockNo, nlevels, jc);
+    p_cvmix.tke_Tdif(blockNo, dolic, jc) = p_internal.a_dif(dolic, jc) * p_cvmix.tke(blockNo, dolic-1, jc) -
+                                             p_internal.b_dif(dolic, jc) * p_cvmix.tke(blockNo, dolic, jc);
     p_cvmix.tke_Tdif(blockNo, 1, jc) += diff_surf_forc;
-    p_cvmix.tke_Tdif(blockNo, nlevels-1, jc) += diff_bott_forc;
+    p_cvmix.tke_Tdif(blockNo, dolic-1, jc) += diff_bott_forc;
 
     // flux out of first box due to diffusion with Dirichlet boundary value of TKE
     // (tke_surf=tke_upd(0)) and TKE of box below (tke_new(1))
@@ -288,15 +292,15 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                                            (tke_surf - p_cvmix.tke(blockNo, 1, jc));
 
     if (p_constant_tke.use_lbound_dirichlet)
-        p_cvmix.tke_Tdif(blockNo, nlevels, jc) = p_internal.ke(nlevels-1, jc) /
-                                                 p_internal.dzw_stretched(nlevels-1, jc) /
-                                                 p_internal.dzt_stretched(nlevels, jc) *
-                                                 (p_cvmix.tke(blockNo, nlevels-1, jc) - tke_bott);
+        p_cvmix.tke_Tdif(blockNo, dolic, jc) = p_internal.ke(dolic-1, jc) /
+                                                 p_internal.dzw_stretched(dolic-1, jc) /
+                                                 p_internal.dzt_stretched(dolic, jc) *
+                                                 (p_cvmix.tke(blockNo, dolic-1, jc) - tke_bott);
 
     // dissipation of TKE
     p_cvmix.tke_Tdis(blockNo, 0, jc) = 0.0;
-    p_cvmix.tke_Tdis(blockNo, nlevels, jc) = 0.0;
-    for (int level = 1; level < nlevels; level++)
+    p_cvmix.tke_Tdis(blockNo, dolic, jc) = 0.0;
+    for (int level = 1; level < dolic; level++)
         p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_cvmix.tke_Lmix(blockNo, level, jc) *
                                                  p_internal.sqrttke(level, jc) * p_cvmix.tke(blockNo, level, jc);
 
@@ -307,13 +311,13 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     // restrict values of TKE to tke_min, if IDEMIX is not used
     if (p_constant_tke.only_tke) {
-        for (int level = 0; level < nlevels+1; level++) {
+        for (int level = 0; level < dolic+1; level++) {
             p_cvmix.tke(blockNo, level, jc) = max(p_cvmix.tke(blockNo, level, jc), p_constant_tke.tke_min);
         }
     }
 
     // Part 6: Assign diagnostic variables
-    for (int level = 0; level < nlevels+1; level++) {
+    for (int level = 0; level < dolic+1; level++) {
         p_cvmix.tke_Tbpr(blockNo, level, jc) *= -1.0;
         p_cvmix.tke_Tbck(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
                                                 p_internal.tke_unrest(level, jc)) /
@@ -330,18 +334,23 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     }
 
     if (p_constant_tke.use_lbound_dirichlet) {
-        p_cvmix.tke_Twin(blockNo, nlevels, jc) = (p_cvmix.tke(blockNo, nlevels, jc) -
-                                                  p_internal.tke_old(nlevels, jc)) /
+        p_cvmix.tke_Twin(blockNo, dolic, jc) = (p_cvmix.tke(blockNo, dolic, jc) -
+                                                  p_internal.tke_old(dolic, jc)) /
                                                   p_constant.dtime -
-                                                  p_cvmix.tke_Tdif(blockNo, nlevels, jc);
-        p_cvmix.tke_Tbck(blockNo, nlevels, jc) = 0.0;
+                                                  p_cvmix.tke_Tdif(blockNo, dolic, jc);
+        p_cvmix.tke_Tbck(blockNo, dolic, jc) = 0.0;
     } else {
-        p_cvmix.tke_Twin(blockNo, nlevels, jc) = 0.0;
+        p_cvmix.tke_Twin(blockNo, dolic, jc) = 0.0;
     }
 
     for (int level = 0; level < nlevels+1; level++) {
         p_cvmix.tke_Ttot(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
                                                 p_internal.tke_old(level, jc)) / p_constant.dtime;
+    }
+
+    for (int level = dolic; level < nlevels+1; level++) {
+        p_cvmix.tke_Lmix(blockNo, level, jc) = 0.0;
+        p_cvmix.tke_Pr(blockNo, level, jc) = 0.0;
     }
 
     // the rest is for debugging
