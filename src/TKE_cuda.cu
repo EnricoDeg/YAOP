@@ -155,7 +155,7 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
         int start_index, end_index;
         get_index_range(cells_block_size, cells_start_block, cells_end_block,
                         cells_start_index, cells_end_index, jb, &start_index, &end_index);
-        int threadsPerBlockI = 512;
+        int threadsPerBlockI = 512;  // too many registers used for 1024
         int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
         dim3 blocksPerGrid(blocksPerGridI, 1, 1);
         dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
@@ -167,12 +167,16 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                                             p_constant_tke);
     }
 
+    // For debugging
+    check(cudaPeekAtLastError());
+    check(cudaDeviceSynchronize());
+
     // over edges
     for (int jb = edges_start_block; jb <= edges_end_block; jb++) {
         int start_index, end_index;
         get_index_range(edges_block_size, edges_start_block, edges_end_block,
                         edges_start_index, edges_end_index, jb, &start_index, &end_index);
-        int threadsPerBlockI = 512;
+        int threadsPerBlockI = 1024;
         int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
         dim3 blocksPerGrid(blocksPerGridI, 1, 1);
         dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
@@ -181,5 +185,7 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                                             p_internal_view, p_constant);
     }
 
+    // For debugging
+    check(cudaPeekAtLastError());
     check(cudaDeviceSynchronize());
 }
