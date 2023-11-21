@@ -158,11 +158,11 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                                               p_internal.tke_Av(blockNo, level, jc) * p_internal.Nsqr(level, jc) /
                                               1.0e-12);
         p_cvmix.tke_Pr(blockNo, level, jc) = max(1.0, min(10.0, 6.6 * p_internal.Rinum(level, jc)));
-        p_internal.KappaH_out(level, jc) = p_internal.tke_Av(blockNo, level, jc) / p_cvmix.tke_Pr(blockNo, level, jc);
+        p_internal.tke_kv(level, jc) = p_internal.tke_Av(blockNo, level, jc) / p_cvmix.tke_Pr(blockNo, level, jc);
         if (p_constant_tke.use_Kappa_min) {
             p_internal.tke_Av(blockNo, level, jc) = max(p_constant_tke.KappaM_min,
                                                         p_internal.tke_Av(blockNo, level, jc));
-            p_internal.KappaH_out(level, jc) = max(p_constant_tke.KappaH_min, p_internal.KappaH_out(level, jc));
+            p_internal.tke_kv(level, jc) = max(p_constant_tke.KappaH_min, p_internal.tke_kv(level, jc));
         }
     }
 
@@ -173,7 +173,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
                                        p_constant.grav * p_constant.OceanReferenceDensity;
     for (int level = 1; level < nlevels+1; level++) {
         p_cvmix.tke_Tspr(blockNo, level, jc) = p_internal.Ssqr(level, jc) * p_internal.tke_Av(blockNo, level, jc);
-        p_cvmix.tke_Tbpr(blockNo, level, jc) = p_internal.Nsqr(level, jc) * p_internal.KappaH_out(level, jc);
+        p_cvmix.tke_Tbpr(blockNo, level, jc) = p_internal.Nsqr(level, jc) * p_internal.tke_kv(level, jc);
     }
 
     for (int level = 0; level < nlevels+1; level++) {
@@ -359,7 +359,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
 
     // the rest is for debugging
     for (int level = 0; level < nlevels+1; level++) {
-        p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.KappaH_out(level, jc);
+        p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.tke_kv(level, jc);
         p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.tke_Av(blockNo, level, jc);
         p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
     }
