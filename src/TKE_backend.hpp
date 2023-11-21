@@ -59,8 +59,6 @@ class TKE_backend {
     double m_ReferencePressureIndbars;
     double m_pi;
 
-    double *m_rho_up;
-    double *m_rho_down;
     double *m_tke_old;
     double *m_tke_Av;
     double *m_tke_kv;

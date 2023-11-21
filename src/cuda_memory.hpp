@@ -69,8 +69,6 @@ struct t_constant_tke {
 
 // TKE internal memory views
 struct t_tke_internal_view {
-    mdspan_2d_double rho_up;
-    mdspan_2d_double rho_down;
     mdspan_1d_double forc_tke_surf_2D;
     mdspan_1d_double forc_rho_surf_2D;
     mdspan_1d_double bottom_fric_2D;

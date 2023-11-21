@@ -74,8 +74,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     // Allocate internal arrays memory and create memory views
     std::cout << "Initializing TKE cuda... " << std::endl;
     p_internal_view.tke_old = view_cuda_malloc(m_tke_old, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.rho_up = view_cuda_malloc(m_rho_up, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    p_internal_view.rho_down = view_cuda_malloc(m_rho_down, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
     p_internal_view.forc_tke_surf_2D = view_cuda_malloc(m_forc_tke_surf_2D, static_cast<size_t>(nproma));
     p_internal_view.forc_rho_surf_2D = view_cuda_malloc(m_forc_rho_surf_2D, static_cast<size_t>(nproma));
     p_internal_view.bottom_fric_2D = view_cuda_malloc(m_bottom_fric_2D, static_cast<size_t>(nproma));
@@ -114,8 +112,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
 TKE_cuda::~TKE_cuda() {
     // Free internal arrays memory
     std::cout << "Finalizing TKE cuda... " << std::endl;
-    check(cudaFree(m_rho_up));
-    check(cudaFree(m_rho_down));
     check(cudaFree(m_forc_tke_surf_2D));
     check(cudaFree(m_forc_rho_surf_2D));
     check(cudaFree(m_bottom_fric_2D));

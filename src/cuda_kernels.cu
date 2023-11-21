@@ -63,26 +63,21 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                 p_internal.Nsqr(level, jc) = 0.0;
                 p_internal.Ssqr(level, jc) = 0.0;
             }
-            for (int level = 0; level < levels; level++) {
-                p_internal.rho_up(level, jc) = 0.0;
-                p_internal.rho_down(level, jc) = 0.0;
-            }
             double tau_abs = (1.0 - p_sea_ice.concsum(blockNo, jc))
                              * sqrt(pow(atmos_fluxes.stress_xw(blockNo, jc), 2.0)
                                   + pow(atmos_fluxes.stress_yw(blockNo, jc), 2.0));
             p_internal.forc_tke_surf_2D(jc) = tau_abs / p_constant.OceanReferenceDensity;
 
-            for (int level = 0; level < levels-1; level++)
-                p_internal.rho_up(level, jc) = calculate_density(ocean_state.temp(blockNo, level, jc),
-                                                                 ocean_state.salt(blockNo, level, jc),
-                                                                 p_internal.pressure(level+1, jc));
-            for (int level = 1; level < levels; level++)
-                p_internal.rho_down(level, jc) = calculate_density(ocean_state.temp(blockNo, level, jc),
-                                                                   ocean_state.salt(blockNo, level, jc),
-                                                                   p_internal.pressure(level, jc));
-            for (int level = 1; level < levels; level++)
+            for (int level = 1; level < levels; level++) {
+                double rho_down = calculate_density(ocean_state.temp(blockNo, level, jc),
+                                                    ocean_state.salt(blockNo, level, jc),
+                                                    p_internal.pressure(level, jc));
+                double rho_up = calculate_density(ocean_state.temp(blockNo, level-1, jc),
+                                                  ocean_state.salt(blockNo, level-1, jc),
+                                                  p_internal.pressure(level, jc));
                 p_internal.Nsqr(level, jc) = p_constant.grav / p_constant.OceanReferenceDensity *
-                                             (p_internal.rho_down(level, jc) - p_internal.rho_up(level-1, jc));
+                                             (rho_down - rho_up);
+            }
 
 
             for (int level = 1; level < levels; level++)
