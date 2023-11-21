@@ -38,10 +38,6 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                 p_cvmix.tke_Tiwf(blockNo, level, jc) = 0.0;
             }
         }
-        if (p_constant.vert_cor_type == 1)
-            p_internal.s_c(jc) = ocean_state.stretch_c(blockNo, jc);
-        else
-            p_internal.s_c(jc) = 1.0;
         p_internal.pressure(0, jc) = 1.0;
         for (int level = 1; level < levels; level++)
             p_internal.pressure(level, jc) = p_patch.zlev_i(level) * p_constant.ReferencePressureIndbars;

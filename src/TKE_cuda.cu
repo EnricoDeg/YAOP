@@ -75,7 +75,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     std::cout << "Initializing TKE cuda... " << std::endl;
     p_internal_view.tke_old = view_cuda_malloc(m_tke_old, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.forc_tke_surf_2D = view_cuda_malloc(m_forc_tke_surf_2D, static_cast<size_t>(nproma));
-    p_internal_view.s_c = view_cuda_malloc(m_s_c, static_cast<size_t>(nproma));
     p_internal_view.dzw_stretched = view_cuda_malloc(m_dzw_stretched,
                                                        static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
     p_internal_view.dzt_stretched = view_cuda_malloc(m_dzt_stretched,
@@ -111,7 +110,6 @@ TKE_cuda::~TKE_cuda() {
     // Free internal arrays memory
     std::cout << "Finalizing TKE cuda... " << std::endl;
     check(cudaFree(m_forc_tke_surf_2D));
-    check(cudaFree(m_s_c));
     check(cudaFree(m_dzw_stretched));
     check(cudaFree(m_dzt_stretched));
     check(cudaFree(m_tke_old));
