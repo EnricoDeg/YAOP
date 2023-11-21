@@ -109,13 +109,9 @@ void integrate(int jc, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
     int dolic = p_patch.dolic_c(blockNo, jc);
     int nlevels = p_constant.nlevs;
 
-    // Initialize diagnostics
+    // Initialize diagnostics and calculate mixing length scale
     for (int level = 0; level < nlevels+1; level++) {
         p_cvmix.tke_Twin(blockNo, level, jc) = 0.0;
-    }
-
-    // calculate mixing length scale
-    for (int level = 0; level < nlevels+1; level++) {
         p_internal.sqrttke(level, jc) = sqrt(max(0.0, p_internal.tke_old(level, jc)));
         p_cvmix.tke_Lmix(blockNo, level, jc) = sqrt(2.0) * p_internal.sqrttke(level, jc) /
                                     sqrt(max(1.0e-12, p_internal.Nsqr(level, jc)));
@@ -161,14 +157,11 @@ void integrate(int jc, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
 
     // tke forcing
     // forcing by shear and buoycancy production
-    p_cvmix.tke_Tspr(blockNo, 0, jc) = p_internal.Ssqr(0, jc) * p_internal.tke_Av(blockNo, 0, jc);
-    p_cvmix.tke_Tbpr(blockNo, 0, jc) = 0.0;
-    for (int level = 1; level < nlevels+1; level++) {
+    for (int level = 0; level < nlevels+1; level++) {
         p_cvmix.tke_Tspr(blockNo, level, jc) = p_internal.Ssqr(level, jc) * p_internal.tke_Av(blockNo, level, jc);
         p_cvmix.tke_Tbpr(blockNo, level, jc) = p_internal.Nsqr(level, jc) * p_internal.tke_kv(level, jc);
-    }
+        if (level == 0) p_cvmix.tke_Tbpr(blockNo, 0, jc) = 0.0;
 
-    for (int level = 0; level < nlevels+1; level++) {
         p_internal.forc(level, jc) = p_cvmix.tke_Tspr(blockNo, level, jc) - p_cvmix.tke_Tbpr(blockNo, level, jc);
         // additional langmuir turbulence term
         if (p_constant.l_lc)
