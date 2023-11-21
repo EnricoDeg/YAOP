@@ -29,6 +29,9 @@ void init_fix(T *data, int nproma, int nlevs, int nblocks, T value);
 template<typename T>
 void read_input_raw(T *data, const std::string &filename, int npoints);
 
+template<typename T>
+void write_output(T*data, const std::string &filename, int npoints);
+
 int main(int argc, char ** argv) {
     int nproma = 15117;
     int nlevs = 40;
@@ -41,16 +44,16 @@ int main(int argc, char ** argv) {
     int nblocks_edges = nedges / nproma + 1;
     int npromz_edges  = nedges % nproma;
 
-    int edges_block_size = nblocks_edges;
+    int edges_block_size = nproma;
     int edges_start_block = 0;
     int edges_end_block = nblocks_edges - 1;
     int edges_start_index = 0;
-    int edges_end_index = nproma - 1;
-    int cells_block_size = nblocks_cells;
+    int edges_end_index = npromz_edges - 1;
+    int cells_block_size = nproma;
     int cells_start_block = 0;
     int cells_end_block = nblocks_cells - 1;
     int cells_start_index = 0;
-    int cells_end_index = nproma - 1;
+    int cells_end_index = npromz_cells - 1;
 
     int vert_mix_type = 2;
     int vmix_idemix_tke = 4;
@@ -275,6 +278,13 @@ int main(int argc, char ** argv) {
       #pragma acc wait
     }
 
+//    #pragma acc update host(tke[0:nproma*(nlevs+1)*nblocks_cells-1])
+//    #pragma acc update host(a_temp_v[0:nproma*(nlevs+1)*nblocks_cells-1])
+//    #pragma acc update host(a_salt_v[0:nproma*(nlevs+1)*nblocks_cells-1])
+//    write_output<double>(tke, "examples/output/tke", nproma*(nlevs+1)*nblocks_cells);
+//    write_output<double>(a_temp_v, "examples/output/a_temp_v", nproma*(nlevs+1)*nblocks_cells);
+//    write_output<double>(a_salt_v, "examples/output/a_salt_v", nproma*(nlevs+1)*nblocks_cells);
+
     ocean_physics.reset();
 
     // Deallocate arrays on host and device
@@ -382,4 +392,13 @@ void read_input_raw(T *data, const std::string &filename, int npoints) {
     ifile.close();
     for (int i = k; i < npoints; i++)
         data[i] = 0;
+}
+
+template<typename T>
+void write_output(T*data, const std::string &filename, int npoints) {
+    std::ofstream ofile;
+    ofile.open(filename);
+    for (int k = 0; k < npoints; k++)
+        ofile << data[k] << std::endl;
+    ofile.close();
 }
