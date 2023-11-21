@@ -89,7 +89,7 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
             }
 
             // integration
-            integrate(jc, p_constant.nlevs, blockNo, p_patch, p_cvmix, p_internal, p_constant, p_constant_tke);
+            integrate(jc, blockNo, p_patch, p_cvmix, p_internal, p_constant, p_constant_tke);
 
             //  write tke vert. diffusivity to vert tracer diffusivities
             for (int level = 0; level < p_constant.nlevs+1; level++) {
@@ -101,12 +101,13 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
 }
 
 __device__
-void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
+void integrate(int jc, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
                t_tke_internal_view p_internal, t_constant p_constant,
                t_constant_tke p_constant_tke) {
     double tke_surf, diff_surf_forc, tke_bott, diff_bott_forc;
 
     int dolic = p_patch.dolic_c(blockNo, jc);
+    int nlevels = p_constant.nlevs;
 
     // Initialize diagnostics
     for (int level = 0; level < nlevels+1; level++) {

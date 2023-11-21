@@ -31,7 +31,7 @@ void calc_impl_edges(int blockNo, int start_index, int end_index, t_patch_view p
                       t_cvmix_view p_cvmix, t_tke_internal_view p_internal, t_constant p_constant);
 
 __device__
-void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
+void integrate(int jc, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
                t_tke_internal_view p_internal, t_constant p_constant,
                t_constant_tke p_constant_tke);
 
