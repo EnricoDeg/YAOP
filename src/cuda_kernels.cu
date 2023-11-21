@@ -38,9 +38,6 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                 p_cvmix.tke_Tiwf(blockNo, level, jc) = 0.0;
             }
         }
-        p_internal.pressure(0, jc) = 1.0;
-        for (int level = 1; level < levels; level++)
-            p_internal.pressure(level, jc) = p_patch.zlev_i(level) * p_constant.ReferencePressureIndbars;
         for (int level = 0; level < levels; level++)
             p_internal.dzw_stretched(level, jc) = p_patch.prism_thick_c(blockNo, level, jc) *
                                                   ocean_state.stretch_c(blockNo, jc);
@@ -65,14 +62,15 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
             for (int level = 1; level < levels; level++) {
                 double rho_down = calculate_density(ocean_state.temp(blockNo, level, jc),
                                                     ocean_state.salt(blockNo, level, jc),
-                                                    p_internal.pressure(level, jc));
+                                                    p_patch.zlev_i(level) *
+                                                    p_constant.ReferencePressureIndbars);
                 double rho_up = calculate_density(ocean_state.temp(blockNo, level-1, jc),
                                                   ocean_state.salt(blockNo, level-1, jc),
-                                                  p_internal.pressure(level, jc));
+                                                  p_patch.zlev_i(level) *
+                                                  p_constant.ReferencePressureIndbars);
                 p_internal.Nsqr(level, jc) = p_constant.grav / p_constant.OceanReferenceDensity *
                                              (rho_down - rho_up);
             }
-
 
             for (int level = 1; level < levels; level++)
                 p_internal.Ssqr(level, jc) = pow((ocean_state.p_vn_x1(blockNo, level-1, jc) -

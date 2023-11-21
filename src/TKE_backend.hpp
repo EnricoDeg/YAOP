@@ -65,7 +65,6 @@ class TKE_backend {
     double *m_forc_tke_surf_2D;
     double *m_dzw_stretched;
     double *m_dzt_stretched;
-    double *m_pressure;
     double *m_Nsqr;
     double *m_Ssqr;
     double *m_a_dif;

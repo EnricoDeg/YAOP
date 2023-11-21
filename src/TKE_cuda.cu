@@ -83,7 +83,6 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
                                static_cast<size_t>(nblocks), static_cast<size_t>(nlevs+1),
                                static_cast<size_t>(nproma));
     p_internal_view.tke_kv = view_cuda_malloc(m_tke_kv, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.pressure = view_cuda_malloc(m_pressure, static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
     p_internal_view.Nsqr = view_cuda_malloc(m_Nsqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.Ssqr = view_cuda_malloc(m_Ssqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
     p_internal_view.a_dif = view_cuda_malloc(m_a_dif, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
@@ -114,7 +113,6 @@ TKE_cuda::~TKE_cuda() {
     check(cudaFree(m_tke_old));
     check(cudaFree(m_tke_Av));
     check(cudaFree(m_tke_kv));
-    check(cudaFree(m_pressure));
     check(cudaFree(m_Nsqr));
     check(cudaFree(m_Ssqr));
     check(cudaFree(m_a_dif));
