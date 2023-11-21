@@ -49,7 +49,7 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
         // pre-integration
         levels = p_patch.dolic_c(blockNo, jc);
         if (levels > 0) {
-            for (int level = 0; level < levels+1; level++) {
+            for (int level = 0; level < p_constant.nlevs+1; level++) {
                 p_internal.tke_old(level, jc) = p_cvmix.tke(blockNo, level, jc);
                 p_internal.Nsqr(level, jc) = 0.0;
                 p_internal.Ssqr(level, jc) = 0.0;
@@ -69,7 +69,9 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                                                   p_patch.zlev_i(level) *
                                                   p_constant.ReferencePressureIndbars);
                 p_internal.Nsqr(level, jc) = p_constant.grav / p_constant.OceanReferenceDensity *
-                                             (rho_down - rho_up);
+                                             (rho_down - rho_up) *
+                                             p_patch.inv_prism_center_dist_c(blockNo, level, jc) /
+                                             ocean_state.stretch_c(blockNo, jc);
             }
 
             for (int level = 1; level < levels; level++)
