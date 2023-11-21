@@ -38,7 +38,6 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                 p_cvmix.tke_Tiwf(blockNo, level, jc) = 0.0;
             }
         }
-        p_internal.forc_rho_surf_2D(jc) = 0.0;
         p_internal.bottom_fric_2D(jc) = 0.0;
         if (p_constant.vert_cor_type == 1)
             p_internal.s_c(jc) = ocean_state.stretch_c(blockNo, jc);
@@ -164,8 +163,7 @@ void integrate(int jc, int nlevels, int blockNo, t_patch_view p_patch, t_cvmix_v
     // tke forcing
     // forcing by shear and buoycancy production
     p_cvmix.tke_Tspr(blockNo, 0, jc) = p_internal.Ssqr(0, jc) * p_internal.tke_Av(blockNo, 0, jc);
-    p_cvmix.tke_Tbpr(blockNo, 0, jc) = p_internal.forc_rho_surf_2D(jc) *
-                                       p_constant.grav * p_constant.OceanReferenceDensity;
+    p_cvmix.tke_Tbpr(blockNo, 0, jc) = 0.0;
     for (int level = 1; level < nlevels+1; level++) {
         p_cvmix.tke_Tspr(blockNo, level, jc) = p_internal.Ssqr(level, jc) * p_internal.tke_Av(blockNo, level, jc);
         p_cvmix.tke_Tbpr(blockNo, level, jc) = p_internal.Nsqr(level, jc) * p_internal.tke_kv(level, jc);
