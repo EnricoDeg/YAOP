@@ -51,8 +51,10 @@ void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p
                 p_internal.tke_old(level, jc) = p_cvmix.tke(blockNo, level, jc);
 
             double tau_abs = (1.0 - p_sea_ice.concsum(blockNo, jc))
-                             * sqrt(pow(atmos_fluxes.stress_xw(blockNo, jc), 2.0)
-                                  + pow(atmos_fluxes.stress_yw(blockNo, jc), 2.0));
+                             * sqrt((atmos_fluxes.stress_xw(blockNo, jc) *
+                                     atmos_fluxes.stress_xw(blockNo, jc))
+                                  + (atmos_fluxes.stress_yw(blockNo, jc) *
+                                     atmos_fluxes.stress_yw(blockNo, jc)));
             p_internal.forc_tke_surf_2D(jc) = tau_abs / p_constant.OceanReferenceDensity;
 
             p_internal.Nsqr(0, jc) = 0.0;
@@ -172,15 +174,14 @@ void integrate(int jc, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
     }
 
     // vertical diffusion and dissipation is solved implicitely
-    for (int level = 0; level < nlevels+1; level++)
-        p_internal.ke(level, jc) = 0.0;
-
     for (int level = 0; level < dolic; level++) {
         int kp1 = min(level+1, dolic-1);
         int kk = max(level, 1);
         p_internal.ke(level, jc) = 0.5 * p_constant_tke.alpha_tke *
                                    (p_internal.tke_Av(blockNo, kp1, jc) + p_internal.tke_Av(blockNo, kk, jc));
     }
+    for (int level = dolic; level < nlevels+1; level++)
+        p_internal.ke(level, jc) = 0.0;
 
     // a is upper diagonal of matrix
     // b is main diagonal of matrix
@@ -383,11 +384,8 @@ void calc_impl_edges(int blockNo, int start_index, int end_index, t_patch_view p
                       t_cvmix_view p_cvmix, t_tke_internal_view p_internal, t_constant p_constant) {
     int je = blockIdx.x * blockDim.x + threadIdx.x + start_index;
     if (je <= end_index) {
-        int levels = p_constant.nlevs;
-        for (int level = 0; level < levels+1; level++)
-            p_cvmix.a_veloc_v(blockNo, level, je) = 0.0;
-
-        levels = p_patch.dolic_e(blockNo, je);
+        p_cvmix.a_veloc_v(blockNo, 0, je) = 0.0;
+        int levels = p_patch.dolic_e(blockNo, je);
         int cell_1_idx = p_patch.edges_cell_idx(0, blockNo, je);
         int cell_1_block = p_patch.edges_cell_blk(0, blockNo, je);
         int cell_2_idx = p_patch.edges_cell_idx(1, blockNo, je);
@@ -395,6 +393,8 @@ void calc_impl_edges(int blockNo, int start_index, int end_index, t_patch_view p
         for (int level = 1; level < levels; level++)
             p_cvmix.a_veloc_v(blockNo, level, je) = 0.5 * (p_internal.tke_Av(cell_1_block, level, cell_1_idx) +
                                                   p_internal.tke_Av(cell_2_block, level, cell_2_idx));
+        for (int level = levels; level < p_constant.nlevs+1; level++)
+            p_cvmix.a_veloc_v(blockNo, level, je) = 0.0;
     }
 }
 
