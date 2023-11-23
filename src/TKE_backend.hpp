@@ -52,19 +52,9 @@ class TKE_backend {
     }
 
  protected:
-    int m_nproma;
-    int m_nlevs;
-    int m_nblocks;
-    int m_vert_mix_type;
-    int m_vmix_idemix_tke;
-    int m_vert_cor_type;
-    double m_dtime;
-    double m_OceanReferenceDensity;
-    double m_grav;
-    int m_l_lc;
-    double m_clc;
-    double m_ReferencePressureIndbars;
-    double m_pi;
+    // Structures with parameters
+    struct t_constant p_constant;
+    struct t_constant_tke p_constant_tke;
 
     double *m_tke_old;
     double *m_tke_Av;

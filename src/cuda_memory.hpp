@@ -32,41 +32,6 @@ using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
 using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
 using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
 
-// TKE constants
-struct t_constant {
-    int vert_mix_type;
-    int vmix_idemix_tke;
-    int vert_cor_type;
-    double dtime;
-    double OceanReferenceDensity;
-    double grav;
-    int l_lc;
-    double clc;
-    double ReferencePressureIndbars;
-    double pi;
-    int nlevs;
-};
-
-struct t_constant_tke {
-    double c_k;
-    double c_eps;
-    double cd;
-    double alpha_tke;
-    double clc;
-    double mxl_min;
-    double KappaM_min;
-    double KappaH_min;
-    double KappaM_max;
-    double tke_surf_min;
-    double tke_min;
-    int tke_mxl_choice;
-    int handle_old_vals;
-    bool only_tke;
-    bool use_Kappa_min;
-    bool use_ubound_dirichlet;
-    bool use_lbound_dirichlet;
-};
-
 // TKE internal memory views
 struct t_tke_internal_view {
     mdspan_1d_double forc_tke_surf_2D;

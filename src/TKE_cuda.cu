@@ -29,48 +29,12 @@ struct t_atmos_for_ocean_view p_as_view;
 struct t_sea_ice_view<mdspan_2d_double> p_sea_ice_view;
 struct t_tke_internal_view p_internal_view;
 
-// Structures with parameters
-struct t_constant p_constant;
-struct t_constant_tke p_constant_tke;
-
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
                    int l_lc, double clc, double ReferencePressureIndbars, double pi)
     : TKE_backend(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
                   vert_cor_type, dtime, OceanReferenceDensity, grav,
                   l_lc, clc, ReferencePressureIndbars, pi) {
-    // Fill structures with parameters
-    p_constant.vert_mix_type = m_vert_mix_type;
-    p_constant.vmix_idemix_tke = m_vmix_idemix_tke;
-    p_constant.vert_cor_type = m_vert_cor_type;
-    p_constant.dtime = m_dtime;
-    p_constant.OceanReferenceDensity = m_OceanReferenceDensity;
-    p_constant.grav = m_grav;
-    p_constant.l_lc = m_l_lc;
-    p_constant.clc = m_clc;
-    p_constant.ReferencePressureIndbars = m_ReferencePressureIndbars;
-    p_constant.pi = m_pi;
-    p_constant.nlevs = m_nlevs;
-
-    // Internal parameters are set for now to default values
-    p_constant_tke.c_k = 0.1;
-    p_constant_tke.c_eps = 0.7;
-    p_constant_tke.cd = 3.75;
-    p_constant_tke.alpha_tke = 30.0;
-    p_constant_tke.clc = 0.15;
-    p_constant_tke.mxl_min = 1.0e-8;
-    p_constant_tke.KappaM_min = 1.0e-4;
-    p_constant_tke.KappaH_min = 1.0e-5;
-    p_constant_tke.KappaM_max = 100.0;
-    p_constant_tke.tke_surf_min = 1.0e-4;
-    p_constant_tke.tke_min = 1.0e-6;
-    p_constant_tke.tke_mxl_choice = 2;
-    p_constant_tke.handle_old_vals = 1;
-    p_constant_tke.only_tke = true;
-    p_constant_tke.use_Kappa_min = false;
-    p_constant_tke.use_ubound_dirichlet = false;
-    p_constant_tke.use_lbound_dirichlet = false;
-
     // Allocate internal arrays memory and create memory views
     std::cout << "Initializing TKE cuda... " << std::endl;
     p_internal_view.tke_old = view_cuda_malloc(m_tke_old, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
@@ -141,12 +105,13 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
     // The pointer to the data should not change inside the time loop
     // structs view are filled only at the first time step
     if (!is_view_init) {
-        fill_struct_view(&p_cvmix_view, &p_cvmix, m_nblocks, m_nlevs, m_nproma);
-        fill_struct_view(&p_patch_view, &p_patch, m_nblocks, m_nlevs, m_nproma);
-        fill_struct_view(&ocean_state_view, &ocean_state, m_nblocks, m_nlevs, m_nproma);
-        fill_struct_view(&atmos_fluxes_view, &atmos_fluxes, m_nblocks, m_nlevs, m_nproma);
-        fill_struct_view(&p_as_view, &p_as, m_nblocks, m_nlevs, m_nproma);
-        this->fill_struct_memview<mdspan_2d_double, cuda_mdspan_impl>(&p_sea_ice_view, &p_sea_ice, m_nblocks, m_nproma);
+        fill_struct_view(&p_cvmix_view, &p_cvmix, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        fill_struct_view(&p_patch_view, &p_patch, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        fill_struct_view(&ocean_state_view, &ocean_state, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        fill_struct_view(&atmos_fluxes_view, &atmos_fluxes, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        fill_struct_view(&p_as_view, &p_as, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        this->fill_struct_memview<mdspan_2d_double, cuda_mdspan_impl>(&p_sea_ice_view, &p_sea_ice,
+                                                                      p_constant.nblocks, p_constant.nproma);
         is_view_init = true;
     }
 
