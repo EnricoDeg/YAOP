@@ -32,32 +32,6 @@ using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
 using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
 using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
 
-// TKE internal memory views
-struct t_tke_internal_view {
-    mdspan_1d_double forc_tke_surf_2D;
-    mdspan_2d_double dzw_stretched;
-    mdspan_2d_double dzt_stretched;
-    mdspan_2d_double tke_old;
-    mdspan_3d_double tke_Av;
-    mdspan_2d_double tke_kv;
-    mdspan_2d_double Nsqr;
-    mdspan_2d_double Ssqr;
-    mdspan_2d_double a_dif;
-    mdspan_2d_double b_dif;
-    mdspan_2d_double c_dif;
-    mdspan_2d_double a_tri;
-    mdspan_2d_double b_tri;
-    mdspan_2d_double c_tri;
-    mdspan_2d_double d_tri;
-    mdspan_2d_double sqrttke;
-    mdspan_2d_double forc;
-    mdspan_2d_double ke;
-    mdspan_2d_double cp;
-    mdspan_2d_double dp;
-    mdspan_2d_double tke_upd;
-    mdspan_2d_double tke_unrest;
-};
-
 // TKE interface memory views
 struct t_cvmix_view {
     mdspan_3d_double tke;
@@ -137,12 +111,24 @@ class cuda_mdspan_impl {
     static mdspan_2d_double memview_2d_impl(double *data, int nblocks, int nproma) {
         return mdspan_2d_double{ data, ext2d_t{nblocks, nproma} };
     }
+    static mdspan_1d_double memview_malloc(double *field, int dim1) {
+        check( cudaMalloc(&field, dim1*sizeof(double)) );
+        mdspan_1d_double memview{ field, ext1d_t{static_cast<size_t>(dim1)} };
+        return memview;
+    }
+    static mdspan_2d_double memview_malloc(double *field, int dim1, int dim2) {
+        check( cudaMalloc(&field, dim1*dim2*sizeof(double)) );
+        mdspan_2d_double memview{ field, ext2d_t{static_cast<size_t>(dim1),
+                                                 static_cast<size_t>(dim2)} };
+        return memview;
+    }
+    static mdspan_3d_double memview_malloc(double *field, size_t dim1, size_t dim2, size_t dim3) {
+        check( cudaMalloc(&field, dim1*dim2*dim3*sizeof(double)) );
+        mdspan_3d_double memview{ field, ext3d_t{static_cast<size_t>(dim1),
+                                                 static_cast<size_t>(dim2),
+                                                 static_cast<size_t>(dim3)} };
+        return memview;
+    }
 };
-
-mdspan_1d_double view_cuda_malloc(double *field, size_t dim1);
-
-mdspan_2d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2);
-
-mdspan_3d_double view_cuda_malloc(double *field, size_t dim1, size_t dim2, size_t dim3);
 
 #endif  // SRC_CUDA_MEMORY_HPP_

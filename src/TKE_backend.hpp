@@ -51,6 +51,69 @@ class TKE_backend {
         p_sea_ice_view->concsum = memview_policy::memview_2d_impl(p_sea_ice->concsum, nblocks, nproma);
     }
 
+    template <typename memview, typename memview_policy>
+    memview memview_malloc(double *field, int dim1) {
+        return memview_policy::memview_malloc(field, dim1);
+    }
+
+    template <typename memview, typename memview_policy>
+    memview memview_malloc(double *field, int dim1, int dim2) {
+        return memview_policy::memview_malloc(field, dim1, dim2);
+    }
+
+    template <typename memview, typename memview_policy>
+    memview memview_malloc(double *field, int dim1, int dim2, int dim3) {
+        return memview_policy::memview_malloc(field, dim1, dim2, dim3);
+    }
+
+    template<typename T1d, typename T2d, typename T3d, typename memview_policy>
+    void internal_fields_malloc(t_tke_internal_view<T1d, T2d, T3d> *p_internal_view) {
+        p_internal_view->tke_old = this->memview_malloc<T2d, memview_policy>(m_tke_old,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->forc_tke_surf_2D = this->memview_malloc<T1d, memview_policy>(m_forc_tke_surf_2D,
+                                                       p_constant.nproma);
+        p_internal_view->dzw_stretched = this->memview_malloc<T2d, memview_policy>(m_dzw_stretched,
+                                                       p_constant.nlevs, p_constant.nproma);
+        p_internal_view->dzt_stretched = this->memview_malloc<T2d, memview_policy>(m_dzt_stretched,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_Av = this->memview_malloc<T3d, memview_policy>(m_tke_Av,
+                                                       p_constant.nblocks, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_kv = this->memview_malloc<T2d, memview_policy>(m_tke_kv,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->Nsqr = this->memview_malloc<T2d, memview_policy>(m_Nsqr,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->Ssqr = this->memview_malloc<T2d, memview_policy>(m_Ssqr,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->a_dif = this->memview_malloc<T2d, memview_policy>(m_a_dif,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->b_dif = this->memview_malloc<T2d, memview_policy>(m_b_dif,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->c_dif = this->memview_malloc<T2d, memview_policy>(m_c_dif,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->a_tri = this->memview_malloc<T2d, memview_policy>(m_a_tri,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->b_tri = this->memview_malloc<T2d, memview_policy>(m_b_tri,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->c_tri = this->memview_malloc<T2d, memview_policy>(m_c_tri,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->d_tri = this->memview_malloc<T2d, memview_policy>(m_d_tri,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->sqrttke = this->memview_malloc<T2d, memview_policy>(m_sqrttke,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->forc = this->memview_malloc<T2d, memview_policy>(m_forc,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->ke = this->memview_malloc<T2d, memview_policy>(m_ke,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->cp = this->memview_malloc<T2d, memview_policy>(m_cp,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->dp = this->memview_malloc<T2d, memview_policy>(m_dp,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_upd = this->memview_malloc<T2d, memview_policy>(m_tke_upd,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_unrest = this->memview_malloc<T2d, memview_policy>(m_tke_unrest,
+                                                       p_constant.nlevs+1, p_constant.nproma);
+    }
+
  protected:
     // Structures with parameters
     struct t_constant p_constant;

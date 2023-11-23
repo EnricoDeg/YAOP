@@ -24,16 +24,20 @@ __global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
                                  t_patch_view p_patch, t_cvmix_view p_cvmix,
                                  t_ocean_state_view ocean_state, t_atmo_fluxes_view atmos_fluxes,
                                  t_atmos_for_ocean_view p_as, t_sea_ice_view<mdspan_2d_double> p_sea_ice,
-                                 t_tke_internal_view p_internal, t_constant p_constant,
+                                 t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
+                                 t_constant p_constant,
                                  t_constant_tke p_constant_tke);
 
 __global__
 void calc_impl_edges(int blockNo, int start_index, int end_index, t_patch_view p_patch,
-                      t_cvmix_view p_cvmix, t_tke_internal_view p_internal, t_constant p_constant);
+                     t_cvmix_view p_cvmix,
+                     t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
+                     t_constant p_constant);
 
 __device__
 void integrate(int jc, int blockNo, t_patch_view p_patch, t_cvmix_view p_cvmix,
-               t_tke_internal_view p_internal, t_constant p_constant,
+               t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
+               t_constant p_constant,
                t_constant_tke p_constant_tke);
 
 __device__

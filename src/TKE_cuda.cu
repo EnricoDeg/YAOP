@@ -27,7 +27,7 @@ struct t_ocean_state_view ocean_state_view;
 struct t_atmo_fluxes_view atmos_fluxes_view;
 struct t_atmos_for_ocean_view p_as_view;
 struct t_sea_ice_view<mdspan_2d_double> p_sea_ice_view;
-struct t_tke_internal_view p_internal_view;
+struct t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal_view;
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
@@ -37,34 +37,9 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
                   l_lc, clc, ReferencePressureIndbars, pi) {
     // Allocate internal arrays memory and create memory views
     std::cout << "Initializing TKE cuda... " << std::endl;
-    p_internal_view.tke_old = view_cuda_malloc(m_tke_old, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.forc_tke_surf_2D = view_cuda_malloc(m_forc_tke_surf_2D, static_cast<size_t>(nproma));
-    p_internal_view.dzw_stretched = view_cuda_malloc(m_dzw_stretched,
-                                                       static_cast<size_t>(nlevs), static_cast<size_t>(nproma));
-    p_internal_view.dzt_stretched = view_cuda_malloc(m_dzt_stretched,
-                                                       static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.tke_Av = view_cuda_malloc(m_tke_Av,
-                               static_cast<size_t>(nblocks), static_cast<size_t>(nlevs+1),
-                               static_cast<size_t>(nproma));
-    p_internal_view.tke_kv = view_cuda_malloc(m_tke_kv, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.Nsqr = view_cuda_malloc(m_Nsqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.Ssqr = view_cuda_malloc(m_Ssqr, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.a_dif = view_cuda_malloc(m_a_dif, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.b_dif = view_cuda_malloc(m_b_dif, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.c_dif = view_cuda_malloc(m_c_dif, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.a_tri = view_cuda_malloc(m_a_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.b_tri = view_cuda_malloc(m_b_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.c_tri = view_cuda_malloc(m_c_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.d_tri = view_cuda_malloc(m_d_tri, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.sqrttke = view_cuda_malloc(m_sqrttke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.forc = view_cuda_malloc(m_forc, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.ke = view_cuda_malloc(m_ke, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.cp = view_cuda_malloc(m_cp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.dp = view_cuda_malloc(m_dp, static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.tke_upd = view_cuda_malloc(m_tke_upd,
-                                                 static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
-    p_internal_view.tke_unrest = view_cuda_malloc(m_tke_unrest,
-                                                    static_cast<size_t>(nlevs+1), static_cast<size_t>(nproma));
+
+    this->internal_fields_malloc<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double, cuda_mdspan_impl>
+                                (&p_internal_view);
     is_view_init = false;
 }
 
