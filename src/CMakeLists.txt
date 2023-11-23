@@ -5,6 +5,8 @@ endif()
 
 include_directories(${CMAKE_BINARY_DIR})
 
+SET(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo ")
+
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
 
 set(SOURCE_EXE  TKE.cpp
