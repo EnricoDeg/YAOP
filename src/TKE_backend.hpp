@@ -19,6 +19,7 @@
 
 #include <memory>
 #include "src/data_struct.hpp"
+#include "src/memview_struct.hpp"
 
 class TKE_backend {
  public:
@@ -43,6 +44,12 @@ class TKE_backend {
                            int edges_start_index, int edges_end_index, int cells_block_size,
                            int cells_start_block, int cells_end_block, int cells_start_index,
                            int cells_end_index) = 0;
+
+    template <typename memview, typename memview_policy>
+    void fill_struct_memview(t_sea_ice_view<memview> *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
+                             int nblocks, int nproma) {
+        p_sea_ice_view->concsum = memview_policy::memview_2d_impl(p_sea_ice->concsum, nblocks, nproma);
+    }
 
  protected:
     int m_nproma;

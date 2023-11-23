@@ -151,10 +151,6 @@ struct t_atmos_for_ocean_view {
     mdspan_2d_double fu10;
 };
 
-struct t_sea_ice_view {
-    mdspan_2d_double concsum;
-};
-
 void fill_struct_view(struct t_cvmix_view *p_cvmix_view, struct t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma);
 
@@ -171,8 +167,12 @@ void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atm
 void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_for_ocean *p_as,
                              int nblocks, int nlevs, int nproma);
 
-void fill_struct_view(struct t_sea_ice_view *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
-                             int nblocks, int nlevs, int nproma);
+class cuda_mdspan_impl {
+ public:
+    static mdspan_2d_double memview_2d_impl(double *data, int nblocks, int nproma) {
+        return mdspan_2d_double{ data, ext2d_t{nblocks, nproma} };
+    }
+};
 
 mdspan_1d_double view_cuda_malloc(double *field, size_t dim1);
 

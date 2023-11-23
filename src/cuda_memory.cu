@@ -83,11 +83,6 @@ void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_f
     p_as_view->fu10 = mdspan_2d_double{ p_as->fu10, ext2d_t{nblocks, nproma} };
 }
 
-void fill_struct_view(struct t_sea_ice_view *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
-                             int nblocks, int nlevs, int nproma) {
-    p_sea_ice_view->concsum = mdspan_2d_double{ p_sea_ice->concsum, ext2d_t{nblocks, nproma} };
-}
-
 mdspan_1d_double view_cuda_malloc(double *field, size_t dim1) {
     check( cudaMalloc(&field, dim1*sizeof(double)) );
     mdspan_1d_double memview{ field, ext1d_t{dim1} };
