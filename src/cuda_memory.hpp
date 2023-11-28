@@ -129,6 +129,9 @@ class cuda_mdspan_impl {
                                                  static_cast<size_t>(dim3)} };
         return memview;
     }
+    static void memview_free(double *field) {
+        check(cudaFree(field));
+    }
 };
 
 #endif  // SRC_CUDA_MEMORY_HPP_

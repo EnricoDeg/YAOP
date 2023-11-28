@@ -46,28 +46,8 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
 TKE_cuda::~TKE_cuda() {
     // Free internal arrays memory
     std::cout << "Finalizing TKE cuda... " << std::endl;
-    check(cudaFree(m_forc_tke_surf_2D));
-    check(cudaFree(m_dzw_stretched));
-    check(cudaFree(m_dzt_stretched));
-    check(cudaFree(m_tke_old));
-    check(cudaFree(m_tke_Av));
-    check(cudaFree(m_tke_kv));
-    check(cudaFree(m_Nsqr));
-    check(cudaFree(m_Ssqr));
-    check(cudaFree(m_a_dif));
-    check(cudaFree(m_b_dif));
-    check(cudaFree(m_c_dif));
-    check(cudaFree(m_a_tri));
-    check(cudaFree(m_b_tri));
-    check(cudaFree(m_c_tri));
-    check(cudaFree(m_d_tri));
-    check(cudaFree(m_sqrttke));
-    check(cudaFree(m_forc));
-    check(cudaFree(m_ke));
-    check(cudaFree(m_cp));
-    check(cudaFree(m_dp));
-    check(cudaFree(m_tke_upd));
-    check(cudaFree(m_tke_unrest));
+
+    this->internal_fields_free<cuda_mdspan_impl>();
 }
 
 void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,

@@ -66,6 +66,11 @@ class TKE_backend {
         return memview_policy::memview_malloc(field, dim1, dim2, dim3);
     }
 
+    template <typename memview_policy>
+    void memview_free(double *field) {
+        return memview_policy::memview_free(field);
+    }
+
     template<typename T1d, typename T2d, typename T3d, typename memview_policy>
     void internal_fields_malloc(t_tke_internal_view<T1d, T2d, T3d> *p_internal_view) {
         p_internal_view->tke_old = this->memview_malloc<T2d, memview_policy>(m_tke_old,
@@ -112,6 +117,32 @@ class TKE_backend {
                                                        p_constant.nlevs+1, p_constant.nproma);
         p_internal_view->tke_unrest = this->memview_malloc<T2d, memview_policy>(m_tke_unrest,
                                                        p_constant.nlevs+1, p_constant.nproma);
+    }
+
+    template<typename memview_policy>
+    void internal_fields_free() {
+        this->memview_free<memview_policy>(m_tke_old);
+        this->memview_free<memview_policy>(m_dzw_stretched);
+        this->memview_free<memview_policy>(m_dzt_stretched);
+        this->memview_free<memview_policy>(m_tke_old);
+        this->memview_free<memview_policy>(m_tke_Av);
+        this->memview_free<memview_policy>(m_tke_kv);
+        this->memview_free<memview_policy>(m_Nsqr);
+        this->memview_free<memview_policy>(m_Ssqr);
+        this->memview_free<memview_policy>(m_a_dif);
+        this->memview_free<memview_policy>(m_b_dif);
+        this->memview_free<memview_policy>(m_c_dif);
+        this->memview_free<memview_policy>(m_a_tri);
+        this->memview_free<memview_policy>(m_b_tri);
+        this->memview_free<memview_policy>(m_c_tri);
+        this->memview_free<memview_policy>(m_d_tri);
+        this->memview_free<memview_policy>(m_sqrttke);
+        this->memview_free<memview_policy>(m_forc);
+        this->memview_free<memview_policy>(m_ke);
+        this->memview_free<memview_policy>(m_cp);
+        this->memview_free<memview_policy>(m_dp);
+        this->memview_free<memview_policy>(m_tke_upd);
+        this->memview_free<memview_policy>(m_tke_unrest);
     }
 
  protected:
