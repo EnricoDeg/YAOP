@@ -46,9 +46,15 @@ class TKE_backend {
                            int cells_end_index) = 0;
 
     template <typename memview, typename memview_policy>
-    void fill_struct_memview(t_sea_ice_view<memview> *p_sea_ice_view, struct t_sea_ice *p_sea_ice,
+    void fill_struct_memview(t_sea_ice_view<memview> *p_sea_ice_view, t_sea_ice *p_sea_ice,
                              int nblocks, int nproma) {
         p_sea_ice_view->concsum = memview_policy::memview_2d_impl(p_sea_ice->concsum, nblocks, nproma);
+    }
+
+    template<typename memview, typename memview_policy>
+    void fill_struct_memview(t_atmos_for_ocean_view<memview> *p_as_view, t_atmos_for_ocean *p_as,
+                             int nblocks, int nproma) {
+        p_as_view->fu10 = memview_policy::memview_2d_impl(p_as->fu10, nblocks, nproma);
     }
 
     template <typename memview, typename memview_policy>

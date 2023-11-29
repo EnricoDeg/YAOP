@@ -77,8 +77,3 @@ void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atm
     atmos_fluxes_view->stress_xw = mdspan_2d_double{ atmos_fluxes->stress_xw, ext2d_t{nblocks, nproma} };
     atmos_fluxes_view->stress_yw = mdspan_2d_double{ atmos_fluxes->stress_yw, ext2d_t{nblocks, nproma} };
 }
-
-void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_for_ocean *p_as,
-                             int nblocks, int nlevs, int nproma) {
-    p_as_view->fu10 = mdspan_2d_double{ p_as->fu10, ext2d_t{nblocks, nproma} };
-}

@@ -86,10 +86,6 @@ struct t_atmo_fluxes_view {
     mdspan_2d_double stress_yw;
 };
 
-struct t_atmos_for_ocean_view {
-    mdspan_2d_double fu10;
-};
-
 void fill_struct_view(struct t_cvmix_view *p_cvmix_view, struct t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma);
 
@@ -101,9 +97,6 @@ void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocea
                              int nblocks, int nlevs, int nproma);
 
 void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atmo_fluxes *atmos_fluxes,
-                             int nblocks, int nlevs, int nproma);
-
-void fill_struct_view(struct t_atmos_for_ocean_view *p_as_view, struct t_atmos_for_ocean *p_as,
                              int nblocks, int nlevs, int nproma);
 
 class cuda_mdspan_impl {

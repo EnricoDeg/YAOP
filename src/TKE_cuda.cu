@@ -25,7 +25,7 @@ struct t_cvmix_view p_cvmix_view;
 struct t_patch_view p_patch_view;
 struct t_ocean_state_view ocean_state_view;
 struct t_atmo_fluxes_view atmos_fluxes_view;
-struct t_atmos_for_ocean_view p_as_view;
+struct t_atmos_for_ocean_view<mdspan_2d_double> p_as_view;
 struct t_sea_ice_view<mdspan_2d_double> p_sea_ice_view;
 struct t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal_view;
 
@@ -64,7 +64,8 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
         fill_struct_view(&p_patch_view, &p_patch, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
         fill_struct_view(&ocean_state_view, &ocean_state, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
         fill_struct_view(&atmos_fluxes_view, &atmos_fluxes, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
-        fill_struct_view(&p_as_view, &p_as, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        this->fill_struct_memview<mdspan_2d_double, cuda_mdspan_impl>(&p_as_view, &p_as,
+                                                                      p_constant.nblocks, p_constant.nproma);
         this->fill_struct_memview<mdspan_2d_double, cuda_mdspan_impl>(&p_sea_ice_view, &p_sea_ice,
                                                                       p_constant.nblocks, p_constant.nproma);
         is_view_init = true;

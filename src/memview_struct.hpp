@@ -22,6 +22,11 @@ struct t_sea_ice_view {
     T2d concsum;
 };
 
+template <typename T2d>
+struct t_atmos_for_ocean_view {
+    T2d fu10;
+};
+
 template <typename T1d, typename T2d, typename T3d>
 struct t_tke_internal_view {
     T1d forc_tke_surf_2D;
