@@ -73,10 +73,10 @@ void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atm
 
 class cuda_mdspan_impl {
  public:
-    static mdspan_2d_double memview_2d_impl(double *data, int nblocks, int nproma) {
+    static mdspan_2d_double memview(double *data, int nblocks, int nproma) {
         return mdspan_2d_double{ data, ext2d_t{nblocks, nproma} };
     }
-    static mdspan_3d_double memview_3d_impl(double *data, int nblocks, int nlevs, int nproma) {
+    static mdspan_3d_double memview(double *data, int nblocks, int nlevs, int nproma) {
         return mdspan_3d_double{ data, ext3d_t{nblocks, nlevs, nproma} };
     }
     static mdspan_1d_double memview_malloc(double *field, int dim1) {

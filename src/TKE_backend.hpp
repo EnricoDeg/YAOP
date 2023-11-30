@@ -48,40 +48,40 @@ class TKE_backend {
     template <typename memview, typename memview_policy>
     void fill_struct_memview(t_sea_ice_view<memview> *p_sea_ice_view, t_sea_ice *p_sea_ice,
                              int nblocks, int nproma) {
-        p_sea_ice_view->concsum = memview_policy::memview_2d_impl(p_sea_ice->concsum, nblocks, nproma);
+        p_sea_ice_view->concsum = memview_policy::memview(p_sea_ice->concsum, nblocks, nproma);
     }
 
     template<typename memview, typename memview_policy>
     void fill_struct_memview(t_atmos_for_ocean_view<memview> *p_as_view, t_atmos_for_ocean *p_as,
                              int nblocks, int nproma) {
-        p_as_view->fu10 = memview_policy::memview_2d_impl(p_as->fu10, nblocks, nproma);
+        p_as_view->fu10 = memview_policy::memview(p_as->fu10, nblocks, nproma);
     }
 
     template<typename memview_2d, typename memview_3d, typename memview_policy>
     void fill_struct_memview(t_cvmix_view<memview_2d, memview_3d> *p_cvmix_view, t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma) {
-        p_cvmix_view->tke = memview_policy::memview_3d_impl(p_cvmix->tke, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_plc = memview_policy::memview_3d_impl(p_cvmix->tke_plc, nblocks, nlevs+1, nproma);
-        p_cvmix_view->hlc = memview_policy::memview_2d_impl(p_cvmix->hlc, nblocks, nproma);
-        p_cvmix_view->wlc = memview_policy::memview_3d_impl(p_cvmix->wlc, nblocks, nlevs+1, nproma);
-        p_cvmix_view->u_stokes = memview_policy::memview_2d_impl(p_cvmix->u_stokes, nblocks, nproma);
-        p_cvmix_view->a_veloc_v = memview_policy::memview_3d_impl(p_cvmix->a_veloc_v, nblocks, nlevs+1, nproma);
-        p_cvmix_view->a_temp_v = memview_policy::memview_3d_impl(p_cvmix->a_temp_v, nblocks, nlevs+1, nproma);
-        p_cvmix_view->a_salt_v = memview_policy::memview_3d_impl(p_cvmix->a_salt_v, nblocks, nlevs+1, nproma);
-        p_cvmix_view->iwe_Tdis = memview_policy::memview_3d_impl(p_cvmix->iwe_Tdis, nblocks, nlevs+1, nproma);
-        p_cvmix_view->cvmix_dummy_1 = memview_policy::memview_3d_impl(p_cvmix->cvmix_dummy_1, nblocks, nlevs+1, nproma);
-        p_cvmix_view->cvmix_dummy_2 = memview_policy::memview_3d_impl(p_cvmix->cvmix_dummy_2, nblocks, nlevs+1, nproma);
-        p_cvmix_view->cvmix_dummy_3 = memview_policy::memview_3d_impl(p_cvmix->cvmix_dummy_3, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Tbpr = memview_policy::memview_3d_impl(p_cvmix->tke_Tbpr, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Tspr = memview_policy::memview_3d_impl(p_cvmix->tke_Tspr, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Tdif = memview_policy::memview_3d_impl(p_cvmix->tke_Tdif, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Tdis = memview_policy::memview_3d_impl(p_cvmix->tke_Tdis, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Twin = memview_policy::memview_3d_impl(p_cvmix->tke_Twin, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Tiwf = memview_policy::memview_3d_impl(p_cvmix->tke_Tiwf, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Tbck = memview_policy::memview_3d_impl(p_cvmix->tke_Tbck, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Ttot = memview_policy::memview_3d_impl(p_cvmix->tke_Ttot, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Lmix = memview_policy::memview_3d_impl(p_cvmix->tke_Lmix, nblocks, nlevs+1, nproma);
-        p_cvmix_view->tke_Pr = memview_policy::memview_3d_impl(p_cvmix->tke_Pr, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke = memview_policy::memview(p_cvmix->tke, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_plc = memview_policy::memview(p_cvmix->tke_plc, nblocks, nlevs+1, nproma);
+        p_cvmix_view->hlc = memview_policy::memview(p_cvmix->hlc, nblocks, nproma);
+        p_cvmix_view->wlc = memview_policy::memview(p_cvmix->wlc, nblocks, nlevs+1, nproma);
+        p_cvmix_view->u_stokes = memview_policy::memview(p_cvmix->u_stokes, nblocks, nproma);
+        p_cvmix_view->a_veloc_v = memview_policy::memview(p_cvmix->a_veloc_v, nblocks, nlevs+1, nproma);
+        p_cvmix_view->a_temp_v = memview_policy::memview(p_cvmix->a_temp_v, nblocks, nlevs+1, nproma);
+        p_cvmix_view->a_salt_v = memview_policy::memview(p_cvmix->a_salt_v, nblocks, nlevs+1, nproma);
+        p_cvmix_view->iwe_Tdis = memview_policy::memview(p_cvmix->iwe_Tdis, nblocks, nlevs+1, nproma);
+        p_cvmix_view->cvmix_dummy_1 = memview_policy::memview(p_cvmix->cvmix_dummy_1, nblocks, nlevs+1, nproma);
+        p_cvmix_view->cvmix_dummy_2 = memview_policy::memview(p_cvmix->cvmix_dummy_2, nblocks, nlevs+1, nproma);
+        p_cvmix_view->cvmix_dummy_3 = memview_policy::memview(p_cvmix->cvmix_dummy_3, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Tbpr = memview_policy::memview(p_cvmix->tke_Tbpr, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Tspr = memview_policy::memview(p_cvmix->tke_Tspr, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Tdif = memview_policy::memview(p_cvmix->tke_Tdif, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Tdis = memview_policy::memview(p_cvmix->tke_Tdis, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Twin = memview_policy::memview(p_cvmix->tke_Twin, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Tiwf = memview_policy::memview(p_cvmix->tke_Tiwf, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Tbck = memview_policy::memview(p_cvmix->tke_Tbck, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Ttot = memview_policy::memview(p_cvmix->tke_Ttot, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Lmix = memview_policy::memview(p_cvmix->tke_Lmix, nblocks, nlevs+1, nproma);
+        p_cvmix_view->tke_Pr = memview_policy::memview(p_cvmix->tke_Pr, nblocks, nlevs+1, nproma);
     }
 
     template <typename memview, typename memview_policy>
