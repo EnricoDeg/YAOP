@@ -16,33 +16,6 @@
 
 #include "src/cuda_memory.hpp"
 
-
-void fill_struct_view(struct t_cvmix_view *p_cvmix_view, struct t_cvmix *p_cvmix,
-                             int nblocks, int nlevs, int nproma) {
-    p_cvmix_view->tke = mdspan_3d_double{ p_cvmix->tke, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_plc = mdspan_3d_double{ p_cvmix->tke_plc, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->hlc = mdspan_2d_double{ p_cvmix->hlc, ext2d_t{nblocks, nproma} };
-    p_cvmix_view->wlc = mdspan_3d_double{ p_cvmix->wlc, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->u_stokes = mdspan_2d_double{ p_cvmix->u_stokes, ext2d_t{nblocks, nproma} };
-    p_cvmix_view->a_veloc_v = mdspan_3d_double{ p_cvmix->a_veloc_v, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->a_temp_v = mdspan_3d_double{ p_cvmix->a_temp_v, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->a_salt_v = mdspan_3d_double{ p_cvmix->a_salt_v, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->iwe_Tdis = mdspan_3d_double{ p_cvmix->iwe_Tdis, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->cvmix_dummy_1 = mdspan_3d_double{ p_cvmix->cvmix_dummy_1, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->cvmix_dummy_2 = mdspan_3d_double{ p_cvmix->cvmix_dummy_2, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->cvmix_dummy_3 = mdspan_3d_double{ p_cvmix->cvmix_dummy_3, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Tbpr = mdspan_3d_double{ p_cvmix->tke_Tbpr, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Tspr = mdspan_3d_double{ p_cvmix->tke_Tspr, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Tdif = mdspan_3d_double{ p_cvmix->tke_Tdif, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Tdis = mdspan_3d_double{ p_cvmix->tke_Tdis, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Twin = mdspan_3d_double{ p_cvmix->tke_Twin, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Tiwf = mdspan_3d_double{ p_cvmix->tke_Tiwf, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Tbck = mdspan_3d_double{ p_cvmix->tke_Tbck, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Ttot = mdspan_3d_double{ p_cvmix->tke_Ttot, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Lmix = mdspan_3d_double{ p_cvmix->tke_Lmix, ext3d_t{nblocks, nlevs+1, nproma} };
-    p_cvmix_view->tke_Pr = mdspan_3d_double{ p_cvmix->tke_Pr, ext3d_t{nblocks, nlevs+1, nproma} };
-}
-
 void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
                              int nblocks, int nlevs, int nproma) {
     p_patch_view->depth_CellInterface = mdspan_3d_double{ p_patch->depth_CellInterface,

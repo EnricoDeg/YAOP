@@ -21,7 +21,7 @@
 #include "src/cuda_kernels.hpp"
 
 // Structures with memory views
-struct t_cvmix_view p_cvmix_view;
+struct t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix_view;
 struct t_patch_view p_patch_view;
 struct t_ocean_state_view ocean_state_view;
 struct t_atmo_fluxes_view atmos_fluxes_view;
@@ -60,7 +60,8 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
     // The pointer to the data should not change inside the time loop
     // structs view are filled only at the first time step
     if (!is_view_init) {
-        fill_struct_view(&p_cvmix_view, &p_cvmix, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        this->fill_struct_memview<mdspan_2d_double, mdspan_3d_double, cuda_mdspan_impl>(&p_cvmix_view, &p_cvmix,
+                                                    p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
         fill_struct_view(&p_patch_view, &p_patch, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
         fill_struct_view(&ocean_state_view, &ocean_state, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
         fill_struct_view(&atmos_fluxes_view, &atmos_fluxes, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);

@@ -27,6 +27,32 @@ struct t_atmos_for_ocean_view {
     T2d fu10;
 };
 
+template <typename T2d, typename T3d>
+struct t_cvmix_view {
+    T3d tke;
+    T3d tke_plc;
+    T2d hlc;
+    T3d wlc;
+    T2d u_stokes;
+    T3d a_veloc_v;
+    T3d a_temp_v;
+    T3d a_salt_v;
+    T3d iwe_Tdis;
+    T3d cvmix_dummy_1;
+    T3d cvmix_dummy_2;
+    T3d cvmix_dummy_3;
+    T3d tke_Tbpr;
+    T3d tke_Tspr;
+    T3d tke_Tdif;
+    T3d tke_Tdis;
+    T3d tke_Twin;
+    T3d tke_Tiwf;
+    T3d tke_Tbck;
+    T3d tke_Ttot;
+    T3d tke_Lmix;
+    T3d tke_Pr;
+};
+
 template <typename T1d, typename T2d, typename T3d>
 struct t_tke_internal_view {
     T1d forc_tke_surf_2D;

@@ -33,31 +33,6 @@ using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
 using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
 
 // TKE interface memory views
-struct t_cvmix_view {
-    mdspan_3d_double tke;
-    mdspan_3d_double tke_plc;
-    mdspan_2d_double hlc;
-    mdspan_3d_double wlc;
-    mdspan_2d_double u_stokes;
-    mdspan_3d_double a_veloc_v;
-    mdspan_3d_double a_temp_v;
-    mdspan_3d_double a_salt_v;
-    mdspan_3d_double iwe_Tdis;
-    mdspan_3d_double cvmix_dummy_1;
-    mdspan_3d_double cvmix_dummy_2;
-    mdspan_3d_double cvmix_dummy_3;
-    mdspan_3d_double tke_Tbpr;
-    mdspan_3d_double tke_Tspr;
-    mdspan_3d_double tke_Tdif;
-    mdspan_3d_double tke_Tdis;
-    mdspan_3d_double tke_Twin;
-    mdspan_3d_double tke_Tiwf;
-    mdspan_3d_double tke_Tbck;
-    mdspan_3d_double tke_Ttot;
-    mdspan_3d_double tke_Lmix;
-    mdspan_3d_double tke_Pr;
-};
-
 struct t_patch_view {
     mdspan_3d_double depth_CellInterface;
     mdspan_3d_double prism_center_dist_c;
@@ -86,9 +61,6 @@ struct t_atmo_fluxes_view {
     mdspan_2d_double stress_yw;
 };
 
-void fill_struct_view(struct t_cvmix_view *p_cvmix_view, struct t_cvmix *p_cvmix,
-                             int nblocks, int nlevs, int nproma);
-
 void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
                              int nblocks, int nlevs, int nproma);
 
@@ -103,6 +75,9 @@ class cuda_mdspan_impl {
  public:
     static mdspan_2d_double memview_2d_impl(double *data, int nblocks, int nproma) {
         return mdspan_2d_double{ data, ext2d_t{nblocks, nproma} };
+    }
+    static mdspan_3d_double memview_3d_impl(double *data, int nblocks, int nlevs, int nproma) {
+        return mdspan_3d_double{ data, ext3d_t{nblocks, nlevs, nproma} };
     }
     static mdspan_1d_double memview_malloc(double *field, int dim1) {
         check( cudaMalloc(&field, dim1*sizeof(double)) );
