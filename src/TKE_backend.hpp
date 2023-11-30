@@ -57,6 +57,13 @@ class TKE_backend {
         p_as_view->fu10 = memview_policy::memview(p_as->fu10, nblocks, nproma);
     }
 
+    template<typename memview, typename memview_policy>
+    void fill_struct_memview(t_atmo_fluxes_view<memview> *atmos_fluxes_view, t_atmo_fluxes *atmos_fluxes,
+                             int nblocks, int nproma) {
+        atmos_fluxes_view->stress_xw = memview_policy::memview(atmos_fluxes->stress_xw, nblocks, nproma);
+        atmos_fluxes_view->stress_yw = memview_policy::memview(atmos_fluxes->stress_yw, nblocks, nproma);
+    }
+
     template<typename memview_2d, typename memview_3d, typename memview_policy>
     void fill_struct_memview(t_cvmix_view<memview_2d, memview_3d> *p_cvmix_view, t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma) {

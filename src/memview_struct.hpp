@@ -53,6 +53,12 @@ struct t_cvmix_view {
     T3d tke_Pr;
 };
 
+template<typename T2d>
+struct t_atmo_fluxes_view {
+    T2d stress_xw;
+    T2d stress_yw;
+};
+
 template <typename T1d, typename T2d, typename T3d>
 struct t_tke_internal_view {
     T1d forc_tke_surf_2D;

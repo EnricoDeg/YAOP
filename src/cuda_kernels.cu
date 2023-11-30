@@ -22,7 +22,7 @@ __global__
 void calc_impl_cells(int blockNo, int start_index, int end_index, t_patch_view p_patch,
                       t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix,
                       t_ocean_state_view ocean_state,
-                      t_atmo_fluxes_view atmos_fluxes,
+                      t_atmo_fluxes_view<mdspan_2d_double> atmos_fluxes,
                       t_atmos_for_ocean_view<mdspan_2d_double> p_as,
                       t_sea_ice_view<mdspan_2d_double> p_sea_ice,
                       t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,

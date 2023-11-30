@@ -44,9 +44,3 @@ void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocea
     ocean_state_view->p_vn_x2 = mdspan_3d_double{ ocean_state->p_vn_x2, ext3d_t{nblocks, nlevs, nproma} };
     ocean_state_view->p_vn_x3 = mdspan_3d_double{ ocean_state->p_vn_x3, ext3d_t{nblocks, nlevs, nproma} };
 }
-
-void fill_struct_view(struct t_atmo_fluxes_view *atmos_fluxes_view, struct t_atmo_fluxes *atmos_fluxes,
-                             int nblocks, int nlevs, int nproma) {
-    atmos_fluxes_view->stress_xw = mdspan_2d_double{ atmos_fluxes->stress_xw, ext2d_t{nblocks, nproma} };
-    atmos_fluxes_view->stress_yw = mdspan_2d_double{ atmos_fluxes->stress_yw, ext2d_t{nblocks, nproma} };
-}
