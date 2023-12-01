@@ -59,7 +59,7 @@ class cuda_mdspan_impl {
         mdspan_2d_double memview{ field, ext2d_t{dim1, dim2} };
         return memview;
     }
-    static mdspan_3d_double memview_malloc(double *field, size_t dim1, size_t dim2, size_t dim3) {
+    static mdspan_3d_double memview_malloc(double *field, int dim1, int dim2, int dim3) {
         check( cudaMalloc(&field, dim1*dim2*dim3*sizeof(double)) );
         mdspan_3d_double memview{ field, ext3d_t{dim1, dim2, dim3} };
         return memview;
