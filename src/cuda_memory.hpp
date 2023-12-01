@@ -32,30 +32,22 @@ using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
 using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
 using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
 
-// TKE interface memory views
-struct t_patch_view {
-    mdspan_3d_double depth_CellInterface;
-    mdspan_3d_double prism_center_dist_c;
-    mdspan_3d_double inv_prism_center_dist_c;
-    mdspan_3d_double prism_thick_c;
-    mdspan_2d_int dolic_c;
-    mdspan_2d_int dolic_e;
-    mdspan_1d_double zlev_i;
-    mdspan_3d_double wet_c;
-    mdspan_3d_int edges_cell_idx;
-    mdspan_3d_int edges_cell_blk;
-};
-
-void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
-                             int nblocks, int nlevs, int nproma);
-
 class cuda_mdspan_impl {
  public:
+    static mdspan_1d_double memview(double *data, int nlevs) {
+        return mdspan_1d_double{ data, ext1d_t{nlevs} };
+    }
     static mdspan_2d_double memview(double *data, int nblocks, int nproma) {
         return mdspan_2d_double{ data, ext2d_t{nblocks, nproma} };
     }
     static mdspan_3d_double memview(double *data, int nblocks, int nlevs, int nproma) {
         return mdspan_3d_double{ data, ext3d_t{nblocks, nlevs, nproma} };
+    }
+    static mdspan_2d_int memview(int *data, int nblocks, int nproma) {
+        return mdspan_2d_int{ data, ext2d_t{nblocks, nproma} };
+    }
+    static mdspan_3d_int memview(int *data, int nblocks, int nlevs, int nproma) {
+        return mdspan_3d_int{ data, ext3d_t{nblocks, nlevs, nproma} };
     }
     static mdspan_1d_double memview_malloc(double *field, int dim1) {
         check( cudaMalloc(&field, dim1*sizeof(double)) );

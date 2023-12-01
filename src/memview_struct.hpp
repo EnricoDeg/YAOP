@@ -17,6 +17,20 @@
 #ifndef SRC_MEMVIEW_STRUCT_HPP_
 #define SRC_MEMVIEW_STRUCT_HPP_
 
+template <typename T1d_d, typename T3d_d, typename T2d_i, typename T3d_i>
+struct t_patch_view {
+    T3d_d depth_CellInterface;
+    T3d_d prism_center_dist_c;
+    T3d_d inv_prism_center_dist_c;
+    T3d_d prism_thick_c;
+    T2d_i dolic_c;
+    T2d_i dolic_e;
+    T1d_d zlev_i;
+    T3d_d wet_c;
+    T3d_i edges_cell_idx;
+    T3d_i edges_cell_blk;
+};
+
 template <typename T2d>
 struct t_sea_ice_view {
     T2d concsum;

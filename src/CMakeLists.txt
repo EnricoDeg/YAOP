@@ -14,7 +14,6 @@ set(SOURCE_EXE  TKE.cpp
                 mod_TKE.f90
                 TKE_backend.cpp
                 cuda_check.cu
-                cuda_memory.cu
                 cuda_kernels.cu
                 TKE_cuda.cu
                 utils.cpp

@@ -20,7 +20,8 @@
 
 __global__
 void calc_impl_cells(int blockNo, int start_index, int end_index,
-                     t_patch_view p_patch,
+                     t_patch_view<mdspan_1d_double, mdspan_3d_double,
+                                  mdspan_2d_int, mdspan_3d_int> p_patch,
                      t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix,
                      t_ocean_state_view<mdspan_2d_double, mdspan_3d_double> ocean_state,
                      t_atmo_fluxes_view<mdspan_2d_double> atmos_fluxes,
@@ -107,7 +108,9 @@ void calc_impl_cells(int blockNo, int start_index, int end_index,
 }
 
 __device__
-void integrate(int jc, int blockNo, t_patch_view p_patch,
+void integrate(int jc, int blockNo,
+               t_patch_view<mdspan_1d_double, mdspan_3d_double,
+                            mdspan_2d_int, mdspan_3d_int> p_patch,
                t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix,
                t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
                t_constant p_constant,
@@ -386,7 +389,9 @@ void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
 }
 
 __global__
-void calc_impl_edges(int blockNo, int start_index, int end_index, t_patch_view p_patch,
+void calc_impl_edges(int blockNo, int start_index, int end_index,
+                     t_patch_view<mdspan_1d_double, mdspan_3d_double,
+                                  mdspan_2d_int, mdspan_3d_int> p_patch,
                      t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix,
                      t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
                      t_constant p_constant) {

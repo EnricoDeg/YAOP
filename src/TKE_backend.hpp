@@ -45,6 +45,25 @@ class TKE_backend {
                            int cells_start_block, int cells_end_block, int cells_start_index,
                            int cells_end_index) = 0;
 
+    template <typename memview_1d_d, typename memview_3d_d,
+              typename memview_2d_i, typename memview_3d_i, typename memview_policy>
+    void fill_struct_memview(t_patch_view<memview_1d_d, memview_3d_d, memview_2d_i, memview_3d_i> *p_patch_view,
+                             t_patch *p_patch, int nblocks, int nlevs, int nproma) {
+        p_patch_view->depth_CellInterface = memview_policy::memview(p_patch->depth_CellInterface,
+                                                                    nblocks, nlevs+1, nproma);
+        p_patch_view->prism_center_dist_c = memview_policy::memview(p_patch->prism_center_dist_c,
+                                                                    nblocks, nlevs+1, nproma);
+        p_patch_view->inv_prism_center_dist_c = memview_policy::memview(p_patch->inv_prism_center_dist_c,
+                                                                        nblocks, nlevs+1, nproma);
+        p_patch_view->prism_thick_c = memview_policy::memview(p_patch->prism_thick_c, nblocks, nlevs, nproma);
+        p_patch_view->dolic_c = memview_policy::memview(p_patch->dolic_c, nblocks, nproma);
+        p_patch_view->dolic_e = memview_policy::memview(p_patch->dolic_e, nblocks, nproma);
+        p_patch_view->zlev_i = memview_policy::memview(p_patch->zlev_i, nlevs);
+        p_patch_view->wet_c = memview_policy::memview(p_patch->wet_c, nblocks, nlevs, nproma);
+        p_patch_view->edges_cell_idx = memview_policy::memview(p_patch->edges_cell_idx, 2, nlevs, nproma);
+        p_patch_view->edges_cell_blk = memview_policy::memview(p_patch->edges_cell_blk, 2, nlevs, nproma);
+    }
+
     template <typename memview, typename memview_policy>
     void fill_struct_memview(t_sea_ice_view<memview> *p_sea_ice_view, t_sea_ice *p_sea_ice,
                              int nblocks, int nproma) {
