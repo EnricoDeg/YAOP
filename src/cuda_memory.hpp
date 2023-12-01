@@ -23,9 +23,9 @@
 #include "src/data_struct.hpp"
 
 constexpr auto dyn = cuda::std::dynamic_extent;
-using ext1d_t = cuda::std::extents<size_t, dyn>;
-using ext2d_t = cuda::std::extents<size_t, dyn, dyn>;
-using ext3d_t = cuda::std::extents<size_t, dyn, dyn, dyn>;
+using ext1d_t = cuda::std::extents<int, dyn>;
+using ext2d_t = cuda::std::extents<int, dyn, dyn>;
+using ext3d_t = cuda::std::extents<int, dyn, dyn, dyn>;
 using mdspan_1d_double = cuda::std::mdspan<double, ext1d_t>;
 using mdspan_2d_double = cuda::std::mdspan<double, ext2d_t>;
 using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
@@ -51,20 +51,17 @@ class cuda_mdspan_impl {
     }
     static mdspan_1d_double memview_malloc(double *field, int dim1) {
         check( cudaMalloc(&field, dim1*sizeof(double)) );
-        mdspan_1d_double memview{ field, ext1d_t{static_cast<size_t>(dim1)} };
+        mdspan_1d_double memview{ field, ext1d_t{dim1} };
         return memview;
     }
     static mdspan_2d_double memview_malloc(double *field, int dim1, int dim2) {
         check( cudaMalloc(&field, dim1*dim2*sizeof(double)) );
-        mdspan_2d_double memview{ field, ext2d_t{static_cast<size_t>(dim1),
-                                                 static_cast<size_t>(dim2)} };
+        mdspan_2d_double memview{ field, ext2d_t{dim1, dim2} };
         return memview;
     }
     static mdspan_3d_double memview_malloc(double *field, size_t dim1, size_t dim2, size_t dim3) {
         check( cudaMalloc(&field, dim1*dim2*dim3*sizeof(double)) );
-        mdspan_3d_double memview{ field, ext3d_t{static_cast<size_t>(dim1),
-                                                 static_cast<size_t>(dim2),
-                                                 static_cast<size_t>(dim3)} };
+        mdspan_3d_double memview{ field, ext3d_t{dim1, dim2, dim3} };
         return memview;
     }
     static void memview_free(double *field) {
