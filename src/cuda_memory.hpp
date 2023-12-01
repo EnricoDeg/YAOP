@@ -46,21 +46,7 @@ struct t_patch_view {
     mdspan_3d_int edges_cell_blk;
 };
 
-struct t_ocean_state_view {
-    mdspan_3d_double temp;
-    mdspan_3d_double salt;
-    mdspan_2d_double stretch_c;
-    mdspan_2d_double eta_c;
-    mdspan_3d_double p_vn_x1;
-    mdspan_3d_double p_vn_x2;
-    mdspan_3d_double p_vn_x3;
-};
-
 void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch,
-                             int nblocks, int nlevs, int nproma);
-
-
-void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocean_state *ocean_state,
                              int nblocks, int nlevs, int nproma);
 
 class cuda_mdspan_impl {

@@ -51,20 +51,32 @@ class TKE_backend {
         p_sea_ice_view->concsum = memview_policy::memview(p_sea_ice->concsum, nblocks, nproma);
     }
 
-    template<typename memview, typename memview_policy>
+    template <typename memview, typename memview_policy>
     void fill_struct_memview(t_atmos_for_ocean_view<memview> *p_as_view, t_atmos_for_ocean *p_as,
                              int nblocks, int nproma) {
         p_as_view->fu10 = memview_policy::memview(p_as->fu10, nblocks, nproma);
     }
 
-    template<typename memview, typename memview_policy>
+    template <typename memview, typename memview_policy>
     void fill_struct_memview(t_atmo_fluxes_view<memview> *atmos_fluxes_view, t_atmo_fluxes *atmos_fluxes,
                              int nblocks, int nproma) {
         atmos_fluxes_view->stress_xw = memview_policy::memview(atmos_fluxes->stress_xw, nblocks, nproma);
         atmos_fluxes_view->stress_yw = memview_policy::memview(atmos_fluxes->stress_yw, nblocks, nproma);
     }
 
-    template<typename memview_2d, typename memview_3d, typename memview_policy>
+    template <typename memview_2d, typename memview_3d, typename memview_policy>
+    void fill_struct_memview(t_ocean_state_view<memview_2d, memview_3d> *ocean_state_view,
+                             t_ocean_state *ocean_state, int nblocks, int nlevs, int nproma) {
+        ocean_state_view->temp = memview_policy::memview(ocean_state->temp, nblocks, nlevs, nproma);
+        ocean_state_view->salt = memview_policy::memview(ocean_state->salt, nblocks, nlevs, nproma);
+        ocean_state_view->stretch_c = memview_policy::memview(ocean_state->stretch_c, nblocks, nproma);
+        ocean_state_view->eta_c = memview_policy::memview(ocean_state->eta_c, nblocks, nproma);
+        ocean_state_view->p_vn_x1 = memview_policy::memview(ocean_state->p_vn_x1, nblocks, nlevs, nproma);
+        ocean_state_view->p_vn_x2 = memview_policy::memview(ocean_state->p_vn_x2, nblocks, nlevs, nproma);
+        ocean_state_view->p_vn_x3 = memview_policy::memview(ocean_state->p_vn_x3, nblocks, nlevs, nproma);
+    }
+
+    template <typename memview_2d, typename memview_3d, typename memview_policy>
     void fill_struct_memview(t_cvmix_view<memview_2d, memview_3d> *p_cvmix_view, t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma) {
         p_cvmix_view->tke = memview_policy::memview(p_cvmix->tke, nblocks, nlevs+1, nproma);
@@ -111,7 +123,7 @@ class TKE_backend {
         return memview_policy::memview_free(field);
     }
 
-    template<typename T1d, typename T2d, typename T3d, typename memview_policy>
+    template <typename T1d, typename T2d, typename T3d, typename memview_policy>
     void internal_fields_malloc(t_tke_internal_view<T1d, T2d, T3d> *p_internal_view) {
         p_internal_view->tke_old = this->memview_malloc<T2d, memview_policy>(m_tke_old,
                                                        p_constant.nlevs+1, p_constant.nproma);
@@ -159,7 +171,7 @@ class TKE_backend {
                                                        p_constant.nlevs+1, p_constant.nproma);
     }
 
-    template<typename memview_policy>
+    template <typename memview_policy>
     void internal_fields_free() {
         this->memview_free<memview_policy>(m_tke_old);
         this->memview_free<memview_policy>(m_dzw_stretched);

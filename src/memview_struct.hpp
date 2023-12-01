@@ -53,10 +53,21 @@ struct t_cvmix_view {
     T3d tke_Pr;
 };
 
-template<typename T2d>
+template <typename T2d>
 struct t_atmo_fluxes_view {
     T2d stress_xw;
     T2d stress_yw;
+};
+
+template <typename T2d, typename T3d>
+struct t_ocean_state_view {
+    T3d temp;
+    T3d salt;
+    T2d stretch_c;
+    T2d eta_c;
+    T3d p_vn_x1;
+    T3d p_vn_x2;
+    T3d p_vn_x3;
 };
 
 template <typename T1d, typename T2d, typename T3d>

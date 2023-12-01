@@ -32,15 +32,3 @@ void fill_struct_view(struct t_patch_view *p_patch_view, struct t_patch *p_patch
     p_patch_view->edges_cell_idx = mdspan_3d_int{ p_patch->edges_cell_idx, ext3d_t{2, nlevs, nproma} };
     p_patch_view->edges_cell_blk = mdspan_3d_int{ p_patch->edges_cell_blk, ext3d_t{2, nlevs, nproma} };
 }
-
-
-void fill_struct_view(struct t_ocean_state_view *ocean_state_view, struct t_ocean_state *ocean_state,
-                             int nblocks, int nlevs, int nproma) {
-    ocean_state_view->temp = mdspan_3d_double{ ocean_state->temp, ext3d_t{nblocks, nlevs, nproma} };
-    ocean_state_view->salt = mdspan_3d_double{ ocean_state->salt, ext3d_t{nblocks, nlevs, nproma} };
-    ocean_state_view->stretch_c = mdspan_2d_double{ ocean_state->stretch_c, ext2d_t{nblocks, nproma} };
-    ocean_state_view->eta_c = mdspan_2d_double{ ocean_state->eta_c, ext2d_t{nblocks, nproma} };
-    ocean_state_view->p_vn_x1 = mdspan_3d_double{ ocean_state->p_vn_x1, ext3d_t{nblocks, nlevs, nproma} };
-    ocean_state_view->p_vn_x2 = mdspan_3d_double{ ocean_state->p_vn_x2, ext3d_t{nblocks, nlevs, nproma} };
-    ocean_state_view->p_vn_x3 = mdspan_3d_double{ ocean_state->p_vn_x3, ext3d_t{nblocks, nlevs, nproma} };
-}
