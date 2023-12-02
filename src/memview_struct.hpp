@@ -17,98 +17,104 @@
 #ifndef SRC_MEMVIEW_STRUCT_HPP_
 #define SRC_MEMVIEW_STRUCT_HPP_
 
-template <typename T1d_d, typename T3d_d, typename T2d_i, typename T3d_i>
+template <template <class ...> class memview,
+          template <class, size_t> class dext>
 struct t_patch_view {
-    T3d_d depth_CellInterface;
-    T3d_d prism_center_dist_c;
-    T3d_d inv_prism_center_dist_c;
-    T3d_d prism_thick_c;
-    T2d_i dolic_c;
-    T2d_i dolic_e;
-    T1d_d zlev_i;
-    T3d_d wet_c;
-    T3d_i edges_cell_idx;
-    T3d_i edges_cell_blk;
+    memview<double, dext<int, 3>> depth_CellInterface;
+    memview<double, dext<int, 3>> prism_center_dist_c;
+    memview<double, dext<int, 3>> inv_prism_center_dist_c;
+    memview<double, dext<int, 3>> prism_thick_c;
+    memview<int, dext<int, 2>> dolic_c;
+    memview<int, dext<int, 2>> dolic_e;
+    memview<double, dext<int, 1>> zlev_i;
+    memview<double, dext<int, 3>> wet_c;
+    memview<int, dext<int, 3>> edges_cell_idx;
+    memview<int, dext<int, 3>> edges_cell_blk;
 };
 
-template <typename T2d>
+template <template <class ...> class memview,
+          template <class, size_t> class dext>
 struct t_sea_ice_view {
-    T2d concsum;
+    memview<double, dext<int, 2>> concsum;
 };
 
-template <typename T2d>
+template <template <class ...> class memview,
+          template <class, size_t> class dext>
 struct t_atmos_for_ocean_view {
-    T2d fu10;
+    memview<double, dext<int, 2>> fu10;
 };
 
-template <typename T2d, typename T3d>
+template <template <class ...> class memview,
+          template <class, size_t> class dext>
 struct t_cvmix_view {
-    T3d tke;
-    T3d tke_plc;
-    T2d hlc;
-    T3d wlc;
-    T2d u_stokes;
-    T3d a_veloc_v;
-    T3d a_temp_v;
-    T3d a_salt_v;
-    T3d iwe_Tdis;
-    T3d cvmix_dummy_1;
-    T3d cvmix_dummy_2;
-    T3d cvmix_dummy_3;
-    T3d tke_Tbpr;
-    T3d tke_Tspr;
-    T3d tke_Tdif;
-    T3d tke_Tdis;
-    T3d tke_Twin;
-    T3d tke_Tiwf;
-    T3d tke_Tbck;
-    T3d tke_Ttot;
-    T3d tke_Lmix;
-    T3d tke_Pr;
+    memview<double, dext<int, 3>> tke;
+    memview<double, dext<int, 3>> tke_plc;
+    memview<double, dext<int, 2>> hlc;
+    memview<double, dext<int, 3>> wlc;
+    memview<double, dext<int, 2>> u_stokes;
+    memview<double, dext<int, 3>> a_veloc_v;
+    memview<double, dext<int, 3>> a_temp_v;
+    memview<double, dext<int, 3>> a_salt_v;
+    memview<double, dext<int, 3>> iwe_Tdis;
+    memview<double, dext<int, 3>> cvmix_dummy_1;
+    memview<double, dext<int, 3>> cvmix_dummy_2;
+    memview<double, dext<int, 3>> cvmix_dummy_3;
+    memview<double, dext<int, 3>> tke_Tbpr;
+    memview<double, dext<int, 3>> tke_Tspr;
+    memview<double, dext<int, 3>> tke_Tdif;
+    memview<double, dext<int, 3>> tke_Tdis;
+    memview<double, dext<int, 3>> tke_Twin;
+    memview<double, dext<int, 3>> tke_Tiwf;
+    memview<double, dext<int, 3>> tke_Tbck;
+    memview<double, dext<int, 3>> tke_Ttot;
+    memview<double, dext<int, 3>> tke_Lmix;
+    memview<double, dext<int, 3>> tke_Pr;
 };
 
-template <typename T2d>
+template <template <class ...> class memview,
+          template <class, size_t> class dext>
 struct t_atmo_fluxes_view {
-    T2d stress_xw;
-    T2d stress_yw;
+    memview<double, dext<int, 2>> stress_xw;
+    memview<double, dext<int, 2>> stress_yw;
 };
 
-template <typename T2d, typename T3d>
+template <template <class ...> class memview,
+          template <class, size_t> class dext>
 struct t_ocean_state_view {
-    T3d temp;
-    T3d salt;
-    T2d stretch_c;
-    T2d eta_c;
-    T3d p_vn_x1;
-    T3d p_vn_x2;
-    T3d p_vn_x3;
+    memview<double, dext<int, 3>> temp;
+    memview<double, dext<int, 3>> salt;
+    memview<double, dext<int, 2>> stretch_c;
+    memview<double, dext<int, 2>> eta_c;
+    memview<double, dext<int, 3>> p_vn_x1;
+    memview<double, dext<int, 3>> p_vn_x2;
+    memview<double, dext<int, 3>> p_vn_x3;
 };
 
-template <typename T1d, typename T2d, typename T3d>
+template <template <class ...> class memview,
+          template <class, size_t> class dext>
 struct t_tke_internal_view {
-    T1d forc_tke_surf_2D;
-    T2d dzw_stretched;
-    T2d dzt_stretched;
-    T2d tke_old;
-    T3d tke_Av;
-    T2d tke_kv;
-    T2d Nsqr;
-    T2d Ssqr;
-    T2d a_dif;
-    T2d b_dif;
-    T2d c_dif;
-    T2d a_tri;
-    T2d b_tri;
-    T2d c_tri;
-    T2d d_tri;
-    T2d sqrttke;
-    T2d forc;
-    T2d ke;
-    T2d cp;
-    T2d dp;
-    T2d tke_upd;
-    T2d tke_unrest;
+    memview<double, dext<int, 1>> forc_tke_surf_2D;
+    memview<double, dext<int, 2>> dzw_stretched;
+    memview<double, dext<int, 2>> dzt_stretched;
+    memview<double, dext<int, 2>> tke_old;
+    memview<double, dext<int, 3>> tke_Av;
+    memview<double, dext<int, 2>> tke_kv;
+    memview<double, dext<int, 2>> Nsqr;
+    memview<double, dext<int, 2>> Ssqr;
+    memview<double, dext<int, 2>> a_dif;
+    memview<double, dext<int, 2>> b_dif;
+    memview<double, dext<int, 2>> c_dif;
+    memview<double, dext<int, 2>> a_tri;
+    memview<double, dext<int, 2>> b_tri;
+    memview<double, dext<int, 2>> c_tri;
+    memview<double, dext<int, 2>> d_tri;
+    memview<double, dext<int, 2>> sqrttke;
+    memview<double, dext<int, 2>> forc;
+    memview<double, dext<int, 2>> ke;
+    memview<double, dext<int, 2>> cp;
+    memview<double, dext<int, 2>> dp;
+    memview<double, dext<int, 2>> tke_upd;
+    memview<double, dext<int, 2>> tke_unrest;
 };
-
 
 #endif  // SRC_MEMVIEW_STRUCT_HPP_

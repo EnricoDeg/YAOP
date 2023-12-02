@@ -21,31 +21,28 @@
 #include "src/memview_struct.hpp"
 
 __global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
-                                 t_patch_view<mdspan_1d_double, mdspan_3d_double,
-                                              mdspan_2d_int, mdspan_3d_int> p_patch,
-                                 t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix,
-                                 t_ocean_state_view<mdspan_2d_double, mdspan_3d_double> ocean_state,
-                                 t_atmo_fluxes_view<mdspan_2d_double> atmos_fluxes,
-                                 t_atmos_for_ocean_view<mdspan_2d_double> p_as,
-                                 t_sea_ice_view<mdspan_2d_double> p_sea_ice,
-                                 t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
+                                 t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch,
+                                 t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix,
+                                 t_ocean_state_view<cuda::std::mdspan, cuda::std::dextents> ocean_state,
+                                 t_atmo_fluxes_view<cuda::std::mdspan, cuda::std::dextents> atmos_fluxes,
+                                 t_atmos_for_ocean_view<cuda::std::mdspan, cuda::std::dextents> p_as,
+                                 t_sea_ice_view<cuda::std::mdspan, cuda::std::dextents> p_sea_ice,
+                                 t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal,
                                  t_constant p_constant,
                                  t_constant_tke p_constant_tke);
 
 __global__
 void calc_impl_edges(int blockNo, int start_index, int end_index,
-                     t_patch_view<mdspan_1d_double, mdspan_3d_double,
-                                  mdspan_2d_int, mdspan_3d_int> p_patch,
-                     t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix,
-                     t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
+                     t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch,
+                     t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix,
+                     t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal,
                      t_constant p_constant);
 
 __device__
 void integrate(int jc, int blockNo,
-               t_patch_view<mdspan_1d_double, mdspan_3d_double,
-                            mdspan_2d_int, mdspan_3d_int> p_patch,
-               t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix,
-               t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal,
+               t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch,
+               t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix,
+               t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal,
                t_constant p_constant,
                t_constant_tke p_constant_tke);
 

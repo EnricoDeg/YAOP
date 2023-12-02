@@ -45,9 +45,10 @@ class TKE_backend {
                            int cells_start_block, int cells_end_block, int cells_start_index,
                            int cells_end_index) = 0;
 
-    template <typename memview_1d_d, typename memview_3d_d,
-              typename memview_2d_i, typename memview_3d_i, typename memview_policy>
-    void fill_struct_memview(t_patch_view<memview_1d_d, memview_3d_d, memview_2d_i, memview_3d_i> *p_patch_view,
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    void fill_struct_memview(t_patch_view<memview, dext> *p_patch_view,
                              t_patch *p_patch, int nblocks, int nlevs, int nproma) {
         p_patch_view->depth_CellInterface = memview_policy::memview(p_patch->depth_CellInterface,
                                                                     nblocks, nlevs+1, nproma);
@@ -64,27 +65,35 @@ class TKE_backend {
         p_patch_view->edges_cell_blk = memview_policy::memview(p_patch->edges_cell_blk, 2, nlevs, nproma);
     }
 
-    template <typename memview, typename memview_policy>
-    void fill_struct_memview(t_sea_ice_view<memview> *p_sea_ice_view, t_sea_ice *p_sea_ice,
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    void fill_struct_memview(t_sea_ice_view<memview, dext> *p_sea_ice_view, t_sea_ice *p_sea_ice,
                              int nblocks, int nproma) {
         p_sea_ice_view->concsum = memview_policy::memview(p_sea_ice->concsum, nblocks, nproma);
     }
 
-    template <typename memview, typename memview_policy>
-    void fill_struct_memview(t_atmos_for_ocean_view<memview> *p_as_view, t_atmos_for_ocean *p_as,
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    void fill_struct_memview(t_atmos_for_ocean_view<memview, dext> *p_as_view, t_atmos_for_ocean *p_as,
                              int nblocks, int nproma) {
         p_as_view->fu10 = memview_policy::memview(p_as->fu10, nblocks, nproma);
     }
 
-    template <typename memview, typename memview_policy>
-    void fill_struct_memview(t_atmo_fluxes_view<memview> *atmos_fluxes_view, t_atmo_fluxes *atmos_fluxes,
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    void fill_struct_memview(t_atmo_fluxes_view<memview, dext> *atmos_fluxes_view, t_atmo_fluxes *atmos_fluxes,
                              int nblocks, int nproma) {
         atmos_fluxes_view->stress_xw = memview_policy::memview(atmos_fluxes->stress_xw, nblocks, nproma);
         atmos_fluxes_view->stress_yw = memview_policy::memview(atmos_fluxes->stress_yw, nblocks, nproma);
     }
 
-    template <typename memview_2d, typename memview_3d, typename memview_policy>
-    void fill_struct_memview(t_ocean_state_view<memview_2d, memview_3d> *ocean_state_view,
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    void fill_struct_memview(t_ocean_state_view<memview, dext> *ocean_state_view,
                              t_ocean_state *ocean_state, int nblocks, int nlevs, int nproma) {
         ocean_state_view->temp = memview_policy::memview(ocean_state->temp, nblocks, nlevs, nproma);
         ocean_state_view->salt = memview_policy::memview(ocean_state->salt, nblocks, nlevs, nproma);
@@ -95,8 +104,10 @@ class TKE_backend {
         ocean_state_view->p_vn_x3 = memview_policy::memview(ocean_state->p_vn_x3, nblocks, nlevs, nproma);
     }
 
-    template <typename memview_2d, typename memview_3d, typename memview_policy>
-    void fill_struct_memview(t_cvmix_view<memview_2d, memview_3d> *p_cvmix_view, t_cvmix *p_cvmix,
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    void fill_struct_memview(t_cvmix_view<memview, dext> *p_cvmix_view, t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma) {
         p_cvmix_view->tke = memview_policy::memview(p_cvmix->tke, nblocks, nlevs+1, nproma);
         p_cvmix_view->tke_plc = memview_policy::memview(p_cvmix->tke_plc, nblocks, nlevs+1, nproma);
@@ -122,18 +133,24 @@ class TKE_backend {
         p_cvmix_view->tke_Pr = memview_policy::memview(p_cvmix->tke_Pr, nblocks, nlevs+1, nproma);
     }
 
-    template <typename memview, typename memview_policy>
-    memview memview_malloc(double *field, int dim1) {
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    memview<double, dext<int, 1>> memview_malloc(double *field, int dim1) {
         return memview_policy::memview_malloc(field, dim1);
     }
 
-    template <typename memview, typename memview_policy>
-    memview memview_malloc(double *field, int dim1, int dim2) {
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    memview<double, dext<int, 2>> memview_malloc(double *field, int dim1, int dim2) {
         return memview_policy::memview_malloc(field, dim1, dim2);
     }
 
-    template <typename memview, typename memview_policy>
-    memview memview_malloc(double *field, int dim1, int dim2, int dim3) {
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    memview<double, dext<int, 3>> memview_malloc(double *field, int dim1, int dim2, int dim3) {
         return memview_policy::memview_malloc(field, dim1, dim2, dim3);
     }
 
@@ -142,52 +159,54 @@ class TKE_backend {
         return memview_policy::memview_free(field);
     }
 
-    template <typename T1d, typename T2d, typename T3d, typename memview_policy>
-    void internal_fields_malloc(t_tke_internal_view<T1d, T2d, T3d> *p_internal_view) {
-        p_internal_view->tke_old = this->memview_malloc<T2d, memview_policy>(m_tke_old,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->forc_tke_surf_2D = this->memview_malloc<T1d, memview_policy>(m_forc_tke_surf_2D,
-                                                       p_constant.nproma);
-        p_internal_view->dzw_stretched = this->memview_malloc<T2d, memview_policy>(m_dzw_stretched,
-                                                       p_constant.nlevs, p_constant.nproma);
-        p_internal_view->dzt_stretched = this->memview_malloc<T2d, memview_policy>(m_dzt_stretched,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->tke_Av = this->memview_malloc<T3d, memview_policy>(m_tke_Av,
-                                                       p_constant.nblocks, p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->tke_kv = this->memview_malloc<T2d, memview_policy>(m_tke_kv,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->Nsqr = this->memview_malloc<T2d, memview_policy>(m_Nsqr,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->Ssqr = this->memview_malloc<T2d, memview_policy>(m_Ssqr,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->a_dif = this->memview_malloc<T2d, memview_policy>(m_a_dif,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->b_dif = this->memview_malloc<T2d, memview_policy>(m_b_dif,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->c_dif = this->memview_malloc<T2d, memview_policy>(m_c_dif,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->a_tri = this->memview_malloc<T2d, memview_policy>(m_a_tri,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->b_tri = this->memview_malloc<T2d, memview_policy>(m_b_tri,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->c_tri = this->memview_malloc<T2d, memview_policy>(m_c_tri,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->d_tri = this->memview_malloc<T2d, memview_policy>(m_d_tri,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->sqrttke = this->memview_malloc<T2d, memview_policy>(m_sqrttke,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->forc = this->memview_malloc<T2d, memview_policy>(m_forc,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->ke = this->memview_malloc<T2d, memview_policy>(m_ke,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->cp = this->memview_malloc<T2d, memview_policy>(m_cp,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->dp = this->memview_malloc<T2d, memview_policy>(m_dp,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->tke_upd = this->memview_malloc<T2d, memview_policy>(m_tke_upd,
-                                                       p_constant.nlevs+1, p_constant.nproma);
-        p_internal_view->tke_unrest = this->memview_malloc<T2d, memview_policy>(m_tke_unrest,
-                                                       p_constant.nlevs+1, p_constant.nproma);
+    template <template <class ...> class memview,
+              template <class, size_t> class dext,
+              class memview_policy>
+    void internal_fields_malloc(t_tke_internal_view<memview, dext> *p_internal_view) {
+        p_internal_view->tke_old = this->memview_malloc<memview, dext, memview_policy>
+                                         (m_tke_old, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->forc_tke_surf_2D = this->memview_malloc<memview, dext, memview_policy>
+                                                  (m_forc_tke_surf_2D, p_constant.nproma);
+        p_internal_view->dzw_stretched = this->memview_malloc<memview, dext, memview_policy>
+                                               (m_dzw_stretched, p_constant.nlevs, p_constant.nproma);
+        p_internal_view->dzt_stretched = this->memview_malloc<memview, dext, memview_policy>
+                                               (m_dzt_stretched, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_Av = this->memview_malloc<memview, dext, memview_policy>
+                                        (m_tke_Av, p_constant.nblocks, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_kv = this->memview_malloc<memview, dext, memview_policy>
+                                        (m_tke_kv, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->Nsqr = this->memview_malloc<memview, dext, memview_policy>
+                                      (m_Nsqr, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->Ssqr = this->memview_malloc<memview, dext, memview_policy>
+                                      (m_Ssqr, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->a_dif = this->memview_malloc<memview, dext, memview_policy>
+                                       (m_a_dif, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->b_dif = this->memview_malloc<memview, dext, memview_policy>
+                                       (m_b_dif, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->c_dif = this->memview_malloc<memview, dext, memview_policy>
+                                       (m_c_dif, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->a_tri = this->memview_malloc<memview, dext, memview_policy>
+                                       (m_a_tri, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->b_tri = this->memview_malloc<memview, dext, memview_policy>
+                                       (m_b_tri, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->c_tri = this->memview_malloc<memview, dext, memview_policy>
+                                       (m_c_tri, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->d_tri = this->memview_malloc<memview, dext, memview_policy>
+                                       (m_d_tri, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->sqrttke = this->memview_malloc<memview, dext, memview_policy>
+                                         (m_sqrttke, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->forc = this->memview_malloc<memview, dext, memview_policy>
+                                      (m_forc, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->ke = this->memview_malloc<memview, dext, memview_policy>
+                                    (m_ke, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->cp = this->memview_malloc<memview, dext, memview_policy>
+                                    (m_cp, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->dp = this->memview_malloc<memview, dext, memview_policy>
+                                    (m_dp, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_upd = this->memview_malloc<memview, dext, memview_policy>
+                                         (m_tke_upd, p_constant.nlevs+1, p_constant.nproma);
+        p_internal_view->tke_unrest = this->memview_malloc<memview, dext, memview_policy>
+                                            (m_tke_unrest, p_constant.nlevs+1, p_constant.nproma);
     }
 
     template <typename memview_policy>

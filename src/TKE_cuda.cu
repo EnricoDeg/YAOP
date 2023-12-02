@@ -21,14 +21,13 @@
 #include "src/cuda_kernels.hpp"
 
 // Structures with memory views
-struct t_cvmix_view<mdspan_2d_double, mdspan_3d_double> p_cvmix_view;
-struct t_patch_view<mdspan_1d_double, mdspan_3d_double,
-                    mdspan_2d_int, mdspan_3d_int> p_patch_view;
-struct t_ocean_state_view<mdspan_2d_double, mdspan_3d_double> ocean_state_view;
-struct t_atmo_fluxes_view<mdspan_2d_double> atmos_fluxes_view;
-struct t_atmos_for_ocean_view<mdspan_2d_double> p_as_view;
-struct t_sea_ice_view<mdspan_2d_double> p_sea_ice_view;
-struct t_tke_internal_view<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double> p_internal_view;
+struct t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix_view;
+struct t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch_view;
+struct t_ocean_state_view<cuda::std::mdspan, cuda::std::dextents> ocean_state_view;
+struct t_atmo_fluxes_view<cuda::std::mdspan, cuda::std::dextents> atmos_fluxes_view;
+struct t_atmos_for_ocean_view<cuda::std::mdspan, cuda::std::dextents> p_as_view;
+struct t_sea_ice_view<cuda::std::mdspan, cuda::std::dextents> p_sea_ice_view;
+struct t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal_view;
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
@@ -39,7 +38,7 @@ TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vm
     // Allocate internal arrays memory and create memory views
     std::cout << "Initializing TKE cuda... " << std::endl;
 
-    this->internal_fields_malloc<mdspan_1d_double, mdspan_2d_double, mdspan_3d_double, cuda_mdspan_impl>
+    this->internal_fields_malloc<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
                                 (&p_internal_view);
     is_view_init = false;
 }
@@ -61,20 +60,19 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
     // The pointer to the data should not change inside the time loop
     // structs view are filled only at the first time step
     if (!is_view_init) {
-        this->fill_struct_memview<mdspan_2d_double, mdspan_3d_double, cuda_mdspan_impl>(&p_cvmix_view, &p_cvmix,
-                                                    p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
-        this->fill_struct_memview<mdspan_1d_double, mdspan_3d_double,
-                                  mdspan_2d_int, mdspan_3d_int, cuda_mdspan_impl>(&p_patch_view, &p_patch,
-                                                    p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
-        this->fill_struct_memview<mdspan_2d_double, mdspan_3d_double, cuda_mdspan_impl>(&ocean_state_view,
-                                                                   &ocean_state, p_constant.nblocks, p_constant.nlevs,
-                                                                   p_constant.nproma);
-        this->fill_struct_memview<mdspan_2d_double, cuda_mdspan_impl>(&atmos_fluxes_view, &atmos_fluxes,
-                                                                      p_constant.nblocks, p_constant.nproma);
-        this->fill_struct_memview<mdspan_2d_double, cuda_mdspan_impl>(&p_as_view, &p_as,
-                                                                      p_constant.nblocks, p_constant.nproma);
-        this->fill_struct_memview<mdspan_2d_double, cuda_mdspan_impl>(&p_sea_ice_view, &p_sea_ice,
-                                                                      p_constant.nblocks, p_constant.nproma);
+        this->fill_struct_memview<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
+                                 (&p_cvmix_view, &p_cvmix, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        this->fill_struct_memview<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
+                                 (&p_patch_view, &p_patch, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
+        this->fill_struct_memview<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
+                                 (&ocean_state_view, &ocean_state, p_constant.nblocks, p_constant.nlevs,
+                                  p_constant.nproma);
+        this->fill_struct_memview<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
+                                 (&atmos_fluxes_view, &atmos_fluxes, p_constant.nblocks, p_constant.nproma);
+        this->fill_struct_memview<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
+                                 (&p_as_view, &p_as, p_constant.nblocks, p_constant.nproma);
+        this->fill_struct_memview<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
+                                 (&p_sea_ice_view, &p_sea_ice, p_constant.nblocks, p_constant.nproma);
         is_view_init = true;
     }
 
