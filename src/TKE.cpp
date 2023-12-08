@@ -19,7 +19,11 @@
 #include <iostream>
 
 #include "src/TKE_backend.hpp"
+#ifdef CUDA
 #include "src/TKE_cuda.hpp"
+#else
+#include "src/TKE_cpu.hpp"
+#endif
 
 struct TKE::Impl {
   TKE_backend::Ptr backend;
@@ -30,10 +34,17 @@ TKE::TKE(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_
          int l_lc, double clc, double ReferencePressureIndbars, double pi)
     : m_impl(new Impl) {
     std::cout << "Initializing TKE... " << std::endl;
+#ifdef CUDA
     m_impl->backend = TKE_backend::Ptr(new TKE_cuda(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
                                        ReferencePressureIndbars, pi));
+#else
+    m_impl->backend = TKE_backend::Ptr(new TKE_cpu(nproma, nlevs, nblocks,
+                                       vert_mix_type, vmix_idemix_tke, vert_cor_type,
+                                       dtime, OceanReferenceDensity, grav, l_lc, clc,
+                                       ReferencePressureIndbars, pi));
+#endif
     m_is_struct_init = false;
 }
 
