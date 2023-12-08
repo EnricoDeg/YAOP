@@ -21,13 +21,13 @@
 #include "src/cuda_kernels.hpp"
 
 // Structures with memory views
-struct t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix_view;
-struct t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch_view;
-struct t_ocean_state_view<cuda::std::mdspan, cuda::std::dextents> ocean_state_view;
-struct t_atmo_fluxes_view<cuda::std::mdspan, cuda::std::dextents> atmos_fluxes_view;
-struct t_atmos_for_ocean_view<cuda::std::mdspan, cuda::std::dextents> p_as_view;
-struct t_sea_ice_view<cuda::std::mdspan, cuda::std::dextents> p_sea_ice_view;
-struct t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal_view;
+static struct t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix_view;
+static struct t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch_view;
+static struct t_ocean_state_view<cuda::std::mdspan, cuda::std::dextents> ocean_state_view;
+static struct t_atmo_fluxes_view<cuda::std::mdspan, cuda::std::dextents> atmos_fluxes_view;
+static struct t_atmos_for_ocean_view<cuda::std::mdspan, cuda::std::dextents> p_as_view;
+static struct t_sea_ice_view<cuda::std::mdspan, cuda::std::dextents> p_sea_ice_view;
+static struct t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal_view;
 
 TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
