@@ -35,6 +35,7 @@ endif()
 add_library(tke SHARED ${SOURCE_EXE})
 target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR})
 target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
+set_property(TARGET tke PROPERTY CXX_STANDARD 17)
 
 # Install the library
 install (
