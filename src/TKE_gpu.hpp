@@ -14,17 +14,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_TKE_CUDA_HPP_
-#define SRC_TKE_CUDA_HPP_
+#ifndef SRC_TKE_GPU_HPP_
+#define SRC_TKE_GPU_HPP_
 
 #include "src/TKE_backend.hpp"
 
-class TKE_cuda : public TKE_backend {
+class TKE_gpu : public TKE_backend {
  public:
-    TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+    TKE_gpu(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
              int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
              int l_lc, double clc, double ReferencePressureIndbars, double pi);
-    ~TKE_cuda();
+    ~TKE_gpu();
 
  protected:
     void calc_impl(struct t_patch p_patch, struct t_cvmix p_cvmix,
@@ -44,4 +44,4 @@ class TKE_cuda : public TKE_backend {
     bool is_view_init;
 };
 
-#endif  // SRC_TKE_CUDA_HPP_
+#endif  // SRC_TKE_GPU_HPP_

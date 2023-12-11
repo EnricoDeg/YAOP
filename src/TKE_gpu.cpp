@@ -16,9 +16,9 @@
 
 #include <algorithm>
 #include <iostream>
-#include "src/TKE_cuda.hpp"
+#include "src/TKE_gpu.hpp"
 #include "src/utils.hpp"
-#include "src/cuda_kernels.hpp"
+#include "src/gpu_kernels.hpp"
 
 // Structures with memory views
 static struct t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix_view;
@@ -29,28 +29,28 @@ static struct t_atmos_for_ocean_view<cuda::std::mdspan, cuda::std::dextents> p_a
 static struct t_sea_ice_view<cuda::std::mdspan, cuda::std::dextents> p_sea_ice_view;
 static struct t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal_view;
 
-TKE_cuda::TKE_cuda(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+TKE_gpu::TKE_gpu(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
                    int l_lc, double clc, double ReferencePressureIndbars, double pi)
     : TKE_backend(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
                   vert_cor_type, dtime, OceanReferenceDensity, grav,
                   l_lc, clc, ReferencePressureIndbars, pi) {
     // Allocate internal arrays memory and create memory views
-    std::cout << "Initializing TKE cuda... " << std::endl;
+    std::cout << "Initializing TKE (GPU)... " << std::endl;
 
     this->internal_fields_malloc<cuda::std::mdspan, cuda::std::dextents, cuda_mdspan_impl>
                                 (&p_internal_view);
     is_view_init = false;
 }
 
-TKE_cuda::~TKE_cuda() {
+TKE_gpu::~TKE_gpu() {
     // Free internal arrays memory
-    std::cout << "Finalizing TKE cuda... " << std::endl;
+    std::cout << "Finalizing TKE (GPU)... " << std::endl;
 
     this->internal_fields_free<cuda_mdspan_impl>();
 }
 
-void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
+void TKE_gpu::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                          t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
                          t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                          int edges_block_size, int edges_start_block, int edges_end_block,
