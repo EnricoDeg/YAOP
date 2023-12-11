@@ -20,13 +20,13 @@
 
 __global__
 void calc_impl_cells(int blockNo, int start_index, int end_index,
-                     t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch,
-                     t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix,
-                     t_ocean_state_view<cuda::std::mdspan, cuda::std::dextents> ocean_state,
-                     t_atmo_fluxes_view<cuda::std::mdspan, cuda::std::dextents> atmos_fluxes,
-                     t_atmos_for_ocean_view<cuda::std::mdspan, cuda::std::dextents> p_as,
-                     t_sea_ice_view<cuda::std::mdspan, cuda::std::dextents> p_sea_ice,
-                     t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal,
+                     t_patch_view<gpu_memview::mdspan, gpu_memview::dextents> p_patch,
+                     t_cvmix_view<gpu_memview::mdspan, gpu_memview::dextents> p_cvmix,
+                     t_ocean_state_view<gpu_memview::mdspan, gpu_memview::dextents> ocean_state,
+                     t_atmo_fluxes_view<gpu_memview::mdspan, gpu_memview::dextents> atmos_fluxes,
+                     t_atmos_for_ocean_view<gpu_memview::mdspan, gpu_memview::dextents> p_as,
+                     t_sea_ice_view<gpu_memview::mdspan, gpu_memview::dextents> p_sea_ice,
+                     t_tke_internal_view<gpu_memview::mdspan, gpu_memview::dextents> p_internal,
                      t_constant p_constant,
                      t_constant_tke p_constant_tke) {
     int jc = blockIdx.x * blockDim.x + threadIdx.x + start_index;
@@ -108,9 +108,9 @@ void calc_impl_cells(int blockNo, int start_index, int end_index,
 
 __device__
 void integrate(int jc, int blockNo,
-               t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch,
-               t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix,
-               t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal,
+               t_patch_view<gpu_memview::mdspan, gpu_memview::dextents> p_patch,
+               t_cvmix_view<gpu_memview::mdspan, gpu_memview::dextents> p_cvmix,
+               t_tke_internal_view<gpu_memview::mdspan, gpu_memview::dextents> p_internal,
                t_constant p_constant,
                t_constant_tke p_constant_tke) {
     double tke_surf, diff_surf_forc, tke_bott, diff_bott_forc;
@@ -388,9 +388,9 @@ void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
 
 __global__
 void calc_impl_edges(int blockNo, int start_index, int end_index,
-                     t_patch_view<cuda::std::mdspan, cuda::std::dextents> p_patch,
-                     t_cvmix_view<cuda::std::mdspan, cuda::std::dextents> p_cvmix,
-                     t_tke_internal_view<cuda::std::mdspan, cuda::std::dextents> p_internal,
+                     t_patch_view<gpu_memview::mdspan, gpu_memview::dextents> p_patch,
+                     t_cvmix_view<gpu_memview::mdspan, gpu_memview::dextents> p_cvmix,
+                     t_tke_internal_view<gpu_memview::mdspan, gpu_memview::dextents> p_internal,
                      t_constant p_constant) {
     int je = blockIdx.x * blockDim.x + threadIdx.x + start_index;
     if (je <= end_index) {

@@ -84,4 +84,8 @@ class cuda_launch_impl {
     }
 };
 
+namespace gpu_memview = cuda::std;
+using gpu_memview_policy = cuda_mdspan_impl;
+using gpu_launch_policy = cuda_launch_impl;
+
 #endif  // SRC_CUDA_BACKEND_HPP_
