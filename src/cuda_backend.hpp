@@ -80,7 +80,7 @@ class cuda_launch_impl {
         cudaLaunchConfig_t config = {0};
         config.gridDim = blocksPerGrid3;
         config.blockDim = threadsPerBlock3;
-        cudaLaunchKernelExC(&config, func, args);
+        check(cudaLaunchKernelExC(&config, func, args));
     }
 };
 
