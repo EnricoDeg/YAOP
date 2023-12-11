@@ -11,10 +11,14 @@ include_directories(${CMAKE_BINARY_DIR})
 
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
 
+if(ENABLE_FORTRAN)
+    set(SOURCE_FORTRAN mod_TKE.f90)
+endif()
+
 if(ENABLE_CUDA)
     set(SOURCE_EXE  TKE.cpp
                     TKE_capi.cpp
-                    mod_TKE.f90
+                    ${SOURCE_FORTRAN}
                     TKE_backend.cpp
                     cuda_check.cu
                     gpu_kernels.cpp
@@ -26,7 +30,7 @@ if(ENABLE_CUDA)
 else()
     set(SOURCE_EXE  TKE.cpp
                     TKE_capi.cpp
-                    mod_TKE.f90
+                    ${SOURCE_FORTRAN}
                     TKE_backend.cpp
                     TKE_cpu.cpp
                     utils.cpp
@@ -45,8 +49,10 @@ install (
   ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib)
 
 # Install the library Fortran module
-install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}
-        DESTINATION ${PROJECT_SOURCE_DIR})
+if(ENABLE_FORTRAN)
+    install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}
+            DESTINATION ${PROJECT_SOURCE_DIR})
+endif()
 
 # ------------ Header Files
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/

@@ -1,10 +1,17 @@
 cmake_minimum_required(VERSION 3.0)
 
-if(ENABLE_CUDA)
-project(tke Fortran CXX C CUDA)
-else()
-project(tke Fortran CXX C)
+set(LANG_CXX CXX)
+set(LANG_C C)
+
+if(ENABLE_FORTRAN)
+set(LANG_FORTRAN Fortran)
 endif()
+
+if(ENABLE_CUDA)
+set(LANG_CUDA CUDA)
+endif()
+
+project(tke ${LANG_CXX} ${LANG_C} ${LANG_FORTRAN} ${LANG_CUDA})
 
 add_subdirectory(src)
 add_subdirectory(examples)
