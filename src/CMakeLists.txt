@@ -17,8 +17,8 @@ if(ENABLE_CUDA)
                     mod_TKE.f90
                     TKE_backend.cpp
                     cuda_check.cu
-                    cuda_kernels.cu
-                    TKE_cuda.cpp
+                    gpu_kernels.cu
+                    TKE_gpu.cpp
                     TKE_cpu.cpp
                     utils.cpp
                     data_struct.cpp)
