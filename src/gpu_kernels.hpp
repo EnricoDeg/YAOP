@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_CUDA_KERNELS_HPP_
-#define SRC_CUDA_KERNELS_HPP_
+#ifndef SRC_GPU_KERNELS_HPP_
+#define SRC_GPU_KERNELS_HPP_
 
 #include "src/cuda_memory.hpp"
 #include "src/memview_struct.hpp"
@@ -54,4 +54,4 @@ void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
 __device__
 double  calculate_density(double temp, double salt, double pressure);
 
-#endif  // SRC_CUDA_KERNELS_HPP_
+#endif  // SRC_GPU_KERNELS_HPP_

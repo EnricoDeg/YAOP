@@ -15,7 +15,7 @@
  */
 
 #include <algorithm>
-#include "src/cuda_kernels.hpp"
+#include "src/gpu_kernels.hpp"
 #include "src/constants_thermodyn.hpp"
 
 __global__
