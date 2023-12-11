@@ -72,4 +72,16 @@ class cuda_mdspan_impl {
     }
 };
 
+class cuda_launch_impl {
+ public:
+    static void launch(int threadsPerBlock, int blocksPerGrid, void* func, void **args) {
+        dim3 blocksPerGrid3(blocksPerGrid, 1, 1);
+        dim3 threadsPerBlock3(threadsPerBlock, 1, 1);
+        cudaLaunchConfig_t config = {0};
+        config.gridDim = blocksPerGrid3;
+        config.blockDim = threadsPerBlock3;
+        cudaLaunchKernelExC(&config, func, args);
+    }
+};
+
 #endif  // SRC_CUDA_MEMORY_HPP_

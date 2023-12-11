@@ -83,19 +83,15 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                         cells_start_index, cells_end_index, jb, &start_index, &end_index);
         int threadsPerBlockI = 512;  // too many registers used for 1024
         int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
-        dim3 blocksPerGrid(blocksPerGridI, 1, 1);
-        dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
-        calc_impl_cells<<<blocksPerGrid, threadsPerBlock>>>(jb, start_index, end_index,
-                                                            p_patch_view, p_cvmix_view,
-                                                            ocean_state_view, atmos_fluxes_view,
-                                                            p_as_view, p_sea_ice_view,
-                                                            p_internal_view, p_constant,
-                                                            p_constant_tke);
+        void *args[] = {&jb, &start_index, &end_index,
+                        &p_patch_view, &p_cvmix_view,
+                        &ocean_state_view, &atmos_fluxes_view,
+                        &p_as_view, &p_sea_ice_view,
+                        &p_internal_view, &p_constant,
+                        &p_constant_tke};
+        this->launch_kernel<cuda_launch_impl>(threadsPerBlockI, blocksPerGridI,
+                                              reinterpret_cast<void *>(calc_impl_cells), args);
     }
-
-    // For debugging
-    check(cudaPeekAtLastError());
-    check(cudaDeviceSynchronize());
 
     // over edges
     for (int jb = edges_start_block; jb <= edges_end_block; jb++) {
@@ -104,14 +100,10 @@ void TKE_cuda::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                         edges_start_index, edges_end_index, jb, &start_index, &end_index);
         int threadsPerBlockI = 1024;
         int blocksPerGridI = (end_index - start_index) / threadsPerBlockI + 1;
-        dim3 blocksPerGrid(blocksPerGridI, 1, 1);
-        dim3 threadsPerBlock(threadsPerBlockI, 1, 1);
-        calc_impl_edges<<<blocksPerGrid, threadsPerBlock>>>(jb, start_index, end_index,
-                                                            p_patch_view, p_cvmix_view,
-                                                            p_internal_view, p_constant);
+        void *args[] = {&jb, &start_index, &end_index,
+                        &p_patch_view, &p_cvmix_view,
+                        &p_internal_view, &p_constant};
+        this->launch_kernel<cuda_launch_impl>(threadsPerBlockI, blocksPerGridI,
+                                              reinterpret_cast<void *>(calc_impl_edges), args);
     }
-
-    // For debugging
-    check(cudaPeekAtLastError());
-    check(cudaDeviceSynchronize());
 }

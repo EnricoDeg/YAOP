@@ -18,7 +18,7 @@ if(ENABLE_CUDA)
                     TKE_backend.cpp
                     cuda_check.cu
                     cuda_kernels.cu
-                    TKE_cuda.cu
+                    TKE_cuda.cpp
                     TKE_cpu.cpp
                     utils.cpp
                     data_struct.cpp)

@@ -35,6 +35,11 @@ class TKE_cuda : public TKE_backend {
                    int cells_start_block, int cells_end_block, int cells_start_index,
                    int cells_end_index);
 
+    template <class launch_policy>
+    void launch_kernel(int threadsPerBlock, int blocksPerGrid, void* func, void **args) {
+        launch_policy::launch(threadsPerBlock, blocksPerGrid, func, args);
+    }
+
  private:
     bool is_view_init;
 };
