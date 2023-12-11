@@ -17,11 +17,12 @@ if(ENABLE_CUDA)
                     mod_TKE.f90
                     TKE_backend.cpp
                     cuda_check.cu
-                    gpu_kernels.cu
+                    gpu_kernels.cpp
                     TKE_gpu.cpp
                     TKE_cpu.cpp
                     utils.cpp
                     data_struct.cpp)
+    set_source_files_properties(gpu_kernels.cpp PROPERTIES LANGUAGE CUDA)
 else()
     set(SOURCE_EXE  TKE.cpp
                     TKE_capi.cpp
