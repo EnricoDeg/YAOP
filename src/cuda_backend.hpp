@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_CUDA_MEMORY_HPP_
-#define SRC_CUDA_MEMORY_HPP_
+#ifndef SRC_CUDA_BACKEND_HPP_
+#define SRC_CUDA_BACKEND_HPP_
 
 #include <cuda.h>
 #include <cuda/std/mdspan>
@@ -84,4 +84,4 @@ class cuda_launch_impl {
     }
 };
 
-#endif  // SRC_CUDA_MEMORY_HPP_
+#endif  // SRC_CUDA_BACKEND_HPP_

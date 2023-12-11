@@ -17,7 +17,7 @@
 #ifndef SRC_GPU_KERNELS_HPP_
 #define SRC_GPU_KERNELS_HPP_
 
-#include "src/cuda_memory.hpp"
+#include "src/cuda_backend.hpp"
 #include "src/memview_struct.hpp"
 
 __global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
