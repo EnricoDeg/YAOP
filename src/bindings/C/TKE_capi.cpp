@@ -16,7 +16,7 @@
 
 #include <memory>
 extern "C" {
-#include "src/TKE.h"
+#include "src/bindings/C/TKE.h"
 }
 #include "src/TKE.hpp"
 

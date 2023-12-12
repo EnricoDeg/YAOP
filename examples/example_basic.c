@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "src/TKE.h"
+#include "src/bindings/C/TKE.h"
 
 int main(int argc, char ** argv) {
     int nproma = 25;

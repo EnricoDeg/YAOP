@@ -12,12 +12,12 @@ include_directories(${CMAKE_BINARY_DIR})
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
 
 if(ENABLE_FORTRAN)
-    set(SOURCE_FORTRAN mod_TKE.f90)
+    set(SOURCE_FORTRAN bindings/Fortran/mod_TKE.f90)
 endif()
 
 if(ENABLE_CUDA)
     set(SOURCE_EXE  TKE.cpp
-                    TKE_capi.cpp
+                    bindings/C/TKE_capi.cpp
                     ${SOURCE_FORTRAN}
                     TKE_backend.cpp
                     cuda_check.cu
@@ -56,8 +56,19 @@ if(ENABLE_FORTRAN)
 endif()
 
 # ------------ Header Files
-install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
-  DESTINATION ${PROJECT_SOURCE_DIR}/include
-  FILES_MATCHING
-  PATTERN "TKE.h*"
-  )
+set(HEADERS_CXX TKE.hpp)
+set(HEADERS_C bindings/C/TKE.h)
+install(FILES ${HEADERS_CXX} DESTINATION ${PROJECT_SOURCE_DIR}/include)
+install(FILES ${HEADERS_C} DESTINATION ${PROJECT_SOURCE_DIR}/include)
+
+#install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
+#  DESTINATION ${PROJECT_SOURCE_DIR}/include
+#  FILES_MATCHING
+#  PATTERN "TKE.h"
+#  )
+
+#install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
+#  DESTINATION ${PROJECT_SOURCE_DIR}/include
+#  FILES_MATCHING
+#  PATTERN "TKE.hpp"
+#  )

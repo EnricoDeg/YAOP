@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_TKE_H_
-#define SRC_TKE_H_
+#ifndef SRC_BINDINGS_C_TKE_H_
+#define SRC_BINDINGS_C_TKE_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,4 +53,4 @@ void TKE_Calc(double *depth_CellInterface, double *prism_center_dist_c,
 }
 #endif
 
-#endif  // SRC_TKE_H_
+#endif  // SRC_BINDINGS_C_TKE_H_
