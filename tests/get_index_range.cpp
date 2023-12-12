@@ -15,7 +15,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "src/utils.hpp"
+#include "src/shared/utils.hpp"
 
 // Test the default value assignment for start_index and end_index
 TEST(get_index_range, default_value) {
