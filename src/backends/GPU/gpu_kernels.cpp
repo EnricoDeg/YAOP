@@ -15,8 +15,8 @@
  */
 
 #include <algorithm>
-#include "src/gpu_kernels.hpp"
-#include "src/constants_thermodyn.hpp"
+#include "src/backends/GPU/gpu_kernels.hpp"
+#include "src/shared/constants/constants_thermodyn.hpp"
 
 __global__
 void calc_impl_cells(int blockNo, int start_index, int end_index,

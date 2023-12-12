@@ -18,7 +18,7 @@
 #define SRC_TKE_HPP_
 
 #include <iostream>
-#include "src/data_struct.hpp"
+#include "src/shared/interface/data_struct.hpp"
 
 class TKE {
  public:

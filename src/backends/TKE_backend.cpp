@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "src/TKE_backend.hpp"
+#include "src/backends/TKE_backend.hpp"
 #include <iostream>
 
 TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,

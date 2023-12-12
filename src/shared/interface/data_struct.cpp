@@ -14,7 +14,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "src/data_struct.hpp"
+#include "src/shared/interface/data_struct.hpp"
 
 void fill_struct(struct t_patch *p_patch, double *depth_CellInterface, double *prism_center_dist_c,
                  double *inv_prism_center_dist_c, double *prism_thick_c, int *dolic_c, int *dolic_e,

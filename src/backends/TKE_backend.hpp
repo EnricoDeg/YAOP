@@ -14,12 +14,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_TKE_BACKEND_HPP_
-#define SRC_TKE_BACKEND_HPP_
+#ifndef SRC_BACKENDS_TKE_BACKEND_HPP_
+#define SRC_BACKENDS_TKE_BACKEND_HPP_
 
 #include <memory>
-#include "src/data_struct.hpp"
-#include "src/memview_struct.hpp"
+#include "src/shared/interface/data_struct.hpp"
+#include "src/shared/interface/memview_struct.hpp"
 
 class TKE_backend {
  public:
@@ -264,4 +264,4 @@ class TKE_backend {
     double *m_tke_unrest;
 };
 
-#endif  // SRC_TKE_BACKEND_HPP_
+#endif  // SRC_BACKENDS_TKE_BACKEND_HPP_

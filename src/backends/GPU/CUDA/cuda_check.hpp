@@ -14,12 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include "src/cuda_check.hpp"
+#ifndef SRC_BACKENDS_GPU_CUDA_CUDA_CHECK_HPP_
+#define SRC_BACKENDS_GPU_CUDA_CUDA_CHECK_HPP_
 
-void check(cudaError_t err) {
-    if (err != cudaSuccess) {
-        std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
-        std::exit(-1);
-    }
-}
+#include <cuda_runtime.h>
+
+void check(cudaError_t err);
+
+#endif  // SRC_BACKENDS_GPU_CUDA_CUDA_CHECK_HPP_

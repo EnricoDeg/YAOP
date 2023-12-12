@@ -14,11 +14,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_UTILS_HPP_
-#define SRC_UTILS_HPP_
+#include <iostream>
+#include "src/backends/GPU/HIP/hip_check.hpp"
 
-void get_index_range(int subset_block_size, int subset_start_block, int subset_end_block,
-                     int subset_start_index, int subset_end_index, int current_block,
-                     int *start_index, int *end_index);
-
-#endif  // SRC_UTILS_HPP_
+void check(hipError_t err) {
+    if (err != hipSuccess) {
+        std::cerr << "CUDA error: " << hipGetErrorString(err) << std::endl;
+        std::exit(-1);
+    }
+}

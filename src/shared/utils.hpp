@@ -14,11 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_CUDA_CHECK_HPP_
-#define SRC_CUDA_CHECK_HPP_
+#ifndef SRC_SHARED_UTILS_HPP_
+#define SRC_SHARED_UTILS_HPP_
 
-#include <cuda_runtime.h>
+void get_index_range(int subset_block_size, int subset_start_block, int subset_end_block,
+                     int subset_start_index, int subset_end_index, int current_block,
+                     int *start_index, int *end_index);
 
-void check(cudaError_t err);
-
-#endif  // SRC_CUDA_CHECK_HPP_
+#endif  // SRC_SHARED_UTILS_HPP_

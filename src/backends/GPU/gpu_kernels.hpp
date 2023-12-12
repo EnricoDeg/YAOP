@@ -14,11 +14,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_GPU_KERNELS_HPP_
-#define SRC_GPU_KERNELS_HPP_
+#ifndef SRC_BACKENDS_GPU_GPU_KERNELS_HPP_
+#define SRC_BACKENDS_GPU_GPU_KERNELS_HPP_
 
-#include "src/cuda_backend.hpp"
-#include "src/memview_struct.hpp"
+#include "src/backends/GPU/CUDA/cuda_backend.hpp"
+#include "src/shared/interface/memview_struct.hpp"
 
 __global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
                                  t_patch_view<gpu_memview::mdspan, gpu_memview::dextents> p_patch,
@@ -54,4 +54,4 @@ void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
 __device__
 double  calculate_density(double temp, double salt, double pressure);
 
-#endif  // SRC_GPU_KERNELS_HPP_
+#endif  // SRC_BACKENDS_GPU_GPU_KERNELS_HPP_

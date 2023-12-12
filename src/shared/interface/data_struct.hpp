@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_DATA_STRUCT_HPP_
-#define SRC_DATA_STRUCT_HPP_
+#ifndef SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_
+#define SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_
 
 // TKE constants
 struct t_constant {
@@ -134,4 +134,4 @@ void fill_struct(struct t_atmos_for_ocean *p_as, double *fu10);
 
 void fill_struct(struct t_sea_ice *p_sea_ice, double *concsum);
 
-#endif  // SRC_DATA_STRUCT_HPP_
+#endif  // SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_

@@ -16,9 +16,9 @@
 
 #include <algorithm>
 #include <iostream>
-#include "src/TKE_gpu.hpp"
-#include "src/utils.hpp"
-#include "src/gpu_kernels.hpp"
+#include "src/backends/GPU/TKE_gpu.hpp"
+#include "src/shared/utils.hpp"
+#include "src/backends/GPU/gpu_kernels.hpp"
 
 // Structures with memory views
 static struct t_cvmix_view<gpu_memview::mdspan, gpu_memview::dextents> p_cvmix_view;

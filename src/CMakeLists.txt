@@ -19,23 +19,23 @@ if(ENABLE_CUDA)
     set(SOURCE_EXE  TKE.cpp
                     bindings/C/TKE_capi.cpp
                     ${SOURCE_FORTRAN}
-                    TKE_backend.cpp
-                    cuda_check.cu
-                    gpu_kernels.cpp
-                    TKE_gpu.cpp
-                    TKE_cpu.cpp
-                    utils.cpp
-                    data_struct.cpp)
-    set_source_files_properties(gpu_kernels.cpp PROPERTIES LANGUAGE CUDA)
-    set_source_files_properties(TKE_gpu.cpp PROPERTIES LANGUAGE CUDA)
+                    backends/TKE_backend.cpp
+                    backends/GPU/CUDA/cuda_check.cu
+                    backends/GPU/gpu_kernels.cpp
+                    backends/GPU/TKE_gpu.cpp
+                    backends/CPU/TKE_cpu.cpp
+                    shared/utils.cpp
+                    shared/interface/data_struct.cpp)
+    set_source_files_properties(backends/GPU/gpu_kernels.cpp PROPERTIES LANGUAGE CUDA)
+    set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE CUDA)
 else()
     set(SOURCE_EXE  TKE.cpp
-                    TKE_capi.cpp
+                    bindings/C/TKE_capi.cpp
                     ${SOURCE_FORTRAN}
-                    TKE_backend.cpp
-                    TKE_cpu.cpp
-                    utils.cpp
-                    data_struct.cpp)
+                    backends/TKE_backend.cpp
+                    backends/CPU/TKE_cpu.cpp
+                    shared/utils.cpp
+                    shared/interface/data_struct.cpp)
 endif()
 
 add_library(tke SHARED ${SOURCE_EXE})
@@ -60,15 +60,3 @@ set(HEADERS_CXX TKE.hpp)
 set(HEADERS_C bindings/C/TKE.h)
 install(FILES ${HEADERS_CXX} DESTINATION ${PROJECT_SOURCE_DIR}/include)
 install(FILES ${HEADERS_C} DESTINATION ${PROJECT_SOURCE_DIR}/include)
-
-#install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
-#  DESTINATION ${PROJECT_SOURCE_DIR}/include
-#  FILES_MATCHING
-#  PATTERN "TKE.h"
-#  )
-
-#install(DIRECTORY ${PROJECT_SOURCE_DIR}/src/
-#  DESTINATION ${PROJECT_SOURCE_DIR}/include
-#  FILES_MATCHING
-#  PATTERN "TKE.hpp"
-#  )

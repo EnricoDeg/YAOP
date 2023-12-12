@@ -18,11 +18,11 @@
 
 #include <iostream>
 
-#include "src/TKE_backend.hpp"
+#include "src/backends/TKE_backend.hpp"
 #ifdef CUDA
-#include "src/TKE_gpu.hpp"
+#include "src/backends/GPU/TKE_gpu.hpp"
 #else
-#include "src/TKE_cpu.hpp"
+#include "src/backends/CPU/TKE_cpu.hpp"
 #endif
 
 struct TKE::Impl {

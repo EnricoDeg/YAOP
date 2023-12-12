@@ -14,16 +14,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "src/utils.hpp"
+#include <iostream>
+#include "src/backends/GPU/CUDA/cuda_check.hpp"
 
-void get_index_range(int subset_block_size, int subset_start_block, int subset_end_block,
-                     int subset_start_index, int subset_end_index, int current_block,
-                     int *start_index, int *end_index) {
-    *start_index = 0;
-    *end_index = subset_block_size - 1;
-
-    if (current_block == subset_start_block)
-        *start_index = subset_start_index;
-    if (current_block == subset_end_block)
-        *end_index = subset_end_index;
+void check(cudaError_t err) {
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA error: " << cudaGetErrorString(err) << std::endl;
+        std::exit(-1);
+    }
 }

@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_MEMVIEW_STRUCT_HPP_
-#define SRC_MEMVIEW_STRUCT_HPP_
+#ifndef SRC_SHARED_INTERFACE_MEMVIEW_STRUCT_HPP_
+#define SRC_SHARED_INTERFACE_MEMVIEW_STRUCT_HPP_
 
 template <template <class ...> class memview,
           template <class, size_t> class dext>
@@ -117,4 +117,4 @@ struct t_tke_internal_view {
     memview<double, dext<int, 2>> tke_unrest;
 };
 
-#endif  // SRC_MEMVIEW_STRUCT_HPP_
+#endif  // SRC_SHARED_INTERFACE_MEMVIEW_STRUCT_HPP_

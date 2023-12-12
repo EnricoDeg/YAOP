@@ -14,28 +14,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_CUDA_BACKEND_HPP_
-#define SRC_CUDA_BACKEND_HPP_
+#ifndef SRC_BACKENDS_CPU_CPU_MEMORY_HPP_
+#define SRC_BACKENDS_CPU_CPU_MEMORY_HPP_
 
-#include <cuda.h>
-#include <cuda/std/mdspan>
-#include "src/cuda_check.hpp"
-#include "src/data_struct.hpp"
+#include <mdspan/mdspan.hpp>
+#include "src/shared/interface/data_struct.hpp"
 
-constexpr auto dyn = cuda::std::dynamic_extent;
-using ext1d_d = cuda::std::extents<int, dyn>;
-using ext2d_d = cuda::std::extents<int, dyn, dyn>;
-using ext3d_d = cuda::std::extents<int, dyn, dyn, dyn>;
-using ext1d_t = cuda::std::dextents<int, 1>;
-using ext2d_t = cuda::std::dextents<int, 2>;
-using ext3d_t = cuda::std::dextents<int, 3>;
-using mdspan_1d_double = cuda::std::mdspan<double, ext1d_t>;
-using mdspan_2d_double = cuda::std::mdspan<double, ext2d_t>;
-using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
-using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
-using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
+constexpr auto dyn = Kokkos::dynamic_extent;
+using ext1d_d = Kokkos::extents<int, dyn>;
+using ext2d_d = Kokkos::extents<int, dyn, dyn>;
+using ext3d_d = Kokkos::extents<int, dyn, dyn, dyn>;
+using ext1d_t = Kokkos::dextents<int, 1>;
+using ext2d_t = Kokkos::dextents<int, 2>;
+using ext3d_t = Kokkos::dextents<int, 3>;
+using mdspan_1d_double = Kokkos::mdspan<double, ext1d_t>;
+using mdspan_2d_double = Kokkos::mdspan<double, ext2d_t>;
+using mdspan_3d_double = Kokkos::mdspan<double, ext3d_t>;
+using mdspan_2d_int = Kokkos::mdspan<int, ext2d_t>;
+using mdspan_3d_int = Kokkos::mdspan<int, ext3d_t>;
 
-class cuda_mdspan_impl {
+class cpu_mdspan_impl {
  public:
     static mdspan_1d_double memview(double *data, int nlevs) {
         return mdspan_1d_double{ data, ext1d_d{nlevs} };
@@ -53,39 +51,23 @@ class cuda_mdspan_impl {
         return mdspan_3d_int{ data, ext3d_d{nblocks, nlevs, nproma} };
     }
     static mdspan_1d_double memview_malloc(double *field, int dim1) {
-        check( cudaMalloc(&field, dim1*sizeof(double)) );
+        field = reinterpret_cast<double *>(malloc(dim1 * sizeof(double)));
         mdspan_1d_double memview{ field, ext1d_d{dim1} };
         return memview;
     }
     static mdspan_2d_double memview_malloc(double *field, int dim1, int dim2) {
-        check( cudaMalloc(&field, dim1*dim2*sizeof(double)) );
+        field = reinterpret_cast<double *>(malloc(dim1 * dim2 * sizeof(double)));
         mdspan_2d_double memview{ field, ext2d_d{dim1, dim2} };
         return memview;
     }
     static mdspan_3d_double memview_malloc(double *field, int dim1, int dim2, int dim3) {
-        check( cudaMalloc(&field, dim1*dim2*dim3*sizeof(double)) );
+        field = reinterpret_cast<double *>(malloc(dim1 * dim2 * dim3 * sizeof(double)));
         mdspan_3d_double memview{ field, ext3d_d{dim1, dim2, dim3} };
         return memview;
     }
     static void memview_free(double *field) {
-        check(cudaFree(field));
+        free(field);
     }
 };
 
-class cuda_launch_impl {
- public:
-    static void launch(int threadsPerBlock, int blocksPerGrid, void* func, void **args) {
-        dim3 blocksPerGrid3(blocksPerGrid, 1, 1);
-        dim3 threadsPerBlock3(threadsPerBlock, 1, 1);
-        cudaLaunchConfig_t config = {0};
-        config.gridDim = blocksPerGrid3;
-        config.blockDim = threadsPerBlock3;
-        check(cudaLaunchKernelExC(&config, func, args));
-    }
-};
-
-namespace gpu_memview = cuda::std;
-using gpu_memview_policy = cuda_mdspan_impl;
-using gpu_launch_policy = cuda_launch_impl;
-
-#endif  // SRC_CUDA_BACKEND_HPP_
+#endif  // SRC_BACKENDS_CPU_CPU_MEMORY_HPP_

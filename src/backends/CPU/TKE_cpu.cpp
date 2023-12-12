@@ -15,9 +15,9 @@
  */
 
 #include <iostream>
-#include "src/TKE_cpu.hpp"
-#include "src/cpu_memory.hpp"
-#include "src/utils.hpp"
+#include "src/backends/CPU/TKE_cpu.hpp"
+#include "src/backends/CPU/cpu_memory.hpp"
+#include "src/shared/utils.hpp"
 
 // Structures with memory views
 static struct t_cvmix_view<Kokkos::mdspan, Kokkos::dextents> p_cvmix_view;

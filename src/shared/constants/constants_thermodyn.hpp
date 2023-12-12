@@ -14,8 +14,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_CONSTANTS_THERMODYN_HPP_
-#define SRC_CONSTANTS_THERMODYN_HPP_
+#ifndef SRC_SHARED_CONSTANTS_CONSTANTS_THERMODYN_HPP_
+#define SRC_SHARED_CONSTANTS_CONSTANTS_THERMODYN_HPP_
 
 #define a_c3 2.1987e-10
 #define a_a3 5.4065e-7
@@ -72,4 +72,4 @@
 #define r_g1 1.6483e-2
 #define r_g2 -5.3009e-4
 
-#endif  // SRC_CONSTANTS_THERMODYN_HPP_
+#endif  // SRC_SHARED_CONSTANTS_CONSTANTS_THERMODYN_HPP_
