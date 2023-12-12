@@ -80,7 +80,18 @@
              
   <section id="installation">
 <span id="id1"></span><h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
-<p>The installation is straightforeward:</p>
+<p>The Cmake configuration has the following options (default is disabled):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ENABLE_C: enables the C bindings and the examples and tests based on them</p></li>
+<li><p>ENABLE_FORTRAN: enables the Fortran bindings and the examples and tests based on them</p></li>
+<li><p>ENABLE_CUDA: enable the CUDA backend of the GPU implementation (CPU implementation not compiled)</p></li>
+<li><p>ENABLE_HIP: enable the HIP backend of the GPU implementation (CPU implementation not compiled)</p></li>
+<li><p>ENABLE_EXAMPLES: compile files in <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder</p></li>
+<li><p>ENABLE_TESTS: install gtest and compile files in <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder</p></li>
+</ul>
+</div></blockquote>
+<p>The default installation is straightforeward:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">mkdir</span><span class="w"> </span><span class="n">build</span>
 <span class="n">cd</span><span class="w"> </span><span class="n">build</span>
 <span class="n">cmake</span><span class="w"> </span><span class="p">..</span>
@@ -88,7 +99,7 @@
 <span class="n">make</span><span class="w"> </span><span class="n">install</span>
 </pre></div>
 </div>
-<p>It is then possible to run different examples from the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder.</p>
+<p>And it is compiling only the files in the <code class="docutils literal notranslate"><span class="pre">src</span></code> folder for the CPU implementation.</p>
 </section>
 
 
