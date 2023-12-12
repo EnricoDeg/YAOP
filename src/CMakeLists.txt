@@ -27,6 +27,7 @@ if(ENABLE_CUDA)
                     utils.cpp
                     data_struct.cpp)
     set_source_files_properties(gpu_kernels.cpp PROPERTIES LANGUAGE CUDA)
+    set_source_files_properties(TKE_gpu.cpp PROPERTIES LANGUAGE CUDA)
 else()
     set(SOURCE_EXE  TKE.cpp
                     TKE_capi.cpp
