@@ -13,7 +13,7 @@ TKE library documentation
 Table of Contents
 ^^^^^^^^^^^^^^^^^
 .. toctree::
-   :maxdepth: 6
+   :maxdepth: 3
 
    installation
    library
