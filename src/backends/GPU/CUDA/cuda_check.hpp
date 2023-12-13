@@ -19,6 +19,10 @@
 
 #include <cuda_runtime.h>
 
+/*! \brief Check error returned from CUDA function.
+ *
+ *  If not cudaSuccess, print a string describing the error and exit.
+ */
 void check(cudaError_t err);
 
 #endif  // SRC_BACKENDS_GPU_CUDA_CUDA_CHECK_HPP_
