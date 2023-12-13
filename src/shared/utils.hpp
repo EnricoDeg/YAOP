@@ -17,6 +17,9 @@
 #ifndef SRC_SHARED_UTILS_HPP_
 #define SRC_SHARED_UTILS_HPP_
 
+/*! \brief get the start and end index for a given block.
+*
+*/
 void get_index_range(int subset_block_size, int subset_start_block, int subset_end_block,
                      int subset_start_index, int subset_end_index, int current_block,
                      int *start_index, int *end_index);
