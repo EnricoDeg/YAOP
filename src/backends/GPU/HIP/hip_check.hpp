@@ -19,6 +19,10 @@
 
 #include <hip/hip_runtime.h>
 
+/*! \brief Check error returned from HIP function.
+ *
+ *  If not hipSuccess, print a string describing the error and exit.
+ */
 void check(hipError_t err);
 
 #endif  // SRC_BACKENDS_GPU_HIP_HIP_CHECK_HPP_
