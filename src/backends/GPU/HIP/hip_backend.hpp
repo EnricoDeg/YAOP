@@ -35,45 +35,82 @@ using mdspan_3d_double = Kokkos::mdspan<double, ext3d_t>;
 using mdspan_2d_int = Kokkos::mdspan<int, ext2d_t>;
 using mdspan_3d_int = Kokkos::mdspan<int, ext3d_t>;
 
+/*! \brief HIP mdspan memory view policy.
+ *
+ *  It defines the policy to allocate/deallocate arrays and create Kokkos mdspan objects.
+ */
 class hip_mdspan_impl {
  public:
+    /*! \brief Create a 1D mdspan object from double pointer.
+     *
+     */
     static mdspan_1d_double memview(double *data, int nlevs) {
         return mdspan_1d_double{ data, ext1d_d{nlevs} };
     }
+    /*! \brief Create a 2D mdspan object from double pointer.
+     *
+     */
     static mdspan_2d_double memview(double *data, int nblocks, int nproma) {
         return mdspan_2d_double{ data, ext2d_d{nblocks, nproma} };
     }
+    /*! \brief Create a 3D mdspan object from double pointer.
+     *
+     */
     static mdspan_3d_double memview(double *data, int nblocks, int nlevs, int nproma) {
         return mdspan_3d_double{ data, ext3d_d{nblocks, nlevs, nproma} };
     }
+    /*! \brief Create a 2D mdspan object from int pointer.
+     *
+     */
     static mdspan_2d_int memview(int *data, int nblocks, int nproma) {
         return mdspan_2d_int{ data, ext2d_d{nblocks, nproma} };
     }
+    /*! \brief Create a 3D mdspan object from int pointer.
+     *
+     */
     static mdspan_3d_int memview(int *data, int nblocks, int nlevs, int nproma) {
         return mdspan_3d_int{ data, ext3d_d{nblocks, nlevs, nproma} };
     }
+    /*! \brief Allocate memory and create a 1D mdspan object from double pointer.
+     *
+     */
     static mdspan_1d_double memview_malloc(double *field, int dim1) {
         check(hipMalloc(reinterpret_cast<void**>(field), dim1 * sizeof(double)));
         mdspan_1d_double memview{ field, ext1d_d{dim1} };
         return memview;
     }
+    /*! \brief Allocate memory and create a 2D mdspan object from double pointer.
+     *
+     */
     static mdspan_2d_double memview_malloc(double *field, int dim1, int dim2) {
         check(hipMalloc(reinterpret_cast<void**>(field), dim1 * dim2 * sizeof(double)));
         mdspan_2d_double memview{ field, ext2d_d{dim1, dim2} };
         return memview;
     }
+    /*! \brief Allocate memory and create a 3D mdspan object from double pointer.
+     *
+     */
     static mdspan_3d_double memview_malloc(double *field, int dim1, int dim2, int dim3) {
         check(hipMalloc(reinterpret_cast<void**>(field), dim1 * dim2 * dim3 * sizeof(double)));
         mdspan_3d_double memview{ field, ext3d_d{dim1, dim2, dim3} };
         return memview;
     }
+    /*! \brief Free memory from double pointer.
+     *
+     */
     static void memview_free(double *field) {
         check(hipFree(field));
     }
 };
 
+/*! \brief HIP kernel launch policy.
+ *
+ */
 class hip_launch_impl {
  public:
+    /*! \brief It calls the HIP function to launch the kernel function.
+     *
+     */
     static void launch(int threadsPerBlock, int blocksPerGrid, void* func, void **args) {
         dim3 blocksPerGrid3(blocksPerGrid, 1, 1);
         dim3 threadsPerBlock3(threadsPerBlock, 1, 1);
