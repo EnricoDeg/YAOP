@@ -1,22 +1,6 @@
 var searchData=
 [
-  ['t_5fatmo_5ffluxes_7',['t_atmo_fluxes',['../structt__atmo__fluxes.html',1,'']]],
-  ['t_5fatmo_5ffluxes_5fview_8',['t_atmo_fluxes_view',['../structt__atmo__fluxes__view.html',1,'']]],
-  ['t_5fatmos_5ffor_5focean_9',['t_atmos_for_ocean',['../structt__atmos__for__ocean.html',1,'']]],
-  ['t_5fatmos_5ffor_5focean_5fview_10',['t_atmos_for_ocean_view',['../structt__atmos__for__ocean__view.html',1,'']]],
-  ['t_5fconstant_11',['t_constant',['../structt__constant.html',1,'']]],
-  ['t_5fconstant_5ftke_12',['t_constant_tke',['../structt__constant__tke.html',1,'']]],
-  ['t_5fcvmix_13',['t_cvmix',['../structt__cvmix.html',1,'']]],
-  ['t_5fcvmix_5fview_14',['t_cvmix_view',['../structt__cvmix__view.html',1,'']]],
-  ['t_5focean_5fstate_15',['t_ocean_state',['../structt__ocean__state.html',1,'']]],
-  ['t_5focean_5fstate_5fview_16',['t_ocean_state_view',['../structt__ocean__state__view.html',1,'']]],
-  ['t_5fpatch_17',['t_patch',['../structt__patch.html',1,'']]],
-  ['t_5fpatch_5fview_18',['t_patch_view',['../structt__patch__view.html',1,'']]],
-  ['t_5fsea_5fice_19',['t_sea_ice',['../structt__sea__ice.html',1,'']]],
-  ['t_5fsea_5fice_5fview_20',['t_sea_ice_view',['../structt__sea__ice__view.html',1,'']]],
-  ['t_5ftke_5finternal_5fview_21',['t_tke_internal_view',['../structt__tke__internal__view.html',1,'']]],
-  ['tke_22',['TKE',['../classTKE.html',1,'TKE'],['../classTKE.html#a41e7ac7c0d26e5809eb980538458da41',1,'TKE::TKE()']]],
-  ['tke_5fbackend_23',['TKE_backend',['../classTKE__backend.html',1,'']]],
-  ['tke_5fcpu_24',['TKE_cpu',['../classTKE__cpu.html',1,'']]],
-  ['tke_5fgpu_25',['TKE_gpu',['../classTKE__gpu.html',1,'']]]
+  ['impl_8',['Impl',['../structTKE_1_1Impl.html',1,'TKE']]],
+  ['internal_5ffields_5ffree_9',['internal_fields_free',['../classTKE__backend.html#a1e6c9ac9647f5edcd51de449ed64f805',1,'TKE_backend']]],
+  ['internal_5ffields_5fmalloc_10',['internal_fields_malloc',['../classTKE__backend.html#ab4b03d9a9ebf38b79b34e2af97494106',1,'TKE_backend']]]
 ];

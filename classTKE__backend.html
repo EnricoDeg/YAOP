@@ -71,6 +71,11 @@ $(function() {
 <div class="title">TKE_backend Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> backend class.  
+ <a href="classTKE__backend.html#details">More...</a></p>
+
+<p><code>#include &lt;TKE_backend.hpp&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for TKE_backend:</div>
 <div class="dyncontent">
@@ -91,64 +96,70 @@ typedef std::shared_ptr&lt; <a class="el" href="classTKE__backend.html">TKE_back
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a84f1f6fdf0ca7326ff5e171f0f67416e"><td class="memItemLeft" align="right" valign="top"><a id="a84f1f6fdf0ca7326ff5e171f0f67416e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TKE_backend</b> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a84f1f6fdf0ca7326ff5e171f0f67416e">TKE_backend</a> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
+<tr class="memdesc:a84f1f6fdf0ca7326ff5e171f0f67416e"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> backend class constructor. <br /></td></tr>
 <tr class="separator:a84f1f6fdf0ca7326ff5e171f0f67416e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa34de1f0766f8d65dbdad133b1e66e6"><td class="memItemLeft" align="right" valign="top"><a id="afa34de1f0766f8d65dbdad133b1e66e6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>calc</b> (<a class="el" href="structt__patch.html">t_patch</a> p_patch, <a class="el" href="structt__cvmix.html">t_cvmix</a> p_cvmix, <a class="el" href="structt__ocean__state.html">t_ocean_state</a> ocean_state, <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> atmos_fluxes, <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> p_as, <a class="el" href="structt__sea__ice.html">t_sea_ice</a> p_sea_ice, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
+<tr class="memitem:aaf785a0898eb148b3f149d887d63241c"><td class="memItemLeft" align="right" valign="top"><a id="aaf785a0898eb148b3f149d887d63241c"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#aaf785a0898eb148b3f149d887d63241c">~TKE_backend</a> ()=default</td></tr>
+<tr class="memdesc:aaf785a0898eb148b3f149d887d63241c"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> backend class destructor. <br /></td></tr>
+<tr class="separator:aaf785a0898eb148b3f149d887d63241c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa34de1f0766f8d65dbdad133b1e66e6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#afa34de1f0766f8d65dbdad133b1e66e6">calc</a> (<a class="el" href="structt__patch.html">t_patch</a> p_patch, <a class="el" href="structt__cvmix.html">t_cvmix</a> p_cvmix, <a class="el" href="structt__ocean__state.html">t_ocean_state</a> ocean_state, <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> atmos_fluxes, <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> p_as, <a class="el" href="structt__sea__ice.html">t_sea_ice</a> p_sea_ice, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
+<tr class="memdesc:afa34de1f0766f8d65dbdad133b1e66e6"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> backend calculation.  <a href="classTKE__backend.html#afa34de1f0766f8d65dbdad133b1e66e6">More...</a><br /></td></tr>
 <tr class="separator:afa34de1f0766f8d65dbdad133b1e66e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
 <tr class="memitem:a8bda4bcc7657ac52594598c3cd3a7b87"><td class="memItemLeft" align="right" valign="top"><a id="a8bda4bcc7657ac52594598c3cd3a7b87"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>calc_impl</b> (<a class="el" href="structt__patch.html">t_patch</a> p_patch, <a class="el" href="structt__cvmix.html">t_cvmix</a> p_cvmix, <a class="el" href="structt__ocean__state.html">t_ocean_state</a> ocean_state, <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> atmos_fluxes, <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> p_as, <a class="el" href="structt__sea__ice.html">t_sea_ice</a> p_sea_ice, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)=0</td></tr>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a8bda4bcc7657ac52594598c3cd3a7b87">calc_impl</a> (<a class="el" href="structt__patch.html">t_patch</a> p_patch, <a class="el" href="structt__cvmix.html">t_cvmix</a> p_cvmix, <a class="el" href="structt__ocean__state.html">t_ocean_state</a> ocean_state, <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> atmos_fluxes, <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> p_as, <a class="el" href="structt__sea__ice.html">t_sea_ice</a> p_sea_ice, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)=0</td></tr>
+<tr class="memdesc:a8bda4bcc7657ac52594598c3cd3a7b87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Polymorphic function for the actual <a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> scheme backend implementation. <br /></td></tr>
 <tr class="separator:a8bda4bcc7657ac52594598c3cd3a7b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1fef41918553c48c3c585f9cf08351a"><td class="memTemplParams" colspan="2"><a id="af1fef41918553c48c3c585f9cf08351a"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:af1fef41918553c48c3c585f9cf08351a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_struct_memview</b> (<a class="el" href="structt__patch__view.html">t_patch_view</a>&lt; memview, dext &gt; *p_patch_view, <a class="el" href="structt__patch.html">t_patch</a> *p_patch, int nblocks, int nlevs, int nproma)</td></tr>
+<tr class="memitem:af1fef41918553c48c3c585f9cf08351a"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:af1fef41918553c48c3c585f9cf08351a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#af1fef41918553c48c3c585f9cf08351a">fill_struct_memview</a> (<a class="el" href="structt__patch__view.html">t_patch_view</a>&lt; memview, dext &gt; *p_patch_view, <a class="el" href="structt__patch.html">t_patch</a> *p_patch, int nblocks, int nlevs, int nproma)</td></tr>
+<tr class="memdesc:af1fef41918553c48c3c585f9cf08351a"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill a structure of memory views given a structure of pointers about the grid info.  <a href="classTKE__backend.html#af1fef41918553c48c3c585f9cf08351a">More...</a><br /></td></tr>
 <tr class="separator:af1fef41918553c48c3c585f9cf08351a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe76170f4d534c0b675260548b6ad465"><td class="memTemplParams" colspan="2"><a id="abe76170f4d534c0b675260548b6ad465"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:abe76170f4d534c0b675260548b6ad465"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_struct_memview</b> (<a class="el" href="structt__sea__ice__view.html">t_sea_ice_view</a>&lt; memview, dext &gt; *p_sea_ice_view, <a class="el" href="structt__sea__ice.html">t_sea_ice</a> *p_sea_ice, int nblocks, int nproma)</td></tr>
+<tr class="memitem:abe76170f4d534c0b675260548b6ad465"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:abe76170f4d534c0b675260548b6ad465"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#abe76170f4d534c0b675260548b6ad465">fill_struct_memview</a> (<a class="el" href="structt__sea__ice__view.html">t_sea_ice_view</a>&lt; memview, dext &gt; *p_sea_ice_view, <a class="el" href="structt__sea__ice.html">t_sea_ice</a> *p_sea_ice, int nblocks, int nproma)</td></tr>
+<tr class="memdesc:abe76170f4d534c0b675260548b6ad465"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill a structure of memory views given a structure of pointers about the sea ice info.  <a href="classTKE__backend.html#abe76170f4d534c0b675260548b6ad465">More...</a><br /></td></tr>
 <tr class="separator:abe76170f4d534c0b675260548b6ad465"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b92be06baec809aa1df7cf1bb4eb7c2"><td class="memTemplParams" colspan="2"><a id="a3b92be06baec809aa1df7cf1bb4eb7c2"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:a3b92be06baec809aa1df7cf1bb4eb7c2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_struct_memview</b> (<a class="el" href="structt__atmos__for__ocean__view.html">t_atmos_for_ocean_view</a>&lt; memview, dext &gt; *p_as_view, <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> *p_as, int nblocks, int nproma)</td></tr>
+<tr class="memitem:a3b92be06baec809aa1df7cf1bb4eb7c2"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:a3b92be06baec809aa1df7cf1bb4eb7c2"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a3b92be06baec809aa1df7cf1bb4eb7c2">fill_struct_memview</a> (<a class="el" href="structt__atmos__for__ocean__view.html">t_atmos_for_ocean_view</a>&lt; memview, dext &gt; *p_as_view, <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> *p_as, int nblocks, int nproma)</td></tr>
+<tr class="memdesc:a3b92be06baec809aa1df7cf1bb4eb7c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill a structure of memory views given a structure of pointers about the atmosphere info.  <a href="classTKE__backend.html#a3b92be06baec809aa1df7cf1bb4eb7c2">More...</a><br /></td></tr>
 <tr class="separator:a3b92be06baec809aa1df7cf1bb4eb7c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92ff4317f580a0bee1a3e02f801cebc9"><td class="memTemplParams" colspan="2"><a id="a92ff4317f580a0bee1a3e02f801cebc9"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:a92ff4317f580a0bee1a3e02f801cebc9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_struct_memview</b> (<a class="el" href="structt__atmo__fluxes__view.html">t_atmo_fluxes_view</a>&lt; memview, dext &gt; *atmos_fluxes_view, <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> *atmos_fluxes, int nblocks, int nproma)</td></tr>
+<tr class="memitem:a92ff4317f580a0bee1a3e02f801cebc9"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:a92ff4317f580a0bee1a3e02f801cebc9"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a92ff4317f580a0bee1a3e02f801cebc9">fill_struct_memview</a> (<a class="el" href="structt__atmo__fluxes__view.html">t_atmo_fluxes_view</a>&lt; memview, dext &gt; *atmos_fluxes_view, <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> *atmos_fluxes, int nblocks, int nproma)</td></tr>
+<tr class="memdesc:a92ff4317f580a0bee1a3e02f801cebc9"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill a structure of memory views given a structure of pointers about the atmosphere fluxes info.  <a href="classTKE__backend.html#a92ff4317f580a0bee1a3e02f801cebc9">More...</a><br /></td></tr>
 <tr class="separator:a92ff4317f580a0bee1a3e02f801cebc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f67cc7b928e8496896a8c89d1502a85"><td class="memTemplParams" colspan="2"><a id="a2f67cc7b928e8496896a8c89d1502a85"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:a2f67cc7b928e8496896a8c89d1502a85"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_struct_memview</b> (<a class="el" href="structt__ocean__state__view.html">t_ocean_state_view</a>&lt; memview, dext &gt; *ocean_state_view, <a class="el" href="structt__ocean__state.html">t_ocean_state</a> *ocean_state, int nblocks, int nlevs, int nproma)</td></tr>
+<tr class="memitem:a2f67cc7b928e8496896a8c89d1502a85"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:a2f67cc7b928e8496896a8c89d1502a85"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a2f67cc7b928e8496896a8c89d1502a85">fill_struct_memview</a> (<a class="el" href="structt__ocean__state__view.html">t_ocean_state_view</a>&lt; memview, dext &gt; *ocean_state_view, <a class="el" href="structt__ocean__state.html">t_ocean_state</a> *ocean_state, int nblocks, int nlevs, int nproma)</td></tr>
+<tr class="memdesc:a2f67cc7b928e8496896a8c89d1502a85"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill a structure of memory views given a structure of pointers about the ocean state info.  <a href="classTKE__backend.html#a2f67cc7b928e8496896a8c89d1502a85">More...</a><br /></td></tr>
 <tr class="separator:a2f67cc7b928e8496896a8c89d1502a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaafc63a177ebd65052a300fcefc8113c"><td class="memTemplParams" colspan="2"><a id="aaafc63a177ebd65052a300fcefc8113c"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:aaafc63a177ebd65052a300fcefc8113c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>fill_struct_memview</b> (<a class="el" href="structt__cvmix__view.html">t_cvmix_view</a>&lt; memview, dext &gt; *p_cvmix_view, <a class="el" href="structt__cvmix.html">t_cvmix</a> *p_cvmix, int nblocks, int nlevs, int nproma)</td></tr>
+<tr class="memitem:aaafc63a177ebd65052a300fcefc8113c"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:aaafc63a177ebd65052a300fcefc8113c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#aaafc63a177ebd65052a300fcefc8113c">fill_struct_memview</a> (<a class="el" href="structt__cvmix__view.html">t_cvmix_view</a>&lt; memview, dext &gt; *p_cvmix_view, <a class="el" href="structt__cvmix.html">t_cvmix</a> *p_cvmix, int nblocks, int nlevs, int nproma)</td></tr>
+<tr class="memdesc:aaafc63a177ebd65052a300fcefc8113c"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill a structure of memory views given a structure of pointers about the cvmix info.  <a href="classTKE__backend.html#aaafc63a177ebd65052a300fcefc8113c">More...</a><br /></td></tr>
 <tr class="separator:aaafc63a177ebd65052a300fcefc8113c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb636be5784bb7e37a5b0d29b41d0b01"><td class="memTemplParams" colspan="2"><a id="acb636be5784bb7e37a5b0d29b41d0b01"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:acb636be5784bb7e37a5b0d29b41d0b01"><td class="memTemplItemLeft" align="right" valign="top">memview&lt; double, dext&lt; int, 1 &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>memview_malloc</b> (double *field, int dim1)</td></tr>
+<tr class="memitem:acb636be5784bb7e37a5b0d29b41d0b01"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:acb636be5784bb7e37a5b0d29b41d0b01"><td class="memTemplItemLeft" align="right" valign="top">memview&lt; double, dext&lt; int, 1 &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#acb636be5784bb7e37a5b0d29b41d0b01">memview_malloc</a> (double *field, int dim1)</td></tr>
+<tr class="memdesc:acb636be5784bb7e37a5b0d29b41d0b01"><td class="mdescLeft">&#160;</td><td class="mdescRight">allocate internal memory and return a 1D memory view object of the allocated memory.  <a href="classTKE__backend.html#acb636be5784bb7e37a5b0d29b41d0b01">More...</a><br /></td></tr>
 <tr class="separator:acb636be5784bb7e37a5b0d29b41d0b01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7dc94719908cf96ac096a0958ce0c08"><td class="memTemplParams" colspan="2"><a id="ac7dc94719908cf96ac096a0958ce0c08"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:ac7dc94719908cf96ac096a0958ce0c08"><td class="memTemplItemLeft" align="right" valign="top">memview&lt; double, dext&lt; int, 2 &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>memview_malloc</b> (double *field, int dim1, int dim2)</td></tr>
+<tr class="memitem:ac7dc94719908cf96ac096a0958ce0c08"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:ac7dc94719908cf96ac096a0958ce0c08"><td class="memTemplItemLeft" align="right" valign="top">memview&lt; double, dext&lt; int, 2 &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#ac7dc94719908cf96ac096a0958ce0c08">memview_malloc</a> (double *field, int dim1, int dim2)</td></tr>
+<tr class="memdesc:ac7dc94719908cf96ac096a0958ce0c08"><td class="mdescLeft">&#160;</td><td class="mdescRight">allocate internal memory and return a 2D memory view object of the allocated memory.  <a href="classTKE__backend.html#ac7dc94719908cf96ac096a0958ce0c08">More...</a><br /></td></tr>
 <tr class="separator:ac7dc94719908cf96ac096a0958ce0c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a512897bc8ee527a5d7e477f8347aa8be"><td class="memTemplParams" colspan="2"><a id="a512897bc8ee527a5d7e477f8347aa8be"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:a512897bc8ee527a5d7e477f8347aa8be"><td class="memTemplItemLeft" align="right" valign="top">memview&lt; double, dext&lt; int, 3 &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>memview_malloc</b> (double *field, int dim1, int dim2, int dim3)</td></tr>
+<tr class="memitem:a512897bc8ee527a5d7e477f8347aa8be"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:a512897bc8ee527a5d7e477f8347aa8be"><td class="memTemplItemLeft" align="right" valign="top">memview&lt; double, dext&lt; int, 3 &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a512897bc8ee527a5d7e477f8347aa8be">memview_malloc</a> (double *field, int dim1, int dim2, int dim3)</td></tr>
+<tr class="memdesc:a512897bc8ee527a5d7e477f8347aa8be"><td class="mdescLeft">&#160;</td><td class="mdescRight">allocate internal memory and return a 3D memory view object of the allocated memory.  <a href="classTKE__backend.html#a512897bc8ee527a5d7e477f8347aa8be">More...</a><br /></td></tr>
 <tr class="separator:a512897bc8ee527a5d7e477f8347aa8be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07f00319ba97a85acc4013081108c62e"><td class="memTemplParams" colspan="2"><a id="a07f00319ba97a85acc4013081108c62e"></a>
-template&lt;typename memview_policy &gt; </td></tr>
-<tr class="memitem:a07f00319ba97a85acc4013081108c62e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>memview_free</b> (double *field)</td></tr>
+<tr class="memitem:a07f00319ba97a85acc4013081108c62e"><td class="memTemplParams" colspan="2">template&lt;typename memview_policy &gt; </td></tr>
+<tr class="memitem:a07f00319ba97a85acc4013081108c62e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a07f00319ba97a85acc4013081108c62e">memview_free</a> (double *field)</td></tr>
+<tr class="memdesc:a07f00319ba97a85acc4013081108c62e"><td class="mdescLeft">&#160;</td><td class="mdescRight">deallocate internal memory.  <a href="classTKE__backend.html#a07f00319ba97a85acc4013081108c62e">More...</a><br /></td></tr>
 <tr class="separator:a07f00319ba97a85acc4013081108c62e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4b03d9a9ebf38b79b34e2af97494106"><td class="memTemplParams" colspan="2"><a id="ab4b03d9a9ebf38b79b34e2af97494106"></a>
-template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
-<tr class="memitem:ab4b03d9a9ebf38b79b34e2af97494106"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>internal_fields_malloc</b> (<a class="el" href="structt__tke__internal__view.html">t_tke_internal_view</a>&lt; memview, dext &gt; *p_internal_view)</td></tr>
+<tr class="memitem:ab4b03d9a9ebf38b79b34e2af97494106"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
+<tr class="memitem:ab4b03d9a9ebf38b79b34e2af97494106"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#ab4b03d9a9ebf38b79b34e2af97494106">internal_fields_malloc</a> (<a class="el" href="structt__tke__internal__view.html">t_tke_internal_view</a>&lt; memview, dext &gt; *p_internal_view)</td></tr>
+<tr class="memdesc:ab4b03d9a9ebf38b79b34e2af97494106"><td class="mdescLeft">&#160;</td><td class="mdescRight">fill the internal data structure allocating the arrays and creating memory views.  <a href="classTKE__backend.html#ab4b03d9a9ebf38b79b34e2af97494106">More...</a><br /></td></tr>
 <tr class="separator:ab4b03d9a9ebf38b79b34e2af97494106"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e6c9ac9647f5edcd51de449ed64f805"><td class="memTemplParams" colspan="2"><a id="a1e6c9ac9647f5edcd51de449ed64f805"></a>
-template&lt;typename memview_policy &gt; </td></tr>
-<tr class="memitem:a1e6c9ac9647f5edcd51de449ed64f805"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>internal_fields_free</b> ()</td></tr>
+<tr class="memitem:a1e6c9ac9647f5edcd51de449ed64f805"><td class="memTemplParams" colspan="2">template&lt;typename memview_policy &gt; </td></tr>
+<tr class="memitem:a1e6c9ac9647f5edcd51de449ed64f805"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a1e6c9ac9647f5edcd51de449ed64f805">internal_fields_free</a> ()</td></tr>
+<tr class="memdesc:a1e6c9ac9647f5edcd51de449ed64f805"><td class="mdescLeft">&#160;</td><td class="mdescRight">free the internal data structure memory deallocating the arrays.  <a href="classTKE__backend.html#a1e6c9ac9647f5edcd51de449ed64f805">More...</a><br /></td></tr>
 <tr class="separator:a1e6c9ac9647f5edcd51de449ed64f805"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -226,6 +237,697 @@ double *&#160;</td><td class="memItemRight" valign="bottom"><b>m_tke_upd</b></td
 double *&#160;</td><td class="memItemRight" valign="bottom"><b>m_tke_unrest</b></td></tr>
 <tr class="separator:a1ad815e94b0b2f51e251c3ac768ebbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> backend class. </p>
+<p>It implements the part which is in common for each backend:</p><ul>
+<li>library frontend-backend interface</li>
+<li>library initialization and finalization </li>
+</ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="afa34de1f0766f8d65dbdad133b1e66e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa34de1f0766f8d65dbdad133b1e66e6">&#9670;&nbsp;</a></span>calc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::calc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__patch.html">t_patch</a>&#160;</td>
+          <td class="paramname"><em>p_patch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__cvmix.html">t_cvmix</a>&#160;</td>
+          <td class="paramname"><em>p_cvmix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__ocean__state.html">t_ocean_state</a>&#160;</td>
+          <td class="paramname"><em>ocean_state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a>&#160;</td>
+          <td class="paramname"><em>atmos_fluxes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a>&#160;</td>
+          <td class="paramname"><em>p_as</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__sea__ice.html">t_sea_ice</a>&#160;</td>
+          <td class="paramname"><em>p_sea_ice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_block_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_start_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_end_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_start_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_end_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_block_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_start_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_end_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_start_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_end_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> backend calculation. </p>
+<p>It calls calc_impl which contains the actual implementation. </p>
+
+</div>
+</div>
+<a id="a92ff4317f580a0bee1a3e02f801cebc9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92ff4317f580a0bee1a3e02f801cebc9">&#9670;&nbsp;</a></span>fill_struct_memview() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::fill_struct_memview </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__atmo__fluxes__view.html">t_atmo_fluxes_view</a>&lt; memview, dext &gt; *&#160;</td>
+          <td class="paramname"><em>atmos_fluxes_view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> *&#160;</td>
+          <td class="paramname"><em>atmos_fluxes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fill a structure of memory views given a structure of pointers about the atmosphere fluxes info. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="a3b92be06baec809aa1df7cf1bb4eb7c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b92be06baec809aa1df7cf1bb4eb7c2">&#9670;&nbsp;</a></span>fill_struct_memview() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::fill_struct_memview </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__atmos__for__ocean__view.html">t_atmos_for_ocean_view</a>&lt; memview, dext &gt; *&#160;</td>
+          <td class="paramname"><em>p_as_view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> *&#160;</td>
+          <td class="paramname"><em>p_as</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fill a structure of memory views given a structure of pointers about the atmosphere info. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="aaafc63a177ebd65052a300fcefc8113c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaafc63a177ebd65052a300fcefc8113c">&#9670;&nbsp;</a></span>fill_struct_memview() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::fill_struct_memview </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__cvmix__view.html">t_cvmix_view</a>&lt; memview, dext &gt; *&#160;</td>
+          <td class="paramname"><em>p_cvmix_view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__cvmix.html">t_cvmix</a> *&#160;</td>
+          <td class="paramname"><em>p_cvmix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nlevs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fill a structure of memory views given a structure of pointers about the cvmix info. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="a2f67cc7b928e8496896a8c89d1502a85"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f67cc7b928e8496896a8c89d1502a85">&#9670;&nbsp;</a></span>fill_struct_memview() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::fill_struct_memview </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__ocean__state__view.html">t_ocean_state_view</a>&lt; memview, dext &gt; *&#160;</td>
+          <td class="paramname"><em>ocean_state_view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__ocean__state.html">t_ocean_state</a> *&#160;</td>
+          <td class="paramname"><em>ocean_state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nlevs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fill a structure of memory views given a structure of pointers about the ocean state info. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="af1fef41918553c48c3c585f9cf08351a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1fef41918553c48c3c585f9cf08351a">&#9670;&nbsp;</a></span>fill_struct_memview() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::fill_struct_memview </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__patch__view.html">t_patch_view</a>&lt; memview, dext &gt; *&#160;</td>
+          <td class="paramname"><em>p_patch_view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__patch.html">t_patch</a> *&#160;</td>
+          <td class="paramname"><em>p_patch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nlevs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fill a structure of memory views given a structure of pointers about the grid info. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="abe76170f4d534c0b675260548b6ad465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe76170f4d534c0b675260548b6ad465">&#9670;&nbsp;</a></span>fill_struct_memview() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::fill_struct_memview </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__sea__ice__view.html">t_sea_ice_view</a>&lt; memview, dext &gt; *&#160;</td>
+          <td class="paramname"><em>p_sea_ice_view</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structt__sea__ice.html">t_sea_ice</a> *&#160;</td>
+          <td class="paramname"><em>p_sea_ice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fill a structure of memory views given a structure of pointers about the sea ice info. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="a1e6c9ac9647f5edcd51de449ed64f805"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e6c9ac9647f5edcd51de449ed64f805">&#9670;&nbsp;</a></span>internal_fields_free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::internal_fields_free </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>free the internal data structure memory deallocating the arrays. </p>
+<p>It is templated with a memview_policy which defines how to deallocate memory in the actual backend. </p>
+
+</div>
+</div>
+<a id="ab4b03d9a9ebf38b79b34e2af97494106"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4b03d9a9ebf38b79b34e2af97494106">&#9670;&nbsp;</a></span>internal_fields_malloc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::internal_fields_malloc </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structt__tke__internal__view.html">t_tke_internal_view</a>&lt; memview, dext &gt; *&#160;</td>
+          <td class="paramname"><em>p_internal_view</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>fill the internal data structure allocating the arrays and creating memory views. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="a07f00319ba97a85acc4013081108c62e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07f00319ba97a85acc4013081108c62e">&#9670;&nbsp;</a></span>memview_free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_backend::memview_free </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>field</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>deallocate internal memory. </p>
+<p>It is templated with a memview_policy which defines how to deallocate memory in the actual backend. </p>
+
+</div>
+</div>
+<a id="acb636be5784bb7e37a5b0d29b41d0b01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb636be5784bb7e37a5b0d29b41d0b01">&#9670;&nbsp;</a></span>memview_malloc() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">memview&lt;double, dext&lt;int, 1&gt; &gt; TKE_backend::memview_malloc </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>allocate internal memory and return a 1D memory view object of the allocated memory. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="ac7dc94719908cf96ac096a0958ce0c08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7dc94719908cf96ac096a0958ce0c08">&#9670;&nbsp;</a></span>memview_malloc() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">memview&lt;double, dext&lt;int, 2&gt; &gt; TKE_backend::memview_malloc </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>allocate internal memory and return a 2D memory view object of the allocated memory. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
+<a id="a512897bc8ee527a5d7e477f8347aa8be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a512897bc8ee527a5d7e477f8347aa8be">&#9670;&nbsp;</a></span>memview_malloc() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">memview&lt;double, dext&lt;int, 3&gt; &gt; TKE_backend::memview_malloc </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>field</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>dim3</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>allocate internal memory and return a 3D memory view object of the allocated memory. </p>
+<p>It is templated with a memview class and a dext class which define the memory view implementation and with a memview_policy which defines how to allocate and deallocate memory in the actual backend and how to create a memory view object. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/runner/work/TKE/TKE/src/backends/TKE_backend.hpp</li>
 <li>/home/runner/work/TKE/TKE/src/backends/TKE_backend.cpp</li>
