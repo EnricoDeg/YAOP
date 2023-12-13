@@ -20,8 +20,7 @@
 #include <iostream>
 #include "src/shared/interface/data_struct.hpp"
 
-/*! \class
- *  \brief TKE main class, part of the library interface.
+/*! \brief TKE main class, part of the library interface.
  *
  */
 class TKE {
