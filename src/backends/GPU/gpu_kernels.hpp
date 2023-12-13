@@ -20,6 +20,10 @@
 #include "src/backends/GPU/CUDA/cuda_backend.hpp"
 #include "src/shared/interface/memview_struct.hpp"
 
+
+/*! \brief TKE computation on the cells.
+*
+*/
 __global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
                                  t_patch_view<gpu_memview::mdspan, gpu_memview::dextents> p_patch,
                                  t_cvmix_view<gpu_memview::mdspan, gpu_memview::dextents> p_cvmix,
@@ -31,6 +35,9 @@ __global__ void calc_impl_cells(int blockNo, int start_index, int end_index,
                                  t_constant p_constant,
                                  t_constant_tke p_constant_tke);
 
+/*! \brief TKE computation on the edges.
+*
+*/
 __global__
 void calc_impl_edges(int blockNo, int start_index, int end_index,
                      t_patch_view<gpu_memview::mdspan, gpu_memview::dextents> p_patch,
@@ -38,6 +45,9 @@ void calc_impl_edges(int blockNo, int start_index, int end_index,
                      t_tke_internal_view<gpu_memview::mdspan, gpu_memview::dextents> p_internal,
                      t_constant p_constant);
 
+/*! \brief TKE integration for each vertical level.
+*
+*/
 __device__
 void integrate(int jc, int blockNo,
                t_patch_view<gpu_memview::mdspan, gpu_memview::dextents> p_patch,
@@ -46,11 +56,17 @@ void integrate(int jc, int blockNo,
                t_constant p_constant,
                t_constant_tke p_constant_tke);
 
+/*! \brief Solve tridiagonal system.
+*
+*/
 __device__
 void solve_tridiag(int jc, int nlevels, int blockNo, mdspan_2d_double a,
                    mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
                    mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp);
 
+/*! \brief Compute pointwise density from temperature, salinity and pressure.
+*
+*/
 __device__
 double  calculate_density(double temp, double salt, double pressure);
 
