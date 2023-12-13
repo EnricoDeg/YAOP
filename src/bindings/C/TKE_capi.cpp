@@ -22,6 +22,10 @@ extern "C" {
 
 static std::unique_ptr<TKE> impl = nullptr;
 
+/*! \brief TKE initialization.
+*
+*   It creates a unique pointer to a TKE object, which is calling the TKE constructor.
+*/
 void TKE_Init(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
               int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
               int l_lc, double clc, double ReferencePressureIndbars, double pi) {
@@ -30,10 +34,18 @@ void TKE_Init(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_id
                        l_lc, clc, ReferencePressureIndbars, pi));
 }
 
+/*! \brief TKE finalization.
+*
+*   It reset the pointer to a TKE object so that the TKE destructor is called.
+*/
 void TKE_Finalize() {
     impl.reset();
 }
 
+/*! \brief TKE calculation.
+*
+*   It calls the calc method of the TKE class.
+*/
 void TKE_Calc(double *depth_CellInterface, double *prism_center_dist_c,
               double *inv_prism_center_dist_c, double *prism_thick_c,
               int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c,
