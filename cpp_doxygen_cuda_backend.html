@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUDA specs &mdash; TKE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+
+  
+    <link rel="canonical" href="_build/cpp_doxygen_cuda_backend.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HIP" href="backend_gpu_hip.html" />
+    <link rel="prev" title="CUDA" href="backend_gpu_cuda.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TKE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="implementation.html">Implementation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="datastruct.html">Data Structures</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="backend.html">Backend</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_doxygen_tke_backend.html">TKE_backend class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend_cpu.html">CPU Backend</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="backend_gpu.html">GPU Backend</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="cpp_doxygen_tke_gpu.html">TKE_gpu class</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="backend_gpu_cuda.html">CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend_gpu_hip.html">HIP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TKE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="implementation.html">Implementation</a></li>
+          <li class="breadcrumb-item"><a href="backend.html">Backend</a></li>
+          <li class="breadcrumb-item"><a href="backend_gpu.html">GPU Backend</a></li>
+          <li class="breadcrumb-item"><a href="backend_gpu_cuda.html">CUDA</a></li>
+      <li class="breadcrumb-item active">CUDA specs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cpp_doxygen_cuda_backend.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cuda-specs">
+<span id="cpp-doxygen-cuda-backend"></span><h1>CUDA specs<a class="headerlink" href="#cuda-specs" title="Link to this heading"></a></h1>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv47ext1d_d">
+<span id="_CPPv37ext1d_d"></span><span id="_CPPv27ext1d_d"></span><span class="target" id="cuda__backend_8hpp_1ab08e56fc05670d37977446b13af8ba53"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ext1d_d</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">extents</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv43dyn" title="dyn"><span class="n"><span class="pre">dyn</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv47ext2d_d">
+<span id="_CPPv37ext2d_d"></span><span id="_CPPv27ext2d_d"></span><span class="target" id="cuda__backend_8hpp_1a4c38395a4927c73f71ad6c998dd41bc7"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ext2d_d</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">extents</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv43dyn" title="dyn"><span class="n"><span class="pre">dyn</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv43dyn" title="dyn"><span class="n"><span class="pre">dyn</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv47ext3d_d">
+<span id="_CPPv37ext3d_d"></span><span id="_CPPv27ext3d_d"></span><span class="target" id="cuda__backend_8hpp_1a7aba99ea44398e844b8918f8b0d22c95"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ext3d_d</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">extents</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv43dyn" title="dyn"><span class="n"><span class="pre">dyn</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv43dyn" title="dyn"><span class="n"><span class="pre">dyn</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv43dyn" title="dyn"><span class="n"><span class="pre">dyn</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv47ext1d_t">
+<span id="_CPPv37ext1d_t"></span><span id="_CPPv27ext1d_t"></span><span class="target" id="cuda__backend_8hpp_1a3dc2fb1c6d026a83a90252e85fe18ce0"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ext1d_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dextents</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">1</span></span><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv47ext2d_t">
+<span id="_CPPv37ext2d_t"></span><span id="_CPPv27ext2d_t"></span><span class="target" id="cuda__backend_8hpp_1aa30c054271ad52cb0908a860e92cc66b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ext2d_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dextents</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">2</span></span><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv47ext3d_t">
+<span id="_CPPv37ext3d_t"></span><span id="_CPPv27ext3d_t"></span><span class="target" id="cuda__backend_8hpp_1aa2ce1f0fe3b15ba4c8512c1352e4926f"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ext3d_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dextents</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416mdspan_1d_double">
+<span id="_CPPv316mdspan_1d_double"></span><span id="_CPPv216mdspan_1d_double"></span><span class="target" id="cuda__backend_8hpp_1a0fc503df5dda91154d1c195cdfb82671"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mdspan_1d_double</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mdspan</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv47ext1d_t" title="ext1d_t"><span class="n"><span class="pre">ext1d_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416mdspan_2d_double">
+<span id="_CPPv316mdspan_2d_double"></span><span id="_CPPv216mdspan_2d_double"></span><span class="target" id="cuda__backend_8hpp_1a841965b26925b2e738d471fdcd6d9e1a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mdspan_2d_double</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mdspan</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv47ext2d_t" title="ext2d_t"><span class="n"><span class="pre">ext2d_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv416mdspan_3d_double">
+<span id="_CPPv316mdspan_3d_double"></span><span id="_CPPv216mdspan_3d_double"></span><span class="target" id="cuda__backend_8hpp_1a04c80d049125670e25db83c84ec4ad37"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mdspan_3d_double</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mdspan</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv47ext3d_t" title="ext3d_t"><span class="n"><span class="pre">ext3d_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv413mdspan_2d_int">
+<span id="_CPPv313mdspan_2d_int"></span><span id="_CPPv213mdspan_2d_int"></span><span class="target" id="cuda__backend_8hpp_1abe7c4ba751ffd79e2a7da52420d0488d"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mdspan_2d_int</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mdspan</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv47ext2d_t" title="ext2d_t"><span class="n"><span class="pre">ext2d_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv413mdspan_3d_int">
+<span id="_CPPv313mdspan_3d_int"></span><span id="_CPPv213mdspan_3d_int"></span><span class="target" id="cuda__backend_8hpp_1a6824863bed6dfb6fa4d8777ccc678323"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mdspan_3d_int</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mdspan</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv47ext3d_t" title="ext3d_t"><span class="n"><span class="pre">ext3d_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv418gpu_memview_policy">
+<span id="_CPPv318gpu_memview_policy"></span><span id="_CPPv218gpu_memview_policy"></span><span class="target" id="cuda__backend_8hpp_1a43820aee9f80e1446be054d22392ee51"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gpu_memview_policy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416cuda_mdspan_impl" title="cuda_mdspan_impl"><span class="n"><span class="pre">cuda_mdspan_impl</span></span></a><a class="headerlink" href="#_CPPv418gpu_memview_policy" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv417gpu_launch_policy">
+<span id="_CPPv317gpu_launch_policy"></span><span id="_CPPv217gpu_launch_policy"></span><span class="target" id="cuda__backend_8hpp_1ac6a200767b063524636e791fd324b1fe"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gpu_launch_policy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv416cuda_launch_impl" title="cuda_launch_impl"><span class="n"><span class="pre">cuda_launch_impl</span></span></a><a class="headerlink" href="#_CPPv417gpu_launch_policy" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv43dyn">
+<span id="_CPPv33dyn"></span><span id="_CPPv23dyn"></span><span id="dyn__auto"></span><span class="target" id="cuda__backend_8hpp_1a8a786952e7a420342544173ec7e8e9e4"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dyn</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">cuda</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">dynamic_extent</span></span><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv416cuda_mdspan_impl">
+<span id="_CPPv316cuda_mdspan_impl"></span><span id="_CPPv216cuda_mdspan_impl"></span><span id="cuda_mdspan_impl"></span><span class="target" id="classcuda__mdspan__impl"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cuda_mdspan_impl</span></span></span><a class="headerlink" href="#_CPPv416cuda_mdspan_impl" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;cuda_backend.hpp&gt;</em></div>
+<p>CUDA mdspan memory view policy. </p>
+<p>It defines the policy to allocate/deallocate arrays and create CUDA mdspan objects. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl7memviewEPdi">
+<span id="_CPPv3N16cuda_mdspan_impl7memviewEPdi"></span><span id="_CPPv2N16cuda_mdspan_impl7memviewEPdi"></span><span id="cuda_mdspan_impl::memview__doubleP.i"></span><span class="target" id="classcuda__mdspan__impl_1a853d1e2e28baa834160d4aa3e45c8232"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv416mdspan_1d_double" title="mdspan_1d_double"><span class="n"><span class="pre">mdspan_1d_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nlevs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl7memviewEPdi" title="Link to this definition"></a><br /></dt>
+<dd><p>Create a 1D mdspan object from double pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl7memviewEPdii">
+<span id="_CPPv3N16cuda_mdspan_impl7memviewEPdii"></span><span id="_CPPv2N16cuda_mdspan_impl7memviewEPdii"></span><span id="cuda_mdspan_impl::memview__doubleP.i.i"></span><span class="target" id="classcuda__mdspan__impl_1a5993f4d96c7240d6ee43f30bc57de3e3"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv416mdspan_2d_double" title="mdspan_2d_double"><span class="n"><span class="pre">mdspan_2d_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nblocks</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nproma</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl7memviewEPdii" title="Link to this definition"></a><br /></dt>
+<dd><p>Create a 2D mdspan object from double pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl7memviewEPdiii">
+<span id="_CPPv3N16cuda_mdspan_impl7memviewEPdiii"></span><span id="_CPPv2N16cuda_mdspan_impl7memviewEPdiii"></span><span id="cuda_mdspan_impl::memview__doubleP.i.i.i"></span><span class="target" id="classcuda__mdspan__impl_1ab063fdad3c34f5fc6efb7671ad2b98ce"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv416mdspan_3d_double" title="mdspan_3d_double"><span class="n"><span class="pre">mdspan_3d_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nblocks</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nlevs</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nproma</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl7memviewEPdiii" title="Link to this definition"></a><br /></dt>
+<dd><p>Create a 3D mdspan object from double pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl7memviewEPiii">
+<span id="_CPPv3N16cuda_mdspan_impl7memviewEPiii"></span><span id="_CPPv2N16cuda_mdspan_impl7memviewEPiii"></span><span id="cuda_mdspan_impl::memview__iP.i.i"></span><span class="target" id="classcuda__mdspan__impl_1a40ec1235d1e4f7aad1cecc6f84e2ebbf"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv413mdspan_2d_int" title="mdspan_2d_int"><span class="n"><span class="pre">mdspan_2d_int</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nblocks</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nproma</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl7memviewEPiii" title="Link to this definition"></a><br /></dt>
+<dd><p>Create a 2D mdspan object from int pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl7memviewEPiiii">
+<span id="_CPPv3N16cuda_mdspan_impl7memviewEPiiii"></span><span id="_CPPv2N16cuda_mdspan_impl7memviewEPiiii"></span><span id="cuda_mdspan_impl::memview__iP.i.i.i"></span><span class="target" id="classcuda__mdspan__impl_1a031e976b3f62ac38649d7d61d73986bd"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv413mdspan_3d_int" title="mdspan_3d_int"><span class="n"><span class="pre">mdspan_3d_int</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">data</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nblocks</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nlevs</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nproma</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl7memviewEPiiii" title="Link to this definition"></a><br /></dt>
+<dd><p>Create a 3D mdspan object from int pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl14memview_mallocEPdi">
+<span id="_CPPv3N16cuda_mdspan_impl14memview_mallocEPdi"></span><span id="_CPPv2N16cuda_mdspan_impl14memview_mallocEPdi"></span><span id="cuda_mdspan_impl::memview_malloc__doubleP.i"></span><span class="target" id="classcuda__mdspan__impl_1abb1c4df2061a0c1202b96edb42d7dd7e"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv416mdspan_1d_double" title="mdspan_1d_double"><span class="n"><span class="pre">mdspan_1d_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview_malloc</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">field</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim1</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl14memview_mallocEPdi" title="Link to this definition"></a><br /></dt>
+<dd><p>Allocate memory and create a 1D mdspan object from double pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl14memview_mallocEPdii">
+<span id="_CPPv3N16cuda_mdspan_impl14memview_mallocEPdii"></span><span id="_CPPv2N16cuda_mdspan_impl14memview_mallocEPdii"></span><span id="cuda_mdspan_impl::memview_malloc__doubleP.i.i"></span><span class="target" id="classcuda__mdspan__impl_1a95e3207d503a2b311b4d84abd47bd72b"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv416mdspan_2d_double" title="mdspan_2d_double"><span class="n"><span class="pre">mdspan_2d_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview_malloc</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">field</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl14memview_mallocEPdii" title="Link to this definition"></a><br /></dt>
+<dd><p>Allocate memory and create a 2D mdspan object from double pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl14memview_mallocEPdiii">
+<span id="_CPPv3N16cuda_mdspan_impl14memview_mallocEPdiii"></span><span id="_CPPv2N16cuda_mdspan_impl14memview_mallocEPdiii"></span><span id="cuda_mdspan_impl::memview_malloc__doubleP.i.i.i"></span><span class="target" id="classcuda__mdspan__impl_1a0809a9598f51923adc0939ce3082c727"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_cpu_memory.html#_CPPv416mdspan_3d_double" title="mdspan_3d_double"><span class="n"><span class="pre">mdspan_3d_double</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview_malloc</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">field</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim1</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim2</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim3</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl14memview_mallocEPdiii" title="Link to this definition"></a><br /></dt>
+<dd><p>Allocate memory and create a 3D mdspan object from double pointer. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_mdspan_impl12memview_freeEPd">
+<span id="_CPPv3N16cuda_mdspan_impl12memview_freeEPd"></span><span id="_CPPv2N16cuda_mdspan_impl12memview_freeEPd"></span><span id="cuda_mdspan_impl::memview_free__doubleP"></span><span class="target" id="classcuda__mdspan__impl_1a5f6e15861d32b7e1a8feaba57ba1ef23"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">memview_free</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">field</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_mdspan_impl12memview_freeEPd" title="Link to this definition"></a><br /></dt>
+<dd><p>Free memory from double pointer. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv416cuda_launch_impl">
+<span id="_CPPv316cuda_launch_impl"></span><span id="_CPPv216cuda_launch_impl"></span><span id="cuda_launch_impl"></span><span class="target" id="classcuda__launch__impl"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cuda_launch_impl</span></span></span><a class="headerlink" href="#_CPPv416cuda_launch_impl" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;cuda_backend.hpp&gt;</em></div>
+<p>CUDA kernel launch policy. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-static-functions">Public Static Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N16cuda_launch_impl6launchEiiPvPPv">
+<span id="_CPPv3N16cuda_launch_impl6launchEiiPvPPv"></span><span id="_CPPv2N16cuda_launch_impl6launchEiiPvPPv"></span><span id="cuda_launch_impl::launch__i.i.voidP.voidPP"></span><span class="target" id="classcuda__launch__impl_1a5cd2dc777f84e8851f1994fc9b8a6041"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">launch</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">threadsPerBlock</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">blocksPerGrid</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">func</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16cuda_launch_impl6launchEiiPvPPv" title="Link to this definition"></a><br /></dt>
+<dd><p>It creates a CUDA kernel launch configuration object and launch the kernel with it. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="backend_gpu_cuda.html" class="btn btn-neutral float-left" title="CUDA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="backend_gpu_hip.html" class="btn btn-neutral float-right" title="HIP" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Enrico Degregori, Wilton Jaciel Loch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

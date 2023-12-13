@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TKE_gpu class &mdash; TKE  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=eafc0fe6" />
+
+  
+    <link rel="canonical" href="_build/cpp_doxygen_tke_gpu.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CUDA" href="backend_gpu_cuda.html" />
+    <link rel="prev" title="GPU Backend" href="backend_gpu.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            TKE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="library.html">Library</a></li>
+<li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="implementation.html">Implementation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="datastruct.html">Data Structures</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="backend.html">Backend</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_doxygen_tke_backend.html">TKE_backend class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend_cpu.html">CPU Backend</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="backend_gpu.html">GPU Backend</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">TKE_gpu class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend_gpu_cuda.html">CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend_gpu_hip.html">HIP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TKE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="implementation.html">Implementation</a></li>
+          <li class="breadcrumb-item"><a href="backend.html">Backend</a></li>
+          <li class="breadcrumb-item"><a href="backend_gpu.html">GPU Backend</a></li>
+      <li class="breadcrumb-item active">TKE_gpu class</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cpp_doxygen_tke_gpu.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tke-gpu-class">
+<span id="cpp-doxygen-tke-gpu"></span><h1>TKE_gpu class<a class="headerlink" href="#tke-gpu-class" title="Link to this heading"></a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv47TKE_gpu">
+<span id="_CPPv37TKE_gpu"></span><span id="_CPPv27TKE_gpu"></span><span id="TKE_gpu"></span><span class="target" id="classTKE__gpu"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TKE_gpu</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><a class="reference internal" href="cpp_doxygen_tke_backend.html#_CPPv411TKE_backend" title="TKE_backend"><span class="n"><span class="pre">TKE_backend</span></span></a><a class="headerlink" href="#_CPPv47TKE_gpu" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;TKE_gpu.hpp&gt;</em></div>
+<p><a class="reference internal" href="cpp_doxygen_tke.html#classTKE"><span class="std std-ref">TKE</span></a> GPU backend class, derived from <a class="reference internal" href="cpp_doxygen_tke_backend.html#classTKE__backend"><span class="std std-ref">TKE_backend</span></a>. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7TKE_gpu7TKE_gpuEiiiiiidddiddd">
+<span id="_CPPv3N7TKE_gpu7TKE_gpuEiiiiiidddiddd"></span><span id="_CPPv2N7TKE_gpu7TKE_gpuEiiiiiidddiddd"></span><span id="TKE_gpu::TKE_gpu__i.i.i.i.i.i.double.double.double.i.double.double.double"></span><span class="target" id="classTKE__gpu_1a2e8a23db80e82522ce20c165a559d8cb"></span><span class="sig-name descname"><span class="n"><span class="pre">TKE_gpu</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nproma</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nlevs</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nblocks</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vert_mix_type</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vmix_idemix_tke</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">vert_cor_type</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dtime</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">OceanReferenceDensity</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">grav</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">l_lc</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">clc</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ReferencePressureIndbars</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">pi</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7TKE_gpu7TKE_gpuEiiiiiidddiddd" title="Link to this definition"></a><br /></dt>
+<dd><p><a class="reference internal" href="#classTKE__gpu"><span class="std std-ref">TKE_gpu</span></a> class constructor. </p>
+<p>It calls the <a class="reference internal" href="cpp_doxygen_tke_backend.html#classTKE__backend"><span class="std std-ref">TKE_backend</span></a> constructor and the internal_fields_malloc method with specific memory view and policy. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7TKE_gpuD0Ev">
+<span id="_CPPv3N7TKE_gpuD0Ev"></span><span id="_CPPv2N7TKE_gpuD0Ev"></span><span id="TKE_gpu::~TKE_gpu"></span><span class="target" id="classTKE__gpu_1a9ce6407687136186a05aa88506f312bc"></span><span class="sig-name descname"><span class="n"><span class="pre">~TKE_gpu</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7TKE_gpuD0Ev" title="Link to this definition"></a><br /></dt>
+<dd><p><a class="reference internal" href="#classTKE__gpu"><span class="std std-ref">TKE_gpu</span></a> class destructor. </p>
+<p>It calls internal_fields_free with specific memory view policy. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-protected-functions">Protected Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7TKE_gpu9calc_implE7t_patch7t_cvmix13t_ocean_state13t_atmo_fluxes17t_atmos_for_ocean9t_sea_iceiiiiiiiiii">
+<span id="_CPPv3N7TKE_gpu9calc_implE7t_patch7t_cvmix13t_ocean_state13t_atmo_fluxes17t_atmos_for_ocean9t_sea_iceiiiiiiiiii"></span><span id="_CPPv2N7TKE_gpu9calc_implE7t_patch7t_cvmix13t_ocean_state13t_atmo_fluxes17t_atmos_for_ocean9t_sea_iceiiiiiiiiii"></span><span id="TKE_gpu::calc_impl__t_patch.t_cvmix.t_ocean_state.t_atmo_fluxes.t_atmos_for_ocean.t_sea_ice.i.i.i.i.i.i.i.i.i.i"></span><span class="target" id="classTKE__gpu_1a57e70925392e129531f8ca4e64b3c1a6"></span><span class="k"><span class="pre">virtual</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">calc_impl</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">t_patch</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p_patch</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">t_cvmix</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p_cvmix</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">t_ocean_state</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ocean_state</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">t_atmo_fluxes</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">atmos_fluxes</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">t_atmos_for_ocean</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p_as</span></span>, <span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="n"><span class="pre">t_sea_ice</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">p_sea_ice</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">edges_block_size</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">edges_start_block</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">edges_end_block</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">edges_start_index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">edges_end_index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cells_block_size</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cells_start_block</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cells_end_block</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cells_start_index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">cells_end_index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7TKE_gpu9calc_implE7t_patch7t_cvmix13t_ocean_state13t_atmo_fluxes17t_atmos_for_ocean9t_sea_iceiiiiiiiiii" title="Link to this definition"></a><br /></dt>
+<dd><p>GPU implementation of <a class="reference internal" href="cpp_doxygen_tke.html#classTKE"><span class="std std-ref">TKE</span></a>. </p>
+<p>It fills the memory view structures during the first call and then compute the turbulent kinetic energy vertical scheme. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN7TKE_gpu13launch_kernelEviiPvPPv">
+<span id="_CPPv3I0EN7TKE_gpu13launch_kernelEiiPvPPv"></span><span id="_CPPv2I0EN7TKE_gpu13launch_kernelEiiPvPPv"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">launch_policy</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classTKE__gpu_1ab6510cede3b76d44c97110b10397426e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">launch_kernel</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">threadsPerBlock</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">blocksPerGrid</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">func</span></span>, <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">args</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN7TKE_gpu13launch_kernelEviiPvPPv" title="Link to this definition"></a><br /></dt>
+<dd><p>Function to launch the kernel. </p>
+<p>It is templated with the launch policy and calls the launch function of the launch_policy class. </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7TKE_gpu12is_view_initE">
+<span id="_CPPv3N7TKE_gpu12is_view_initE"></span><span id="_CPPv2N7TKE_gpu12is_view_initE"></span><span id="TKE_gpu::is_view_init__b"></span><span class="target" id="classTKE__gpu_1a4e5da4e58bcb89b1a6c1dc34155b20ee"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_view_init</span></span></span><a class="headerlink" href="#_CPPv4N7TKE_gpu12is_view_initE" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="backend_gpu.html" class="btn btn-neutral float-left" title="GPU Backend" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="backend_gpu_cuda.html" class="btn btn-neutral float-right" title="CUDA" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Enrico Degregori, Wilton Jaciel Loch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
