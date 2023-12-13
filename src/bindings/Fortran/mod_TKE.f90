@@ -28,6 +28,9 @@ module mod_TKE
 
     contains
 
+    !> TKE initialization.
+    !!
+    !! It calls the TKE_Init C function.
     subroutine tke_init_f(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
                           vert_cor_type, dtime, OceanReferenceDensity, grav, &
                           l_lc, clc, ReferencePressureIndbars, pi)
@@ -74,6 +77,9 @@ module mod_TKE
                         l_lc, clc, ReferencePressureIndbars, pi)
     end subroutine tke_init_f
 
+    !> TKE finalization.
+    !!
+    !! It calls the TKE_Finalize C function.
     subroutine tke_finalize_f()
         implicit none
 
@@ -88,6 +94,9 @@ module mod_TKE
         CALL tke_finalize_c()
     end subroutine tke_finalize_f
 
+    !> TKE calculation.
+    !!
+    !! It calls the TKE_Calc C function.
     subroutine tke_calc_f(depth_CellInterface, prism_center_dist_c, &
                           inv_prism_center_dist_c, prism_thick_c, &
                           dolic_c, dolic_e, zlev_i, wet_c, &
