@@ -13,10 +13,8 @@ The library is designed to have three steps:
 
 The library is written in C++ but C and Fortran interfaces are provided. The `examples` folder provides simple benchmarks of the vertical mixing scheme running standalone and with different drivers written in the supported languages.
 
-.. doxygenfile:: TKE.hpp
-   :project: TKE
-
 .. toctree::
    :maxdepth: 2
 
+   cpp_doxygen_tke
    bindings
