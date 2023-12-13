@@ -69,6 +69,11 @@ $(function() {
 <div class="title">TKE_cpu Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> CPU backend class, derived from <a class="el" href="classTKE__backend.html" title="TKE backend class.">TKE_backend</a>.  
+ <a href="classTKE__cpu.html#details">More...</a></p>
+
+<p><code>#include &lt;TKE_cpu.hpp&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for TKE_cpu:</div>
 <div class="dyncontent">
@@ -81,9 +86,12 @@ Inheritance diagram for TKE_cpu:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa553f7338a332e3e73bae95f75c5ab32"><td class="memItemLeft" align="right" valign="top"><a id="aa553f7338a332e3e73bae95f75c5ab32"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TKE_cpu</b> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
+<tr class="memitem:aa553f7338a332e3e73bae95f75c5ab32"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__cpu.html#aa553f7338a332e3e73bae95f75c5ab32">TKE_cpu</a> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
+<tr class="memdesc:aa553f7338a332e3e73bae95f75c5ab32"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE__cpu.html" title="TKE CPU backend class, derived from TKE_backend.">TKE_cpu</a> class constructor.  <a href="classTKE__cpu.html#aa553f7338a332e3e73bae95f75c5ab32">More...</a><br /></td></tr>
 <tr class="separator:aa553f7338a332e3e73bae95f75c5ab32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a990b58d8a5261e00fb1b81ffabb34552"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__cpu.html#a990b58d8a5261e00fb1b81ffabb34552">~TKE_cpu</a> ()</td></tr>
+<tr class="memdesc:a990b58d8a5261e00fb1b81ffabb34552"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE__cpu.html" title="TKE CPU backend class, derived from TKE_backend.">TKE_cpu</a> class destructor.  <a href="classTKE__cpu.html#a990b58d8a5261e00fb1b81ffabb34552">More...</a><br /></td></tr>
+<tr class="separator:a990b58d8a5261e00fb1b81ffabb34552"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classTKE__backend"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classTKE__backend')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classTKE__backend.html">TKE_backend</a></td></tr>
 <tr class="memitem:a84f1f6fdf0ca7326ff5e171f0f67416e inherit pub_methods_classTKE__backend"><td class="memItemLeft" align="right" valign="top"><a id="a84f1f6fdf0ca7326ff5e171f0f67416e"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__backend.html#a84f1f6fdf0ca7326ff5e171f0f67416e">TKE_backend</a> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
@@ -99,9 +107,8 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a2388f9da364a0deb1d2477fd7b91bc8b"><td class="memItemLeft" align="right" valign="top"><a id="a2388f9da364a0deb1d2477fd7b91bc8b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__cpu.html#a2388f9da364a0deb1d2477fd7b91bc8b">calc_impl</a> (struct <a class="el" href="structt__patch.html">t_patch</a> p_patch, struct <a class="el" href="structt__cvmix.html">t_cvmix</a> p_cvmix, struct <a class="el" href="structt__ocean__state.html">t_ocean_state</a> ocean_state, struct <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> atmos_fluxes, struct <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> p_as, struct <a class="el" href="structt__sea__ice.html">t_sea_ice</a> p_sea_ice, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
-<tr class="memdesc:a2388f9da364a0deb1d2477fd7b91bc8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Polymorphic function for the actual <a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> scheme backend implementation. <br /></td></tr>
+<tr class="memitem:a2388f9da364a0deb1d2477fd7b91bc8b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE__cpu.html#a2388f9da364a0deb1d2477fd7b91bc8b">calc_impl</a> (struct <a class="el" href="structt__patch.html">t_patch</a> p_patch, struct <a class="el" href="structt__cvmix.html">t_cvmix</a> p_cvmix, struct <a class="el" href="structt__ocean__state.html">t_ocean_state</a> ocean_state, struct <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a> atmos_fluxes, struct <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a> p_as, struct <a class="el" href="structt__sea__ice.html">t_sea_ice</a> p_sea_ice, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
+<tr class="memdesc:a2388f9da364a0deb1d2477fd7b91bc8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">CPU implementation of <a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a>.  <a href="classTKE__cpu.html#a2388f9da364a0deb1d2477fd7b91bc8b">More...</a><br /></td></tr>
 <tr class="separator:a2388f9da364a0deb1d2477fd7b91bc8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classTKE__backend"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classTKE__backend')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classTKE__backend.html">TKE_backend</a></td></tr>
 <tr class="memitem:af1fef41918553c48c3c585f9cf08351a inherit pro_methods_classTKE__backend"><td class="memTemplParams" colspan="2">template&lt;template&lt; class ... &gt; class memview, template&lt; class, size_t &gt; class dext, class memview_policy &gt; </td></tr>
@@ -233,6 +240,252 @@ double *&#160;</td><td class="memItemRight" valign="bottom"><b>m_tke_upd</b></td
 double *&#160;</td><td class="memItemRight" valign="bottom"><b>m_tke_unrest</b></td></tr>
 <tr class="separator:a1ad815e94b0b2f51e251c3ac768ebbe4 inherit pro_attribs_classTKE__backend"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> CPU backend class, derived from <a class="el" href="classTKE__backend.html" title="TKE backend class.">TKE_backend</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa553f7338a332e3e73bae95f75c5ab32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa553f7338a332e3e73bae95f75c5ab32">&#9670;&nbsp;</a></span>TKE_cpu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TKE_cpu::TKE_cpu </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nlevs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>vert_mix_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>vmix_idemix_tke</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>vert_cor_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dtime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>OceanReferenceDensity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>grav</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l_lc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>clc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ReferencePressureIndbars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classTKE__cpu.html" title="TKE CPU backend class, derived from TKE_backend.">TKE_cpu</a> class constructor. </p>
+<p>It calls the <a class="el" href="classTKE__backend.html" title="TKE backend class.">TKE_backend</a> constructor and the internal_fields_malloc method with specific memory view and policy. </p>
+
+</div>
+</div>
+<a id="a990b58d8a5261e00fb1b81ffabb34552"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a990b58d8a5261e00fb1b81ffabb34552">&#9670;&nbsp;</a></span>~TKE_cpu()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TKE_cpu::~TKE_cpu </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classTKE__cpu.html" title="TKE CPU backend class, derived from TKE_backend.">TKE_cpu</a> class destructor. </p>
+<p>It calls internal_fields_free with specific memory view policy. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a2388f9da364a0deb1d2477fd7b91bc8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2388f9da364a0deb1d2477fd7b91bc8b">&#9670;&nbsp;</a></span>calc_impl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE_cpu::calc_impl </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structt__patch.html">t_patch</a>&#160;</td>
+          <td class="paramname"><em>p_patch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structt__cvmix.html">t_cvmix</a>&#160;</td>
+          <td class="paramname"><em>p_cvmix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structt__ocean__state.html">t_ocean_state</a>&#160;</td>
+          <td class="paramname"><em>ocean_state</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structt__atmo__fluxes.html">t_atmo_fluxes</a>&#160;</td>
+          <td class="paramname"><em>atmos_fluxes</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structt__atmos__for__ocean.html">t_atmos_for_ocean</a>&#160;</td>
+          <td class="paramname"><em>p_as</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">struct <a class="el" href="structt__sea__ice.html">t_sea_ice</a>&#160;</td>
+          <td class="paramname"><em>p_sea_ice</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_block_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_start_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_end_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_start_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_end_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_block_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_start_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_end_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_start_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_end_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>CPU implementation of <a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a>. </p>
+<p>It fills the memory view structures during the first call and then compute the turbulent kinetic energy vertical scheme. </p>
+
+<p>Implements <a class="el" href="classTKE__backend.html#a8bda4bcc7657ac52594598c3cd3a7b87">TKE_backend</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/runner/work/TKE/TKE/src/backends/CPU/TKE_cpu.hpp</li>
 <li>/home/runner/work/TKE/TKE/src/backends/CPU/TKE_cpu.cpp</li>
