@@ -19,7 +19,7 @@
 
 void check(hipError_t err) {
     if (err != hipSuccess) {
-        std::cerr << "CUDA error: " << hipGetErrorString(err) << std::endl;
+        std::cerr << "HIP error: " << hipGetErrorString(err) << std::endl;
         std::exit(-1);
     }
 }
