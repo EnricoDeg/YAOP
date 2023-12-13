@@ -87,7 +87,21 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="library.html">Library</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cpp_doxygen_sphinx.html">TKE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="library.html#_CPPv43TKE"><code class="docutils literal notranslate"><span class="pre">TKE</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE3TKEEiiiiiidddiddd"><code class="docutils literal notranslate"><span class="pre">TKE::TKE()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKED0Ev"><code class="docutils literal notranslate"><span class="pre">TKE::~TKE()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE4calcEPdPdPdPdPiPiPdPdPiPiPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdPdiiiiiiiiii"><code class="docutils literal notranslate"><span class="pre">TKE::calc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE6m_implE"><code class="docutils literal notranslate"><span class="pre">TKE::m_impl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE7p_patchE"><code class="docutils literal notranslate"><span class="pre">TKE::p_patch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE7p_cvmixE"><code class="docutils literal notranslate"><span class="pre">TKE::p_cvmix</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE9p_sea_iceE"><code class="docutils literal notranslate"><span class="pre">TKE::p_sea_ice</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE4p_asE"><code class="docutils literal notranslate"><span class="pre">TKE::p_as</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE12atmos_fluxesE"><code class="docutils literal notranslate"><span class="pre">TKE::atmos_fluxes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE11ocean_stateE"><code class="docutils literal notranslate"><span class="pre">TKE::ocean_state</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="library.html#_CPPv4N3TKE16m_is_struct_initE"><code class="docutils literal notranslate"><span class="pre">TKE::m_is_struct_init</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="bindings.html">Bindings</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="interface.html">Interface</a><ul>
@@ -97,6 +111,59 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="datastruct.html">Data Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backend.html">Backend</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="backend.html#_CPPv411TKE_backend"><code class="docutils literal notranslate"><span class="pre">TKE_backend</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend3PtrE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::Ptr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend11TKE_backendEiiiiiidddiddd"><code class="docutils literal notranslate"><span class="pre">TKE_backend::TKE_backend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backendD0Ev"><code class="docutils literal notranslate"><span class="pre">TKE_backend::~TKE_backend()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend4calcE7t_patch7t_cvmix13t_ocean_state13t_atmo_fluxes17t_atmos_for_ocean9t_sea_iceiiiiiiiiii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::calc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend9calc_implE7t_patch7t_cvmix13t_ocean_state13t_atmo_fluxes17t_atmos_for_ocean9t_sea_iceiiiiiiiiii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::calc_impl()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend19fill_struct_memviewEvP12t_patch_viewI7memview4dextEP7t_patchiii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::fill_struct_memview()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend19fill_struct_memviewEvP14t_sea_ice_viewI7memview4dextEP9t_sea_iceii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::fill_struct_memview()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend19fill_struct_memviewEvP22t_atmos_for_ocean_viewI7memview4dextEP17t_atmos_for_oceanii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::fill_struct_memview()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend19fill_struct_memviewEvP18t_atmo_fluxes_viewI7memview4dextEP13t_atmo_fluxesii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::fill_struct_memview()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend19fill_struct_memviewEvP18t_ocean_state_viewI7memview4dextEP13t_ocean_stateiii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::fill_struct_memview()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend19fill_struct_memviewEvP12t_cvmix_viewI7memview4dextEP7t_cvmixiii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::fill_struct_memview()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend14memview_mallocE7memviewId4dextIiXL1EEEEPdi"><code class="docutils literal notranslate"><span class="pre">TKE_backend::memview_malloc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend14memview_mallocE7memviewId4dextIiXL2EEEEPdii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::memview_malloc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend14memview_mallocE7memviewId4dextIiXL3EEEEPdiii"><code class="docutils literal notranslate"><span class="pre">TKE_backend::memview_malloc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4I0EN11TKE_backend12memview_freeEvPd"><code class="docutils literal notranslate"><span class="pre">TKE_backend::memview_free()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4IIDpE0I0_6size_tE00EN11TKE_backend22internal_fields_mallocEvP19t_tke_internal_viewI7memview4dextE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::internal_fields_malloc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4I0EN11TKE_backend20internal_fields_freeEvv"><code class="docutils literal notranslate"><span class="pre">TKE_backend::internal_fields_free()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend10p_constantE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::p_constant</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend14p_constant_tkeE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::p_constant_tke</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend9m_tke_oldE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_tke_old</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend8m_tke_AvE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_tke_Av</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend8m_tke_kvE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_tke_kv</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend18m_forc_tke_surf_2DE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_forc_tke_surf_2D</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend15m_dzw_stretchedE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_dzw_stretched</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend15m_dzt_stretchedE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_dzt_stretched</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend6m_NsqrE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_Nsqr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend6m_SsqrE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_Ssqr</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend7m_a_difE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_a_dif</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend7m_b_difE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_b_dif</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend7m_c_difE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_c_dif</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend7m_a_triE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_a_tri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend7m_b_triE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_b_tri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend7m_c_triE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_c_tri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend7m_d_triE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_d_tri</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend9m_sqrttkeE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_sqrttke</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend6m_forcE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_forc</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend4m_keE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_ke</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend4m_cpE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_cp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend4m_dpE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_dp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend9m_tke_updE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_tke_upd</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend.html#_CPPv4N11TKE_backend12m_tke_unrestE"><code class="docutils literal notranslate"><span class="pre">TKE_backend::m_tke_unrest</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="backend_cpu.html">CPU Backend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="backend_gpu.html">GPU Backend</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="backend_gpu_cuda.html">CUDA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="backend_gpu_hip.html">HIP</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="development.html">Development</a><ul>
