@@ -77,13 +77,472 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a41e7ac7c0d26e5809eb980538458da41"><td class="memItemLeft" align="right" valign="top"><a id="a41e7ac7c0d26e5809eb980538458da41"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TKE</b> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
+<tr class="memitem:a41e7ac7c0d26e5809eb980538458da41"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE.html#a41e7ac7c0d26e5809eb980538458da41">TKE</a> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
+<tr class="memdesc:a41e7ac7c0d26e5809eb980538458da41"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html">TKE</a> main class constructor called in the model initialization.0.  <a href="classTKE.html#a41e7ac7c0d26e5809eb980538458da41">More...</a><br /></td></tr>
 <tr class="separator:a41e7ac7c0d26e5809eb980538458da41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2b94d276d2bbb6105941fa7ed8891b3"><td class="memItemLeft" align="right" valign="top"><a id="aa2b94d276d2bbb6105941fa7ed8891b3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>calc</b> (double *depth_CellInterface, double *prism_center_dist_c, double *inv_prism_center_dist_c, double *prism_thick_c, int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c, int *edges_cell_idx, int *edges_cell_blk, double *temp, double *salt, double *stretch_c, double *eta_c, double *p_vn_x1, double *p_vn_x2, double *p_vn_x3, double *tke, double *tke_plc_in, double *hlc_in, double *wlc_in, double *u_stokes_in, double *a_veloc_v, double *a_temp_v, double *a_salt_v, double *iwe_Tdis, double *cvmix_dummy_1, double *cvmix_dummy_2, double *cvmix_dummy_3, double *tke_Tbpr, double *tke_Tspr, double *tke_Tdif, double *tke_Tdis, double *tke_Twin, double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot, double *tke_Lmix, double *tke_Pr, double *stress_xw, double *stress_yw, double *fu10, double *concsum, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
+<tr class="memitem:ab6e407c0e44799727b27e681a4212a88"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE.html#ab6e407c0e44799727b27e681a4212a88">~TKE</a> ()</td></tr>
+<tr class="memdesc:ab6e407c0e44799727b27e681a4212a88"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html">TKE</a> main class destructor called in the model finalization.  <a href="classTKE.html#ab6e407c0e44799727b27e681a4212a88">More...</a><br /></td></tr>
+<tr class="separator:ab6e407c0e44799727b27e681a4212a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2b94d276d2bbb6105941fa7ed8891b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE.html#aa2b94d276d2bbb6105941fa7ed8891b3">calc</a> (double *depth_CellInterface, double *prism_center_dist_c, double *inv_prism_center_dist_c, double *prism_thick_c, int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c, int *edges_cell_idx, int *edges_cell_blk, double *temp, double *salt, double *stretch_c, double *eta_c, double *p_vn_x1, double *p_vn_x2, double *p_vn_x3, double *tke, double *tke_plc_in, double *hlc_in, double *wlc_in, double *u_stokes_in, double *a_veloc_v, double *a_temp_v, double *a_salt_v, double *iwe_Tdis, double *cvmix_dummy_1, double *cvmix_dummy_2, double *cvmix_dummy_3, double *tke_Tbpr, double *tke_Tspr, double *tke_Tdif, double *tke_Tdis, double *tke_Twin, double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot, double *tke_Lmix, double *tke_Pr, double *stress_xw, double *stress_yw, double *fu10, double *concsum, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
+<tr class="memdesc:aa2b94d276d2bbb6105941fa7ed8891b3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html">TKE</a> main class time loop calculation method.  <a href="classTKE.html#aa2b94d276d2bbb6105941fa7ed8891b3">More...</a><br /></td></tr>
 <tr class="separator:aa2b94d276d2bbb6105941fa7ed8891b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a41e7ac7c0d26e5809eb980538458da41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41e7ac7c0d26e5809eb980538458da41">&#9670;&nbsp;</a></span>TKE()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TKE::TKE </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nproma</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nlevs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nblocks</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>vert_mix_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>vmix_idemix_tke</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>vert_cor_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dtime</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>OceanReferenceDensity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>grav</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>l_lc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>clc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ReferencePressureIndbars</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>pi</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classTKE.html">TKE</a> main class constructor called in the model initialization.0. </p>
+<p>Internally the backend is selected based on the library configuration, some constant parameters needed by the <a class="el" href="classTKE.html">TKE</a> scheme are set and all the internal memory is allocated. </p>
+
+</div>
+</div>
+<a id="ab6e407c0e44799727b27e681a4212a88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6e407c0e44799727b27e681a4212a88">&#9670;&nbsp;</a></span>~TKE()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TKE::~TKE </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classTKE.html">TKE</a> main class destructor called in the model finalization. </p>
+<p>Internally the memory is deallocated. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa2b94d276d2bbb6105941fa7ed8891b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2b94d276d2bbb6105941fa7ed8891b3">&#9670;&nbsp;</a></span>calc()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TKE::calc </td>
+          <td>(</td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>depth_CellInterface</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>prism_center_dist_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>inv_prism_center_dist_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>prism_thick_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>dolic_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>dolic_e</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>zlev_i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>wet_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>edges_cell_idx</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int *&#160;</td>
+          <td class="paramname"><em>edges_cell_blk</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>temp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>salt</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>stretch_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>eta_c</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>p_vn_x1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>p_vn_x2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>p_vn_x3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_plc_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>hlc_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>wlc_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>u_stokes_in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>a_veloc_v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>a_temp_v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>a_salt_v</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>iwe_Tdis</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>cvmix_dummy_1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>cvmix_dummy_2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>cvmix_dummy_3</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Tbpr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Tspr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Tdif</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Tdis</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Twin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Tiwf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Tbck</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Ttot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Lmix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>tke_Pr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>stress_xw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>stress_yw</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>fu10</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double *&#160;</td>
+          <td class="paramname"><em>concsum</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_block_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_start_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_end_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_start_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>edges_end_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_block_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_start_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_end_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_start_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>cells_end_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="classTKE.html">TKE</a> main class time loop calculation method. </p>
+<p>Internally it is calling the <a class="el" href="classTKE.html">TKE</a> scheme implementation of the backend selected during the configuration. During the first time step the internal data structures are filled and then the passed arrays are not used, so the model has to make sure that the memory address does not change during the time loop. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/runner/work/TKE/TKE/src/TKE.hpp</li>
 <li>/home/runner/work/TKE/TKE/src/TKE.cpp</li>
