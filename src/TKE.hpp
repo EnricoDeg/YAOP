@@ -20,12 +20,36 @@
 #include <iostream>
 #include "src/shared/interface/data_struct.hpp"
 
+/*! \class
+ *  \brief TKE main class, part of the library interface.
+ *
+ */
 class TKE {
  public:
+    /*! \brief TKE main class constructor called in the model initialization.0
+     *
+     *  Internally the backend is selected based on the library configuration,
+     *  some constant parameters needed by the TKE scheme are set and all the
+     *  internal memory is allocated.
+     */
     TKE(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
         int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
         int l_lc, double clc, double ReferencePressureIndbars, double pi);
+
+    /*! \brief TKE main class destructor called in the model finalization.
+     *
+     *  Internally the memory is deallocated.
+     */
     ~TKE();
+
+    /*! \brief TKE main class time loop calculation method.
+     *
+     *  Internally it is calling the TKE scheme implementation of the backend selected
+     *  during the configuration.
+     *  During the first time step the internal data structures are filled and then the
+     *  passed arrays are not used, so the model has to make sure that the memory address
+     *  does not change during the time loop.
+     */
     void calc(double *depth_CellInterface, double *prism_center_dist_c,
               double *inv_prism_center_dist_c, double *prism_thick_c,
               int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c,
