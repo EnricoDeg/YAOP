@@ -26,7 +26,7 @@
  */
 class TKE {
  public:
-    /*! \brief TKE main class constructor called in the model initialization.0
+    /*! \brief TKE main class constructor called in the model initialization.
      *
      *  Internally the backend is selected based on the library configuration,
      *  some constant parameters needed by the TKE scheme are set and all the

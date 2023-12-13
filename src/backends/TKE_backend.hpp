@@ -21,13 +21,37 @@
 #include "src/shared/interface/data_struct.hpp"
 #include "src/shared/interface/memview_struct.hpp"
 
+/*! \class
+ *  \brief TKE backend class.
+ *
+ *  It implements the part which is in common for each backend:
+ *   - library frontend-backend interface
+ *   - library initialization and finalization
+ */
 class TKE_backend {
  public:
+    /*! \typedef
+    *  \brief Shared pointer to TKE backend class.
+    */
     typedef std::shared_ptr<TKE_backend> Ptr;
+
+    /*! \fn
+    *  \brief TKE backend class constructor.
+    */
     TKE_backend(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                 int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
                 int l_lc, double clc, double ReferencePressureIndbars, double pi);
+
+    /*! \fn
+    *  \brief TKE backend class destructor.
+    */
     virtual ~TKE_backend() = default;
+
+    /*! \fn
+    *  \brief TKE backend calculation.
+    *
+    *  It calls calc_impl which contains the actual implementation.
+    */
     void calc(t_patch p_patch, t_cvmix p_cvmix,
               t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
               t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
@@ -37,6 +61,11 @@ class TKE_backend {
               int cells_end_index);
 
  protected:
+    /*! \fn
+    *  \brief Polymorphic function for the actual TKE scheme backend implementation.
+    *
+    *
+    */
     virtual void calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                            t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
                            t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
@@ -45,6 +74,13 @@ class TKE_backend {
                            int cells_start_block, int cells_end_block, int cells_start_index,
                            int cells_end_index) = 0;
 
+    /*! \fn
+    *   \brief fill a structure of memory views given a structure of pointers about the grid info.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -65,6 +101,13 @@ class TKE_backend {
         p_patch_view->edges_cell_blk = memview_policy::memview(p_patch->edges_cell_blk, 2, nlevs, nproma);
     }
 
+    /*! \fn
+    *   \brief fill a structure of memory views given a structure of pointers about the sea ice info.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -73,6 +116,13 @@ class TKE_backend {
         p_sea_ice_view->concsum = memview_policy::memview(p_sea_ice->concsum, nblocks, nproma);
     }
 
+    /*! \fn
+    *   \brief fill a structure of memory views given a structure of pointers about the atmosphere info.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -81,6 +131,13 @@ class TKE_backend {
         p_as_view->fu10 = memview_policy::memview(p_as->fu10, nblocks, nproma);
     }
 
+    /*! \fn
+    *   \brief fill a structure of memory views given a structure of pointers about the atmosphere fluxes info.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -90,6 +147,13 @@ class TKE_backend {
         atmos_fluxes_view->stress_yw = memview_policy::memview(atmos_fluxes->stress_yw, nblocks, nproma);
     }
 
+    /*! \fn
+    *   \brief fill a structure of memory views given a structure of pointers about the ocean state info.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -104,6 +168,13 @@ class TKE_backend {
         ocean_state_view->p_vn_x3 = memview_policy::memview(ocean_state->p_vn_x3, nblocks, nlevs, nproma);
     }
 
+    /*! \fn
+    *   \brief fill a structure of memory views given a structure of pointers about the cvmix info.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -133,6 +204,13 @@ class TKE_backend {
         p_cvmix_view->tke_Pr = memview_policy::memview(p_cvmix->tke_Pr, nblocks, nlevs+1, nproma);
     }
 
+    /*! \fn
+    *   \brief allocate internal memory and return a 1D memory view object of the allocated memory.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -140,6 +218,13 @@ class TKE_backend {
         return memview_policy::memview_malloc(field, dim1);
     }
 
+    /*! \fn
+    *   \brief allocate internal memory and return a 2D memory view object of the allocated memory.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -147,6 +232,13 @@ class TKE_backend {
         return memview_policy::memview_malloc(field, dim1, dim2);
     }
 
+    /*! \fn
+    *   \brief allocate internal memory and return a 3D memory view object of the allocated memory.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -154,11 +246,23 @@ class TKE_backend {
         return memview_policy::memview_malloc(field, dim1, dim2, dim3);
     }
 
+    /*! \fn
+    *   \brief deallocate internal memory.
+    *
+    *   It is templated with a memview_policy which defines how to deallocate memory in the actual backend.
+    */
     template <typename memview_policy>
     void memview_free(double *field) {
         return memview_policy::memview_free(field);
     }
 
+    /*! \fn
+    *   \brief fill the internal data structure allocating the arrays and creating memory views.
+    *
+    *   It is templated with a memview class and a dext class which define the memory view implementation
+    *   and with a memview_policy which defines how to allocate and deallocate memory in the actual backend
+    *   and how to create a memory view object.
+    */
     template <template <class ...> class memview,
               template <class, size_t> class dext,
               class memview_policy>
@@ -209,6 +313,11 @@ class TKE_backend {
                                             (m_tke_unrest, p_constant.nlevs+1, p_constant.nproma);
     }
 
+    /*! \fn
+    *   \brief free the internal data structure memory deallocating the arrays.
+    *
+    *   It is templated with a memview_policy which defines how to deallocate memory in the actual backend.
+    */
     template <typename memview_policy>
     void internal_fields_free() {
         this->memview_free<memview_policy>(m_tke_old);
