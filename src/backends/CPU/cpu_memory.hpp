@@ -33,38 +33,69 @@ using mdspan_3d_double = Kokkos::mdspan<double, ext3d_t>;
 using mdspan_2d_int = Kokkos::mdspan<int, ext2d_t>;
 using mdspan_3d_int = Kokkos::mdspan<int, ext3d_t>;
 
+/*! \brief CPU mdspan memory view policy.
+ *
+ *  It defines the policy to allocate/deallocate arrays and create Kokkos mdspan objects.
+ */
 class cpu_mdspan_impl {
  public:
+    /*! \brief Create a 1D mdspan object from double pointer.
+     *
+     */
     static mdspan_1d_double memview(double *data, int nlevs) {
         return mdspan_1d_double{ data, ext1d_d{nlevs} };
     }
+    /*! \brief Create a 2D mdspan object from double pointer.
+     *
+     */
     static mdspan_2d_double memview(double *data, int nblocks, int nproma) {
         return mdspan_2d_double{ data, ext2d_d{nblocks, nproma} };
     }
+    /*! \brief Create a 3D mdspan object from double pointer.
+     *
+     */
     static mdspan_3d_double memview(double *data, int nblocks, int nlevs, int nproma) {
         return mdspan_3d_double{ data, ext3d_d{nblocks, nlevs, nproma} };
     }
+    /*! \brief Create a 2D mdspan object from int pointer.
+     *
+     */
     static mdspan_2d_int memview(int *data, int nblocks, int nproma) {
         return mdspan_2d_int{ data, ext2d_d{nblocks, nproma} };
     }
+    /*! \brief Create a 3D mdspan object from int pointer.
+     *
+     */
     static mdspan_3d_int memview(int *data, int nblocks, int nlevs, int nproma) {
         return mdspan_3d_int{ data, ext3d_d{nblocks, nlevs, nproma} };
     }
+    /*! \brief Allocate memory and create a 1D mdspan object from double pointer.
+     *
+     */
     static mdspan_1d_double memview_malloc(double *field, int dim1) {
         field = reinterpret_cast<double *>(malloc(dim1 * sizeof(double)));
         mdspan_1d_double memview{ field, ext1d_d{dim1} };
         return memview;
     }
+    /*! \brief Allocate memory and create a 2D mdspan object from double pointer.
+     *
+     */
     static mdspan_2d_double memview_malloc(double *field, int dim1, int dim2) {
         field = reinterpret_cast<double *>(malloc(dim1 * dim2 * sizeof(double)));
         mdspan_2d_double memview{ field, ext2d_d{dim1, dim2} };
         return memview;
     }
+    /*! \brief Allocate memory and create a 3D mdspan object from double pointer.
+     *
+     */
     static mdspan_3d_double memview_malloc(double *field, int dim1, int dim2, int dim3) {
         field = reinterpret_cast<double *>(malloc(dim1 * dim2 * dim3 * sizeof(double)));
         mdspan_3d_double memview{ field, ext3d_d{dim1, dim2, dim3} };
         return memview;
     }
+    /*! \brief Free memory from double pointer.
+     *
+     */
     static void memview_free(double *field) {
         free(field);
     }
