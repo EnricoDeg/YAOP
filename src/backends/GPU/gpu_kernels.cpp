@@ -16,7 +16,7 @@
 
 #include <algorithm>
 #include "src/backends/GPU/gpu_kernels.hpp"
-#include "src/shared/constants/constants_thermodyn.hpp"
+#include "src/backends/kernels.hpp"
 
 __global__
 void calc_impl_cells(int blockNo, int start_index, int end_index,
@@ -406,46 +406,4 @@ void calc_impl_edges(int blockNo, int start_index, int end_index,
         for (int level = levels; level < p_constant.nlevs+1; level++)
             p_cvmix.a_veloc_v(blockNo, level, je) = 0.0;
     }
-}
-
-__device__
-double  calculate_density(double temp, double salt, double pressure) {
-    double dvs, fne, fst, qn3;
-    double qnq, qvs, s, s3h;
-    double t, denom, s__2;
-    double rho;
-
-    // This is the adisit part, that transforms potential in in-situ temperature
-    qnq = -pressure * (-a_a3 + pressure * a_c3);
-    qn3 = -pressure * a_a4;
-    qvs = (pressure * (a_b1 - a_d * pressure)) *
-          (salt - z_sref) + pressure * (a_a1 + pressure * (a_c1 - a_e1 * pressure));
-
-    dvs = (a_b2 * pressure) * (salt - z_sref) +
-           1.0 + pressure * (-a_a2 + pressure * (a_c2 - a_e2 * pressure));
-
-    t   = (temp + qvs) / dvs;
-    fne = - qvs + t * (dvs + t * (qnq + t * qn3)) - temp;
-
-    fst = dvs + t * (2.0 * qnq + 3.0 * qn3 * t);
-
-    t    = t - fne / fst;
-    s    = max(salt, 0.0);
-    s__2 = pow(s, 2.0);
-    s3h  = s * sqrt(s);
-
-    rho = r_a0 + t * (r_a1 + t * (r_a2 + t * (r_a3 + t * (r_a4 + t * r_a5))))
-        + s * (r_b0 + t * (r_b1 + t * (r_b2 + t * (r_b3 + t * r_b4))))
-        + r_d0 * s__2 + s3h * (r_c0 + t * (r_c1 + r_c2 * t));
-
-    denom = 1.0 - pressure / (pressure * (r_h0 + t *
-            (r_h1 + t * (r_h2 + t * r_h3))
-            + s * (r_ai0 + t * (r_ai1 + r_ai2 * t))
-            + r_aj0 * s3h + (r_ak0 + t * (r_ak1 + t * r_ak2)
-            + s * (r_am0 + t * (r_am1 + t * r_am2))) * pressure)
-            + r_e0 + t * (r_e1 + t * (r_e2 + t * (r_e3 + t * r_e4)))
-            + s * (r_f0 + t * (r_f1 + t * (r_f2 + t * r_f3)))
-            + s3h * (r_g0 + t * (r_g1 + r_g2 * t)));
-
-    return rho/denom;
 }
