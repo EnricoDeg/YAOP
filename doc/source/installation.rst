@@ -3,6 +3,15 @@
 Installation
 ============
 
+Clone the repository::
+
+  git clone https://github.com/EnricoDeg/TKE.git
+
+Init and update submodules::
+
+  git submodule init
+  git submodule update
+
 The Cmake configuration has the following options (default is disabled):
 
  - ENABLE_C: enables the C bindings and the examples and tests based on them
