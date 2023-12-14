@@ -2,7 +2,7 @@ if(ENABLE_CUDA)
     if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
         set(CMAKE_CUDA_ARCHITECTURES 80)
     endif()
-    SET(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo ")
+    SET(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo -DCUDA ")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCUDA")
     SET(SOURCE_CUDA backends/GPU/CUDA/cuda_check.cu)
 endif()
@@ -34,9 +34,11 @@ else()
 endif()
 
 if(ENABLE_CUDA)
+    set_source_files_properties(backends/kernels.cpp PROPERTIES LANGUAGE CUDA)
     set_source_files_properties(backends/GPU/gpu_kernels.cpp PROPERTIES LANGUAGE CUDA)
     set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE CUDA)
 elseif(ENABLE_HIP)
+    set_source_files_properties(backends/kernels.cpp PROPERTIES LANGUAGE HIP)
     set_source_files_properties(backends/GPU/gpu_kernels.cpp PROPERTIES LANGUAGE HIP)
     set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE HIP)
 endif()
@@ -45,6 +47,7 @@ set(SOURCE_EXE  TKE.cpp
                 ${SOURCE_C}
                 ${SOURCE_FORTRAN}
                 backends/TKE_backend.cpp
+                backends/kernels.cpp
                 ${SOURCE_CUDA}
                 ${SOURCE_HIP}
                 ${SOURCE_GPU}
@@ -56,6 +59,9 @@ add_library(tke SHARED ${SOURCE_EXE})
 target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR})
 target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
 set_property(TARGET tke PROPERTY CXX_STANDARD 17)
+if(ENABLE_CUDA)
+    set_property(TARGET tke PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+endif()
 
 # Install the library
 install (

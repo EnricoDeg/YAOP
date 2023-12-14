@@ -26,6 +26,10 @@ endif()
 
 project(tke ${LANG_CXX} ${LANG_C} ${LANG_FORTRAN} ${LANG_CUDA} ${LANG_HIP})
 
+if(ENABLE_CUDA)
+    find_package(CUDA QUIET REQUIRED)
+endif()
+
 add_subdirectory(src)
 
 if(ENABLE_EXAMPLES)
