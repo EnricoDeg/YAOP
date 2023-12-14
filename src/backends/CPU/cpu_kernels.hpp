@@ -37,4 +37,11 @@ void calc_impl_edges(int blockNo, int start_index, int end_index,
                      t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
                      t_constant p_constant);
 
+void integrate(int jc, int blockNo,
+               t_patch_view<cpu_memview::mdspan, cpu_memview::dextents> p_patch,
+               t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
+               t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
+               t_constant p_constant,
+               t_constant_tke p_constant_tke);
+
 #endif  // SRC_BACKENDS_CPU_CPU_KERNELS_HPP_
