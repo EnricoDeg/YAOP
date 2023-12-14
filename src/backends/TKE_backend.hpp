@@ -328,6 +328,8 @@ class TKE_backend {
     struct t_constant p_constant;
     struct t_constant_tke p_constant_tke;
 
+    bool m_is_view_init;
+
     double *m_tke_old;
     double *m_tke_Av;
     double *m_tke_kv;

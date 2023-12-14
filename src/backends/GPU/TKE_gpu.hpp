@@ -61,9 +61,6 @@ class TKE_gpu : public TKE_backend {
     void launch_kernel(int threadsPerBlock, int blocksPerGrid, void* func, void **args) {
         launch_policy::launch(threadsPerBlock, blocksPerGrid, func, args);
     }
-
- private:
-    bool is_view_init;
 };
 
 #endif  // SRC_BACKENDS_GPU_TKE_GPU_HPP_

@@ -53,6 +53,8 @@ TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int vert_mix_type, 
     p_constant_tke.use_Kappa_min = false;
     p_constant_tke.use_ubound_dirichlet = false;
     p_constant_tke.use_lbound_dirichlet = false;
+
+    m_is_view_init = false;
 }
 
 void TKE_backend::calc(t_patch p_patch, t_cvmix p_cvmix,

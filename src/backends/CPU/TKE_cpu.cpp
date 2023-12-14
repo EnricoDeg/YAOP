@@ -39,7 +39,6 @@ TKE_cpu::TKE_cpu(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix
 
     this->internal_fields_malloc<cpu_memview::mdspan, cpu_memview::dextents, cpu_mdspan_impl>
                                 (&p_internal_view);
-    is_view_init = false;
 }
 
 TKE_cpu::~TKE_cpu() {
@@ -58,7 +57,7 @@ void TKE_cpu::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                          int cells_end_index) {
     // The pointer to the data should not change inside the time loop
     // structs view are filled only at the first time step
-    if (!is_view_init) {
+    if (!m_is_view_init) {
         this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&p_cvmix_view, &p_cvmix, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
         this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
@@ -72,7 +71,7 @@ void TKE_cpu::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
                                  (&p_as_view, &p_as, p_constant.nblocks, p_constant.nproma);
         this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&p_sea_ice_view, &p_sea_ice, p_constant.nblocks, p_constant.nproma);
-        is_view_init = true;
+        m_is_view_init = true;
     }
 
     // over cells

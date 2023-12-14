@@ -52,9 +52,6 @@ class TKE_cpu : public TKE_backend {
                    int edges_start_index, int edges_end_index, int cells_block_size,
                    int cells_start_block, int cells_end_block, int cells_start_index,
                    int cells_end_index);
-
- private:
-    bool is_view_init;
 };
 
 #endif  // SRC_BACKENDS_CPU_TKE_CPU_HPP_
