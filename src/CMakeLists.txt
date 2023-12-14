@@ -29,7 +29,8 @@ if(ENABLE_CUDA OR ENABLE_HIP)
     set(SOURCE_GPU backends/GPU/gpu_kernels.cpp
                    backends/GPU/TKE_gpu.cpp)
 else()
-    set(SOURCE_CPU backends/CPU/TKE_cpu.cpp)
+    set(SOURCE_CPU backends/CPU/cpu_kernels.cpp
+                   backends/CPU/TKE_cpu.cpp)
 endif()
 
 if(ENABLE_CUDA)

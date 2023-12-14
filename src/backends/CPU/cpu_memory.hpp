@@ -101,4 +101,7 @@ class cpu_mdspan_impl {
     }
 };
 
+namespace cpu_memview = Kokkos;
+using cpu_memview_policy = cpu_mdspan_impl;
+
 #endif  // SRC_BACKENDS_CPU_CPU_MEMORY_HPP_
