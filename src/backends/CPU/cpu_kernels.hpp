@@ -53,4 +53,13 @@ inline void calculate_diffusivity(int blockNo, int start_index, int end_index, i
                                   mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
                                   mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr);
 
+inline void forcing(int blockNo, int start_index, int end_index, int max_levels, bool l_lc, bool only_tke,
+                    mdspan_2d_int dolic_c, mdspan_2d_double Ssqr, mdspan_2d_double Nsqr, mdspan_3d_double tke_Av,
+                    mdspan_2d_double tke_kv, mdspan_3d_double tke_Tspr, mdspan_3d_double tke_Tbpr,
+                    mdspan_3d_double tke_plc, mdspan_3d_double tke_Tiwf, mdspan_2d_double forc);
+
+inline void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                          mdspan_2d_double a, mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
+                          mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp);
+
 #endif  // SRC_BACKENDS_CPU_CPU_KERNELS_HPP_
