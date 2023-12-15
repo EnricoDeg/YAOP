@@ -281,7 +281,7 @@ void integrate(int blockNo, int start_index, int end_index,
 inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
                             mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched) {
     for (int jc = start_index; jc <= end_index; jc++) {
-        if (dolic_c(blockNo, jc) >= 0) {
+        if (dolic_c(blockNo, jc) > 0) {
             tke_Lmix(blockNo, 0, jc) = 0.0;
             tke_Lmix(blockNo, dolic_c(blockNo, jc), jc) = 0.0;
         }
@@ -294,7 +294,7 @@ inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max
                          tke_Lmix(blockNo, level-1, jc) + dzw_stretched(level-1, jc));
 
     for (int jc = start_index; jc <= end_index; jc++)
-        if (dolic_c(blockNo, jc) >= 0) {
+        if (dolic_c(blockNo, jc) > 0) {
             int dolic = dolic_c(blockNo, jc);
             tke_Lmix(blockNo, dolic-1, jc) = min(tke_Lmix(blockNo, dolic-1, jc),
                                              mxl_min + dzw_stretched(dolic-1, jc));
