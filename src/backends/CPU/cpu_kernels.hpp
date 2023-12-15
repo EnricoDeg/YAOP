@@ -44,12 +44,13 @@ void integrate(int blockNo, int start_index, int end_index,
                t_constant p_constant,
                t_constant_tke p_constant_tke);
 
-void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
-                     mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched);
+inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
+                            mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched);
 
-void calculate_diffusivity(int blockNo, int start_index, int end_index, int max_levels, t_constant_tke *p_constant_tke,
-                           mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
-                           mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
-                           mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr);
+inline void calculate_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
+                                  t_constant_tke *p_constant_tke,
+                                  mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
+                                  mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
+                                  mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr);
 
 #endif  // SRC_BACKENDS_CPU_CPU_KERNELS_HPP_

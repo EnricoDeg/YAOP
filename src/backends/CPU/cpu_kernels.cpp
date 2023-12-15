@@ -153,8 +153,8 @@ void integrate(int blockNo, int start_index, int end_index,
                           p_internal.tke_Av, p_internal.tke_kv, p_cvmix.tke_Pr);
 }
 
-void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
-                     mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched) {
+inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
+                            mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched) {
     for (int jc = start_index; jc <= end_index; jc++) {
         if (dolic_c(blockNo, jc) >= 0) {
             tke_Lmix(blockNo, 0, jc) = 0.0;
@@ -187,10 +187,11 @@ void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels
                 tke_Lmix(blockNo, level, jc) = max(tke_Lmix(blockNo, level, jc), mxl_min);
 }
 
-void calculate_diffusivity(int blockNo, int start_index, int end_index, int max_levels, t_constant_tke *p_constant_tke,
-                           mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
-                           mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
-                           mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr) {
+inline void calculate_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
+                                  t_constant_tke *p_constant_tke,
+                                  mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
+                                  mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
+                                  mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr) {
     for (int level = 0; level < max_levels+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
             if (level < dolic_c(blockNo, jc)) {
