@@ -1,4 +1,4 @@
-# GoogleTest requires at least C++14
+# GoogleTest requires at least C++14 / TKE requires C++17
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -30,21 +30,24 @@ target_link_libraries(
 include(GoogleTest)
 gtest_discover_tests(get_index_range)
 
-# calculate_mxl_2
-add_executable(
-  calculate_mxl_2
-  calculate_mxl_2.cpp
-)
+if(ENABLE_CUDA OR ENABLE_HIP)
 
-target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR})
-target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
-target_link_libraries (calculate_mxl_2 tke)
+else()
+    # calculate_mxl_2
+    add_executable(
+      calculate_mxl_2
+      calculate_mxl_2.cpp
+    )
 
-target_link_libraries(
-  calculate_mxl_2
-  GTest::gtest_main
-)
+    target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR})
+    target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
+    target_link_libraries (calculate_mxl_2 tke)
 
-include(GoogleTest)
-gtest_discover_tests(calculate_mxl_2)
+    target_link_libraries(
+      calculate_mxl_2
+      GTest::gtest_main
+    )
 
+    include(GoogleTest)
+    gtest_discover_tests(calculate_mxl_2)
+endif()
