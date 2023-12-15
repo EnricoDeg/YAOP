@@ -30,6 +30,7 @@ using ext3d_t = Kokkos::dextents<int, 3>;
 using mdspan_1d_double = Kokkos::mdspan<double, ext1d_t>;
 using mdspan_2d_double = Kokkos::mdspan<double, ext2d_t>;
 using mdspan_3d_double = Kokkos::mdspan<double, ext3d_t>;
+using mdspan_1d_int = Kokkos::mdspan<int, ext1d_t>;
 using mdspan_2d_int = Kokkos::mdspan<int, ext2d_t>;
 using mdspan_3d_int = Kokkos::mdspan<int, ext3d_t>;
 
@@ -93,10 +94,40 @@ class cpu_mdspan_impl {
         mdspan_3d_double memview{ field, ext3d_d{dim1, dim2, dim3} };
         return memview;
     }
+    /*! \brief Allocate memory and create a 1D mdspan object from int pointer.
+     *
+     */
+    static mdspan_1d_int memview_malloc(int *field, int dim1) {
+        field = reinterpret_cast<int *>(malloc(dim1 * sizeof(int)));
+        mdspan_1d_int memview{ field, ext1d_d{dim1} };
+        return memview;
+    }
+    /*! \brief Allocate memory and create a 2D mdspan object from int pointer.
+     *
+     */
+    static mdspan_2d_int memview_malloc(int *field, int dim1, int dim2) {
+        field = reinterpret_cast<int *>(malloc(dim1 * dim2 * sizeof(int)));
+        mdspan_2d_int memview{ field, ext2d_d{dim1, dim2} };
+        return memview;
+    }
+    /*! \brief Allocate memory and create a 3D mdspan object from int pointer.
+     *
+     */
+    static mdspan_3d_int memview_malloc(int *field, int dim1, int dim2, int dim3) {
+        field = reinterpret_cast<int *>(malloc(dim1 * dim2 * dim3 * sizeof(int)));
+        mdspan_3d_int memview{ field, ext3d_d{dim1, dim2, dim3} };
+        return memview;
+    }
     /*! \brief Free memory from double pointer.
      *
      */
     static void memview_free(double *field) {
+        free(field);
+    }
+    /*! \brief Free memory from int pointer.
+     *
+     */
+    static void memview_free(int *field) {
         free(field);
     }
 };
