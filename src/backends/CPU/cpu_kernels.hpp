@@ -58,6 +58,13 @@ inline void forcing(int blockNo, int start_index, int end_index, int max_levels,
                     mdspan_2d_double tke_kv, mdspan_3d_double tke_Tspr, mdspan_3d_double tke_Tbpr,
                     mdspan_3d_double tke_plc, mdspan_3d_double tke_Tiwf, mdspan_2d_double forc);
 
+inline void build_diffusion_dissipation_tridiag(int blockNo, int start_index, int end_index, int max_levels,
+                                                mdspan_2d_int dolic_c, double alpha_tke,
+                                                mdspan_3d_double tke_Av, mdspan_2d_double dzt_stretched,
+                                                mdspan_2d_double dzw_stretched,
+                                                mdspan_2d_double ke, mdspan_2d_double a_dif, mdspan_2d_double b_dif,
+                                                mdspan_2d_double c_dif);
+
 inline void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
                           double dtime, double c_eps, int nlevs,
                           mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
