@@ -14,14 +14,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <algorithm>
-#include <cmath>
 #include "src/backends/CPU/cpu_kernels.hpp"
 #include "src/backends/kernels.hpp"
 #include "src/shared/constants/constants_thermodyn.hpp"
-
-using std::max;
-using std::min;
 
 void calc_impl_cells(int blockNo, int start_index, int end_index,
                      t_patch_view<cpu_memview::mdspan, cpu_memview::dextents> p_patch,
@@ -140,8 +135,8 @@ void integrate(int blockNo, int start_index, int end_index,
     }
 
     if (p_constant_tke.tke_mxl_choice == 2) {
-        calculate_mxl_2(blockNo, start_index, end_index, max_levels, p_constant_tke.mxl_min,
-                        p_patch.dolic_c, p_cvmix.tke_Lmix, p_internal.dzw_stretched);
+        calc_mxl_2(blockNo, start_index, end_index, max_levels, p_constant_tke.mxl_min,
+                   p_patch.dolic_c, p_cvmix.tke_Lmix, p_internal.dzw_stretched);
     } else if (p_constant_tke.tke_mxl_choice == 3) {
         // TODO(EnricoDeg): not default
     } else {
@@ -149,16 +144,16 @@ void integrate(int blockNo, int start_index, int end_index,
     }
 
     // calculate diffusivities
-    calculate_diffusivity(blockNo, start_index, end_index, max_levels, &p_constant_tke,
-                          p_patch.dolic_c, p_cvmix.tke_Lmix, p_internal.sqrttke,
-                          p_internal.Nsqr, p_internal.Ssqr,
-                          p_internal.tke_Av, p_internal.tke_kv, p_cvmix.tke_Pr);
+    calc_diffusivity(blockNo, start_index, end_index, max_levels, &p_constant_tke,
+                     p_patch.dolic_c, p_cvmix.tke_Lmix, p_internal.sqrttke,
+                     p_internal.Nsqr, p_internal.Ssqr,
+                     p_internal.tke_Av, p_internal.tke_kv, p_cvmix.tke_Pr);
 
     // tke forcing
-    forcing(blockNo, start_index, end_index, max_levels, p_constant.l_lc, p_constant_tke.only_tke,
-            p_patch.dolic_c, p_internal.Ssqr, p_internal.Nsqr, p_internal.tke_Av,
-            p_internal.tke_kv, p_cvmix.tke_Tspr, p_cvmix.tke_Tbpr,
-            p_cvmix.tke_plc, p_cvmix.tke_Tiwf, p_internal.forc);
+    calc_forcing(blockNo, start_index, end_index, max_levels, p_constant.l_lc, p_constant_tke.only_tke,
+                 p_patch.dolic_c, p_internal.Ssqr, p_internal.Nsqr, p_internal.tke_Av,
+                 p_internal.tke_kv, p_cvmix.tke_Tspr, p_cvmix.tke_Tbpr,
+                 p_cvmix.tke_plc, p_cvmix.tke_Tiwf, p_internal.forc);
 
     // vertical dissipation and diffusion solved implicitly
     build_diffusion_dissipation_tridiag(blockNo, start_index, end_index, max_levels,
@@ -235,29 +230,29 @@ void integrate(int blockNo, int start_index, int end_index,
 
     // diagnose implicite tendencies (only for diagnostics)
     // vertical diffusion of TKE
-    vertical_diffusion(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
-                       diff_surf_forc, diff_bott_forc,
-                       p_internal.a_dif, p_internal.b_dif, p_internal.c_dif,
-                       p_cvmix.tke, p_cvmix.tke_Tdif);
+    tke_vertical_diffusion(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+                           diff_surf_forc, diff_bott_forc,
+                           p_internal.a_dif, p_internal.b_dif, p_internal.c_dif,
+                           p_cvmix.tke, p_cvmix.tke_Tdif);
 
     // flux out of first box due to diffusion with Dirichlet boundary value of TKE
     // (tke_surf=tke_upd(1)) and TKE of box below (tke_new(2))
     if (p_constant_tke.use_ubound_dirichlet)
-        vertical_diffusion_ub_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
-                                        tke_surf, p_internal.ke, p_internal.dzw_stretched,
-                                        p_internal.dzt_stretched, p_cvmix.tke,
-                                        p_cvmix.tke_Tdif);
+        tke_vertical_diffusion_ub_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
+                                            tke_surf, p_internal.ke, p_internal.dzw_stretched,
+                                            p_internal.dzt_stretched, p_cvmix.tke,
+                                            p_cvmix.tke_Tdif);
 
     if (p_constant_tke.use_lbound_dirichlet)
-        vertical_diffusion_lb_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
-                                        tke_bott, p_internal.ke, p_internal.dzw_stretched,
-                                        p_internal.dzt_stretched, p_cvmix.tke,
-                                        p_cvmix.tke_Tdif);
+        tke_vertical_diffusion_lb_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
+                                            tke_bott, p_internal.ke, p_internal.dzw_stretched,
+                                            p_internal.dzt_stretched, p_cvmix.tke,
+                                            p_cvmix.tke_Tdif);
 
     // dissipation of TKE
-    vertical_dissipation(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
-                         p_constant.nlevs, p_constant_tke.c_eps, p_cvmix.tke_Lmix, p_internal.sqrttke,
-                         p_cvmix.tke, p_cvmix.tke_Tdis);
+    tke_vertical_dissipation(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+                             p_constant.nlevs, p_constant_tke.c_eps, p_cvmix.tke_Lmix, p_internal.sqrttke,
+                             p_cvmix.tke, p_cvmix.tke_Tdis);
 
     // reset tke to bounding values
     for (int level = 0; level < p_constant.nlevs+1; level++)
@@ -343,8 +338,9 @@ void integrate(int blockNo, int start_index, int end_index,
     }
 }
 
-inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
-                            mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched) {
+inline
+void calc_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
+                mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched) {
     for (int jc = start_index; jc <= end_index; jc++) {
         if (dolic_c(blockNo, jc) > 0) {
             tke_Lmix(blockNo, 0, jc) = 0.0;
@@ -377,11 +373,12 @@ inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max
                 tke_Lmix(blockNo, level, jc) = max(tke_Lmix(blockNo, level, jc), mxl_min);
 }
 
-inline void calculate_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
-                                  t_constant_tke *p_constant_tke,
-                                  mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
-                                  mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
-                                  mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr) {
+inline
+void calc_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
+                      t_constant_tke *p_constant_tke,
+                      mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
+                      mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
+                      mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr) {
     for (int level = 0; level < max_levels+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
             if (level < dolic_c(blockNo, jc)) {
@@ -403,10 +400,11 @@ inline void calculate_diffusivity(int blockNo, int start_index, int end_index, i
     }
 }
 
-inline void forcing(int blockNo, int start_index, int end_index, int max_levels, bool l_lc, bool only_tke,
-                    mdspan_2d_int dolic_c, mdspan_2d_double Ssqr, mdspan_2d_double Nsqr, mdspan_3d_double tke_Av,
-                    mdspan_2d_double tke_kv, mdspan_3d_double tke_Tspr, mdspan_3d_double tke_Tbpr,
-                    mdspan_3d_double tke_plc, mdspan_3d_double tke_Tiwf, mdspan_2d_double forc) {
+inline
+void calc_forcing(int blockNo, int start_index, int end_index, int max_levels, bool l_lc, bool only_tke,
+                  mdspan_2d_int dolic_c, mdspan_2d_double Ssqr, mdspan_2d_double Nsqr, mdspan_3d_double tke_Av,
+                  mdspan_2d_double tke_kv, mdspan_3d_double tke_Tspr, mdspan_3d_double tke_Tbpr,
+                  mdspan_3d_double tke_plc, mdspan_3d_double tke_Tiwf, mdspan_2d_double forc) {
     for (int level = 0; level < max_levels+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
             if (level < dolic_c(blockNo, jc) + 1) {
@@ -427,12 +425,13 @@ inline void forcing(int blockNo, int start_index, int end_index, int max_levels,
     }
 }
 
-inline void build_diffusion_dissipation_tridiag(int blockNo, int start_index, int end_index, int max_levels,
-                                                mdspan_2d_int dolic_c, double alpha_tke,
-                                                mdspan_3d_double tke_Av, mdspan_2d_double dzt_stretched,
-                                                mdspan_2d_double dzw_stretched,
-                                                mdspan_2d_double ke, mdspan_2d_double a_dif, mdspan_2d_double b_dif,
-                                                mdspan_2d_double c_dif) {
+inline
+void build_diffusion_dissipation_tridiag(int blockNo, int start_index, int end_index, int max_levels,
+                                         mdspan_2d_int dolic_c, double alpha_tke,
+                                         mdspan_3d_double tke_Av, mdspan_2d_double dzt_stretched,
+                                         mdspan_2d_double dzw_stretched,
+                                         mdspan_2d_double ke, mdspan_2d_double a_dif, mdspan_2d_double b_dif,
+                                         mdspan_2d_double c_dif) {
     // c is lower diagonal of matrix
     for (int level = 0; level < max_levels; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
@@ -469,13 +468,14 @@ inline void build_diffusion_dissipation_tridiag(int blockNo, int start_index, in
             a_dif(0, jc) = 0.0;
 }
 
-inline void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
-                          double dtime, double c_eps, int nlevs,
-                          mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
-                          mdspan_2d_double sqrttke, mdspan_3d_double tke_Lmix, mdspan_2d_double tke_upd,
-                          mdspan_2d_double forc,
-                          mdspan_2d_double a_tri, mdspan_2d_double b_tri, mdspan_2d_double c_tri,
-                          mdspan_2d_double d_tri) {
+inline
+void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                   double dtime, double c_eps, int nlevs,
+                   mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
+                   mdspan_2d_double sqrttke, mdspan_3d_double tke_Lmix, mdspan_2d_double tke_upd,
+                   mdspan_2d_double forc,
+                   mdspan_2d_double a_tri, mdspan_2d_double b_tri, mdspan_2d_double c_tri,
+                   mdspan_2d_double d_tri) {
     for (int level = 0; level < nlevs+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
             a_tri(level, jc) = - dtime * a_dif(level, jc);
@@ -496,9 +496,10 @@ inline void build_tridiag(int blockNo, int start_index, int end_index, int max_l
                 d_tri(level, jc) = tke_upd(level, jc) + dtime * forc(level, jc);
 }
 
-inline void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
-                          mdspan_2d_double a, mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
-                          mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp) {
+inline
+void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                   mdspan_2d_double a, mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
+                   mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp) {
     // initialize a-prime (cp) and d-prime
     for (int jc = start_index; jc <= end_index; jc++) {
         if (dolic_c(blockNo, jc)+1 > 0) {
@@ -529,10 +530,11 @@ inline void solve_tridiag(int blockNo, int start_index, int end_index, int max_l
                 x(blockNo, level, jc) = dp(level, jc) - cp(level, jc) * x(blockNo, level-1, jc);
 }
 
-inline void vertical_diffusion(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
-                               double diff_surf_forc, double diff_bott_forc,
-                               mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
-                               mdspan_3d_double tke, mdspan_3d_double tke_Tdif) {
+inline
+void tke_vertical_diffusion(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                            double diff_surf_forc, double diff_bott_forc,
+                            mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
+                            mdspan_3d_double tke, mdspan_3d_double tke_Tdif) {
     for (int level = 1; level < max_levels; level++)
         for (int jc = start_index; jc <= end_index; jc++)
             if (level < dolic_c(blockNo, jc))
@@ -553,20 +555,22 @@ inline void vertical_diffusion(int blockNo, int start_index, int end_index, int 
     }
 }
 
-inline void vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
-                                            double tke_surf, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
-                                            mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
-                                            mdspan_3d_double tke_Tdif) {
+inline
+void tke_vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
+                                         double tke_surf, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
+                                         mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
+                                         mdspan_3d_double tke_Tdif) {
     for (int jc = start_index; jc <= end_index; jc++)
         if (dolic_c(blockNo, jc) > 0)
             tke_Tdif(blockNo, 0, jc) = - ke(0, jc) / dzw_stretched(0, jc) / dzt_stretched(0, jc) *
                                        (tke_surf - tke(blockNo, 1, jc));
 }
 
-inline void vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
-                                            double tke_bott, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
-                                            mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
-                                            mdspan_3d_double tke_Tdif) {
+inline
+void tke_vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
+                                         double tke_bott, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
+                                         mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
+                                         mdspan_3d_double tke_Tdif) {
     for (int jc = start_index; jc <= end_index; jc++) {
         if (dolic_c(blockNo, jc) > 0) {
             int dolic = dolic_c(blockNo, jc);
@@ -576,9 +580,10 @@ inline void vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int en
     }
 }
 
-inline void vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
-                                 int nlevs, double c_eps, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
-                                 mdspan_3d_double tke, mdspan_3d_double tke_Tdis) {
+inline
+void tke_vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                              int nlevs, double c_eps, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
+                              mdspan_3d_double tke, mdspan_3d_double tke_Tdis) {
     for (int level = 0; level < nlevs+1; level++)
         for (int jc = start_index; jc <= end_index; jc++)
             tke_Tdis(blockNo, level, jc) = 0.0;

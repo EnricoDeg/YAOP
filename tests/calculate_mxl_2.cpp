@@ -51,7 +51,7 @@ TEST(calculate_mxl_2, min_val_0D) {
             dzw_stretched(level, jc) = 1.0;
 
     // compute mixing length scale
-    calculate_mxl_2(blockNo, start_index, end_index, max_levels, mxl_min,
+    calc_mxl_2(blockNo, start_index, end_index, max_levels, mxl_min,
                     dolic_c, tke_Lmix, dzw_stretched);
 
     // checks
