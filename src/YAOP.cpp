@@ -92,3 +92,9 @@ void YAOP::calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
                           cells_start_block, cells_end_block, cells_start_index,
                           cells_end_index);
 }
+
+void YAOP::calc_vertical_stability() {}
+
+void YAOP::calc_pp() {}
+
+void YAOP::calc_idemix() {}

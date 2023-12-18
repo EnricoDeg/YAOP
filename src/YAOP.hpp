@@ -68,6 +68,12 @@ class YAOP {
               int cells_start_block, int cells_end_block, int cells_start_index,
               int cells_end_index);
 
+    void calc_vertical_stability();
+
+    void calc_pp();
+
+    void calc_idemix();
+
  private:
     struct Impl;
     Impl *m_impl;
