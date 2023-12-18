@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>TKE: TKE Class Reference</title>
+<title>TKE: YAOP Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -64,45 +64,45 @@ $(function() {
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="classTKE-members.html">List of all members</a>  </div>
+<a href="classYAOP-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">TKE Class Reference</div>  </div>
+<div class="title">YAOP Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class, part of the library interface.  
- <a href="classTKE.html#details">More...</a></p>
+<p><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class, part of the library interface.  
+ <a href="classYAOP.html#details">More...</a></p>
 
-<p><code>#include &lt;TKE.hpp&gt;</code></p>
+<p><code>#include &lt;YAOP.hpp&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structTKE_1_1Impl.html">Impl</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structYAOP_1_1Impl.html">Impl</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a41e7ac7c0d26e5809eb980538458da41"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE.html#a41e7ac7c0d26e5809eb980538458da41">TKE</a> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
-<tr class="memdesc:a41e7ac7c0d26e5809eb980538458da41"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class constructor called in the model initialization.  <a href="classTKE.html#a41e7ac7c0d26e5809eb980538458da41">More...</a><br /></td></tr>
-<tr class="separator:a41e7ac7c0d26e5809eb980538458da41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6e407c0e44799727b27e681a4212a88"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE.html#ab6e407c0e44799727b27e681a4212a88">~TKE</a> ()</td></tr>
-<tr class="memdesc:ab6e407c0e44799727b27e681a4212a88"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class destructor called in the model finalization.  <a href="classTKE.html#ab6e407c0e44799727b27e681a4212a88">More...</a><br /></td></tr>
-<tr class="separator:ab6e407c0e44799727b27e681a4212a88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2b94d276d2bbb6105941fa7ed8891b3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classTKE.html#aa2b94d276d2bbb6105941fa7ed8891b3">calc</a> (double *depth_CellInterface, double *prism_center_dist_c, double *inv_prism_center_dist_c, double *prism_thick_c, int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c, int *edges_cell_idx, int *edges_cell_blk, double *temp, double *salt, double *stretch_c, double *eta_c, double *p_vn_x1, double *p_vn_x2, double *p_vn_x3, double *tke, double *tke_plc_in, double *hlc_in, double *wlc_in, double *u_stokes_in, double *a_veloc_v, double *a_temp_v, double *a_salt_v, double *iwe_Tdis, double *cvmix_dummy_1, double *cvmix_dummy_2, double *cvmix_dummy_3, double *tke_Tbpr, double *tke_Tspr, double *tke_Tdif, double *tke_Tdis, double *tke_Twin, double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot, double *tke_Lmix, double *tke_Pr, double *stress_xw, double *stress_yw, double *fu10, double *concsum, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
-<tr class="memdesc:aa2b94d276d2bbb6105941fa7ed8891b3"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class time loop calculation method.  <a href="classTKE.html#aa2b94d276d2bbb6105941fa7ed8891b3">More...</a><br /></td></tr>
-<tr class="separator:aa2b94d276d2bbb6105941fa7ed8891b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa437181a649e378d4fbacdac6d3ff280"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYAOP.html#aa437181a649e378d4fbacdac6d3ff280">YAOP</a> (int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke, int vert_cor_type, double dtime, double OceanReferenceDensity, double grav, int l_lc, double clc, double ReferencePressureIndbars, double pi)</td></tr>
+<tr class="memdesc:aa437181a649e378d4fbacdac6d3ff280"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class constructor called in the model initialization.  <a href="classYAOP.html#aa437181a649e378d4fbacdac6d3ff280">More...</a><br /></td></tr>
+<tr class="separator:aa437181a649e378d4fbacdac6d3ff280"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0ca45db0c859a31d5510ec8902edff8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYAOP.html#ad0ca45db0c859a31d5510ec8902edff8">~YAOP</a> ()</td></tr>
+<tr class="memdesc:ad0ca45db0c859a31d5510ec8902edff8"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class destructor called in the model finalization.  <a href="classYAOP.html#ad0ca45db0c859a31d5510ec8902edff8">More...</a><br /></td></tr>
+<tr class="separator:ad0ca45db0c859a31d5510ec8902edff8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa559dea6249476568d59bfaef65e6d52"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classYAOP.html#aa559dea6249476568d59bfaef65e6d52">calc_tke</a> (double *depth_CellInterface, double *prism_center_dist_c, double *inv_prism_center_dist_c, double *prism_thick_c, int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c, int *edges_cell_idx, int *edges_cell_blk, double *temp, double *salt, double *stretch_c, double *eta_c, double *p_vn_x1, double *p_vn_x2, double *p_vn_x3, double *tke, double *tke_plc_in, double *hlc_in, double *wlc_in, double *u_stokes_in, double *a_veloc_v, double *a_temp_v, double *a_salt_v, double *iwe_Tdis, double *cvmix_dummy_1, double *cvmix_dummy_2, double *cvmix_dummy_3, double *tke_Tbpr, double *tke_Tspr, double *tke_Tdif, double *tke_Tdis, double *tke_Twin, double *tke_Tiwf, double *tke_Tbck, double *tke_Ttot, double *tke_Lmix, double *tke_Pr, double *stress_xw, double *stress_yw, double *fu10, double *concsum, int edges_block_size, int edges_start_block, int edges_end_block, int edges_start_index, int edges_end_index, int cells_block_size, int cells_start_block, int cells_end_block, int cells_start_index, int cells_end_index)</td></tr>
+<tr class="memdesc:aa559dea6249476568d59bfaef65e6d52"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class time loop calculation of tke scheme.  <a href="classYAOP.html#aa559dea6249476568d59bfaef65e6d52">More...</a><br /></td></tr>
+<tr class="separator:aa559dea6249476568d59bfaef65e6d52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class, part of the library interface. </p>
+<div class="textblock"><p><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class, part of the library interface. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a41e7ac7c0d26e5809eb980538458da41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41e7ac7c0d26e5809eb980538458da41">&#9670;&nbsp;</a></span>TKE()</h2>
+<a id="aa437181a649e378d4fbacdac6d3ff280"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa437181a649e378d4fbacdac6d3ff280">&#9670;&nbsp;</a></span>YAOP()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TKE::TKE </td>
+          <td class="memname">YAOP::YAOP </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>nproma</em>, </td>
@@ -187,19 +187,19 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class constructor called in the model initialization. </p>
-<p>Internally the backend is selected based on the library configuration, some constant parameters needed by the <a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> scheme are set and all the internal memory is allocated. </p>
+<p><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class constructor called in the model initialization. </p>
+<p>Internally the backend is selected based on the library configuration, some constant parameters needed by the selected scheme are set and all the internal memory is allocated. </p>
 
 </div>
 </div>
-<a id="ab6e407c0e44799727b27e681a4212a88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6e407c0e44799727b27e681a4212a88">&#9670;&nbsp;</a></span>~TKE()</h2>
+<a id="ad0ca45db0c859a31d5510ec8902edff8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0ca45db0c859a31d5510ec8902edff8">&#9670;&nbsp;</a></span>~YAOP()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">TKE::~TKE </td>
+          <td class="memname">YAOP::~YAOP </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -207,20 +207,20 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class destructor called in the model finalization. </p>
+<p><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class destructor called in the model finalization. </p>
 <p>Internally the memory is deallocated. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa2b94d276d2bbb6105941fa7ed8891b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa2b94d276d2bbb6105941fa7ed8891b3">&#9670;&nbsp;</a></span>calc()</h2>
+<a id="aa559dea6249476568d59bfaef65e6d52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa559dea6249476568d59bfaef65e6d52">&#9670;&nbsp;</a></span>calc_tke()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void TKE::calc </td>
+          <td class="memname">void YAOP::calc_tke </td>
           <td>(</td>
           <td class="paramtype">double *&#160;</td>
           <td class="paramname"><em>depth_CellInterface</em>, </td>
@@ -545,14 +545,14 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p><a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> main class time loop calculation method. </p>
-<p>Internally it is calling the <a class="el" href="classTKE.html" title="TKE main class, part of the library interface.">TKE</a> scheme implementation of the backend selected during the configuration. During the first time step the internal data structures are filled and then the passed arrays are not used, so the model has to make sure that the memory address does not change during the time loop. </p>
+<p><a class="el" href="classYAOP.html" title="YAOP main class, part of the library interface.">YAOP</a> main class time loop calculation of tke scheme. </p>
+<p>Internally it is calling the tke scheme implementation of the backend selected during the configuration. During the first time step the internal data structures are filled and then the passed arrays are not used, so the model has to make sure that the memory address does not change during the time loop. </p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/runner/work/YAOP/YAOP/src/TKE.hpp</li>
-<li>/home/runner/work/YAOP/YAOP/src/TKE.cpp</li>
+<li>/home/runner/work/YAOP/YAOP/src/YAOP.hpp</li>
+<li>/home/runner/work/YAOP/YAOP/src/YAOP.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
