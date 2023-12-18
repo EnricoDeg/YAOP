@@ -14,7 +14,7 @@
 ! along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 program main
-    use mod_TKE
+    use mod_YAOP
     implicit none
 
     integer, parameter :: pd = 12
@@ -166,7 +166,7 @@ program main
 
     allocate(concsum(nproma, nblocks))
 
-    CALL TKE_Init_f(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
+    CALL YAOP_Init_f(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke, &
                     vert_cor_type, dtime, OceanReferenceDensity, grav, &
                     l_lc, clc, ReferencePressureIndbars, pi)
 
@@ -201,7 +201,7 @@ program main
         !$ACC                      stress_xw, stress_yw, &
         !$ACC                      fu10, &
         !$ACC                      concsum)
-        CALL TKE_Calc_f(depth_CellInterface, prism_center_dist_c, &
+        CALL YAOP_Calc_tke_f(depth_CellInterface, prism_center_dist_c, &
                         inv_prism_center_dist_c, prism_thick_c, &
                         dolic_c, dolic_e, zlev_i, wet_c, &
                         edges_cell_idx, edges_cell_blk, &
@@ -223,7 +223,7 @@ program main
         !$ACC WAIT
     end do
 
-    CALL TKE_Finalize_f()
+    CALL YAOP_Finalize_f()
 
     !$ACC EXIT DATA DELETE(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c, prism_thick_c, &
     !$ACC                  dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx, edges_cell_blk)

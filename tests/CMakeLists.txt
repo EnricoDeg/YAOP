@@ -20,7 +20,7 @@ add_executable(
 )
 
 target_include_directories(get_index_range PRIVATE ${PROJECT_SOURCE_DIR})
-target_link_libraries (get_index_range tke)
+target_link_libraries (get_index_range yaop)
 
 target_link_libraries(
   get_index_range
@@ -41,7 +41,7 @@ else()
 
     target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR})
     target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
-    target_link_libraries (calculate_mxl_2 tke)
+    target_link_libraries (calculate_mxl_2 yaop)
 
     target_link_libraries(
       calculate_mxl_2

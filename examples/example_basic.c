@@ -16,7 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "src/bindings/C/TKE.h"
+#include "src/bindings/C/YAOP.h"
 
 int main(int argc, char ** argv) {
     int nproma = 25;
@@ -46,7 +46,7 @@ int main(int argc, char ** argv) {
     double ReferencePressureIndbars = 1035.0*grav*1.0e-4;
     double pi = 3.14159265358979323846264338327950288;
 
-    TKE_Init(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
+    YAOP_Init(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
              vert_cor_type, dtime, OceanReferenceDensity, grav,
              l_lc, clc, ReferencePressureIndbars, pi);
 
@@ -146,29 +146,29 @@ int main(int argc, char ** argv) {
       #pragma acc host_data use_device(tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr, temp, salt)
       #pragma acc host_data use_device(stretch_c, eta_c, stress_xw, stress_yw, fu10, concsum)
       #pragma acc host_data use_device(p_vn_x1, p_vn_x2, p_vn_x3)
-      TKE_Calc(depth_CellInterface, prism_center_dist_c,
-               inv_prism_center_dist_c, prism_thick_c,
-               dolic_c, dolic_e, zlev_i, wet_c,
-               edges_cell_idx, edges_cell_blk,
-               temp, salt, stretch_c, eta_c,
-               p_vn_x1, p_vn_x2, p_vn_x3,
-               tke, tke_plc_in, hlc_in, wlc_in,
-               u_stokes_in, a_veloc_v, a_temp_v, a_salt_v,
-               iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
-               cvmix_dummy_3, tke_Tbpr, tke_Tspr,
-               tke_Tdif, tke_Tdis, tke_Twin,
-               tke_Tiwf, tke_Tbck, tke_Ttot,
-               tke_Lmix, tke_Pr, stress_xw,
-               stress_yw, fu10, concsum,
-               edges_block_size, edges_start_block, edges_end_block,
-               edges_start_index, edges_end_index, cells_block_size,
-               cells_start_block, cells_end_block, cells_start_index,
-               cells_end_index);
+      YAOP_Calc_tke(depth_CellInterface, prism_center_dist_c,
+                    inv_prism_center_dist_c, prism_thick_c,
+                    dolic_c, dolic_e, zlev_i, wet_c,
+                    edges_cell_idx, edges_cell_blk,
+                    temp, salt, stretch_c, eta_c,
+                    p_vn_x1, p_vn_x2, p_vn_x3,
+                    tke, tke_plc_in, hlc_in, wlc_in,
+                    u_stokes_in, a_veloc_v, a_temp_v, a_salt_v,
+                    iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
+                    cvmix_dummy_3, tke_Tbpr, tke_Tspr,
+                    tke_Tdif, tke_Tdis, tke_Twin,
+                    tke_Tiwf, tke_Tbck, tke_Ttot,
+                    tke_Lmix, tke_Pr, stress_xw,
+                    stress_yw, fu10, concsum,
+                    edges_block_size, edges_start_block, edges_end_block,
+                    edges_start_index, edges_end_index, cells_block_size,
+                    cells_start_block, cells_end_block, cells_start_index,
+                    cells_end_index);
 
       #pragma acc wait
     }
 
-    TKE_Finalize();
+    YAOP_Finalize();
 
     #pragma acc exit data delete(depth_CellInterface, prism_center_dist_c, inv_prism_center_dist_c)
     #pragma acc exit data delete(prism_thick_c, dolic_c, dolic_e, zlev_i, wet_c, edges_cell_idx, edges_cell_blk)

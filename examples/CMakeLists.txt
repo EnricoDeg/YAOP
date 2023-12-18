@@ -8,7 +8,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "NVHPC")
 endif()
 
 add_executable(example_basic_cxx example_basic.cpp)
-target_link_libraries (example_basic_cxx tke)
+target_link_libraries (example_basic_cxx yaop)
 target_include_directories(example_basic_cxx PRIVATE ${PROJECT_SOURCE_DIR})
 if(ENABLE_CUDA)
     set_property(TARGET example_basic_cxx PROPERTY CUDA_SEPARABLE_COMPILATION ON)
@@ -16,7 +16,7 @@ endif()
 
 if(ENABLE_C)
     add_executable(example_basic_c example_basic.c)
-    target_link_libraries (example_basic_c tke)
+    target_link_libraries (example_basic_c yaop)
     target_include_directories(example_basic_c PRIVATE ${PROJECT_SOURCE_DIR})
 endif()
 
@@ -24,7 +24,7 @@ if(ENABLE_FORTRAN)
     set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
     add_executable(example_basic_f example_basic.f90)
     set_property(TARGET example_basic_f PROPERTY LINKER_LANGUAGE Fortran)
-    target_link_libraries (example_basic_f tke)
+    target_link_libraries (example_basic_f yaop)
 endif()
 
 

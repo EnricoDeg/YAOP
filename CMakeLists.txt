@@ -24,7 +24,7 @@ if(ENABLE_CUDA AND ENABLE_HIP)
     message(FATAL_ERROR "CUDA and HIP are both enabled: not allowed")
 endif()
 
-project(tke ${LANG_CXX} ${LANG_C} ${LANG_FORTRAN} ${LANG_CUDA} ${LANG_HIP})
+project(yaop ${LANG_CXX} ${LANG_C} ${LANG_FORTRAN} ${LANG_CUDA} ${LANG_HIP})
 
 if(ENABLE_CUDA)
     find_package(CUDA QUIET REQUIRED)

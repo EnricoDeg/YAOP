@@ -17,12 +17,12 @@ include_directories(${CMAKE_BINARY_DIR})
 
 if(ENABLE_FORTRAN)
     set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_BINARY_DIR}/modules)
-    set(SOURCE_FORTRAN bindings/Fortran/mod_TKE.f90)
-    set(SOURCE_C bindings/C/TKE_capi.cpp)
+    set(SOURCE_FORTRAN bindings/Fortran/mod_YAOP.f90)
+    set(SOURCE_C bindings/C/YAOP_capi.cpp)
 endif()
 
 if(ENABLE_C)
-    set(SOURCE_C bindings/C/TKE_capi.cpp)
+    set(SOURCE_C bindings/C/YAOP_capi.cpp)
 endif()
 
 if(ENABLE_CUDA OR ENABLE_HIP)
@@ -43,7 +43,7 @@ elseif(ENABLE_HIP)
     set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE HIP)
 endif()
 
-set(SOURCE_EXE  TKE.cpp
+set(SOURCE_EXE  YAOP.cpp
                 ${SOURCE_C}
                 ${SOURCE_FORTRAN}
                 backends/TKE_backend.cpp
@@ -55,17 +55,17 @@ set(SOURCE_EXE  TKE.cpp
                 shared/utils.cpp
                 shared/interface/data_struct.cpp)
 
-add_library(tke SHARED ${SOURCE_EXE})
-target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR})
-target_include_directories(tke PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
-set_property(TARGET tke PROPERTY CXX_STANDARD 17)
+add_library(yaop SHARED ${SOURCE_EXE})
+target_include_directories(yaop PRIVATE ${PROJECT_SOURCE_DIR})
+target_include_directories(yaop PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
+set_property(TARGET yaop PROPERTY CXX_STANDARD 17)
 if(ENABLE_CUDA)
-    set_property(TARGET tke PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+    set_property(TARGET yaop PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 endif()
 
 # Install the library
 install (
-  TARGETS tke
+  TARGETS yaop
   LIBRARY DESTINATION ${PROJECT_SOURCE_DIR}/lib
   ARCHIVE DESTINATION ${PROJECT_SOURCE_DIR}/lib)
 
@@ -76,9 +76,9 @@ if(ENABLE_FORTRAN)
 endif()
 
 # Header Files
-set(HEADERS_CXX TKE.hpp)
+set(HEADERS_CXX YAOP.hpp)
 install(FILES ${HEADERS_CXX} DESTINATION ${PROJECT_SOURCE_DIR}/include)
 if(ENABLE_C)
-    set(HEADERS_C bindings/C/TKE.h)
+    set(HEADERS_C bindings/C/YAOP.h)
     install(FILES ${HEADERS_C} DESTINATION ${PROJECT_SOURCE_DIR}/include)
 endif()

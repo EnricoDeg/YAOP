@@ -14,42 +14,42 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_TKE_HPP_
-#define SRC_TKE_HPP_
+#ifndef SRC_YAOP_HPP_
+#define SRC_YAOP_HPP_
 
 #include <iostream>
 #include "src/shared/interface/data_struct.hpp"
 
-/*! \brief TKE main class, part of the library interface.
+/*! \brief YAOP main class, part of the library interface.
  *
  */
-class TKE {
+class YAOP {
  public:
-    /*! \brief TKE main class constructor called in the model initialization.
+    /*! \brief YAOP main class constructor called in the model initialization.
      *
      *  Internally the backend is selected based on the library configuration,
-     *  some constant parameters needed by the TKE scheme are set and all the
+     *  some constant parameters needed by the selected scheme are set and all the
      *  internal memory is allocated.
      */
-    TKE(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+    YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
         int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
         int l_lc, double clc, double ReferencePressureIndbars, double pi);
 
-    /*! \brief TKE main class destructor called in the model finalization.
+    /*! \brief YAOP main class destructor called in the model finalization.
      *
      *  Internally the memory is deallocated.
      */
-    ~TKE();
+    ~YAOP();
 
-    /*! \brief TKE main class time loop calculation method.
+    /*! \brief YAOP main class time loop calculation of tke scheme.
      *
-     *  Internally it is calling the TKE scheme implementation of the backend selected
+     *  Internally it is calling the tke scheme implementation of the backend selected
      *  during the configuration.
      *  During the first time step the internal data structures are filled and then the
      *  passed arrays are not used, so the model has to make sure that the memory address
      *  does not change during the time loop.
      */
-    void calc(double *depth_CellInterface, double *prism_center_dist_c,
+    void calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
               double *inv_prism_center_dist_c, double *prism_thick_c,
               int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c,
               int *edges_cell_idx, int *edges_cell_blk,
@@ -80,4 +80,4 @@ class TKE {
     bool m_is_struct_init;
 };
 
-#endif  // SRC_TKE_HPP_
+#endif  // SRC_YAOP_HPP_

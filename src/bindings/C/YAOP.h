@@ -14,23 +14,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SRC_BINDINGS_C_TKE_H_
-#define SRC_BINDINGS_C_TKE_H_
+#ifndef SRC_BINDINGS_C_YAOP_H_
+#define SRC_BINDINGS_C_YAOP_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // Constructor
-void TKE_Init(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+void YAOP_Init(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
               int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
               int l_lc, double clc, double ReferencePressureIndbars, double pi);
 
 // Destructor
-void TKE_Finalize();
+void YAOP_Finalize();
 
 // Calculation
-void TKE_Calc(double *depth_CellInterface, double *prism_center_dist_c,
+void YAOP_Calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
               double *inv_prism_center_dist_c, double *prism_thick_c,
               int *dolic_c, int *dolic_e, double *zlev_i, double *wet_c,
               int *edges_cell_idx, int *edges_cell_blk,
@@ -53,4 +53,4 @@ void TKE_Calc(double *depth_CellInterface, double *prism_center_dist_c,
 }
 #endif
 
-#endif  // SRC_BINDINGS_C_TKE_H_
+#endif  // SRC_BINDINGS_C_YAOP_H_
