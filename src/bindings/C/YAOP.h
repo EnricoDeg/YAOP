@@ -49,6 +49,12 @@ void YAOP_Calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
               int cells_start_block, int cells_end_block, int cells_start_index,
               int cells_end_index);
 
+void YAOP_Calc_vertical_stability();
+
+void YAOP_Calc_pp();
+
+void YAOP_Calc_idemix();
+
 #ifdef __cplusplus
 }
 #endif

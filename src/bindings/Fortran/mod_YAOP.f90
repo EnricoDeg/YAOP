@@ -25,6 +25,9 @@ module mod_YAOP
     public :: yaop_init_f
     public :: yaop_finalize_f
     public :: yaop_calc_tke_f
+    public :: yaop_calc_vertical_stability_f
+    public :: yaop_calc_pp_f
+    public :: yaop_calc_idemix_f
 
     contains
 
@@ -331,5 +334,47 @@ module mod_YAOP
                              cells_end_index-1)
 
     end subroutine yaop_calc_tke_f
+
+    subroutine yaop_calc_vertical_stability_f()
+        implicit none
+
+        interface
+            subroutine yaop_calc_vertical_stability_c() bind(C, name="YAOP_Calc_vertical_stability")
+                use iso_c_binding
+                implicit none
+
+            end subroutine yaop_calc_vertical_stability_c
+        end interface
+
+        CALL yaop_calc_vertical_stability_c()
+    end subroutine yaop_calc_vertical_stability_f
+
+    subroutine yaop_calc_pp_f()
+        implicit none
+
+        interface
+            subroutine yaop_calc_pp_c() bind(C, name="YAOP_Calc_pp")
+                use iso_c_binding
+                implicit none
+
+            end subroutine yaop_calc_pp_c
+        end interface
+
+        CALL yaop_calc_pp_c()
+    end subroutine yaop_calc_pp_f
+
+    subroutine yaop_calc_idemix_f()
+        implicit none
+
+        interface
+            subroutine yaop_calc_idemix_c() bind(C, name="YAOP_Calc_idemix")
+                use iso_c_binding
+                implicit none
+
+            end subroutine yaop_calc_idemix_c
+        end interface
+
+        CALL yaop_calc_idemix_c()
+    end subroutine yaop_calc_idemix_f
 
 end module mod_YAOP
