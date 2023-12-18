@@ -1,8 +1,8 @@
-[![build status](https://github.com/enricodeg/TKE/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/enricodeg/TKE/actions/workflows/pre-commit.yml)
-[![build](https://github.com/EnricoDeg/TKE/actions/workflows/build.yml/badge.svg)](https://github.com/EnricoDeg/TKE/actions/workflows/build.yml)
-[![build](https://github.com/EnricoDeg/TKE/actions/workflows/docs.yml/badge.svg)](https://github.com/EnricoDeg/TKE/actions/workflows/docs.yml)
+[![build status](https://github.com/enricodeg/YAOP/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/enricodeg/YAOP/actions/workflows/pre-commit.yml)
+[![build](https://github.com/EnricoDeg/YAOP/actions/workflows/build.yml/badge.svg)](https://github.com/EnricoDeg/YAOP/actions/workflows/build.yml)
+[![build](https://github.com/EnricoDeg/YAOP/actions/workflows/docs.yml/badge.svg)](https://github.com/EnricoDeg/YAOP/actions/workflows/docs.yml)
 
-# TKE
-**Documentation** : https://enricodeg.github.io/TKE/
+# YAOP (Yet Another Ocean Physics)
+**Documentation** : https://enricodeg.github.io/YAOP/
 
-Turbulent kinetic energy library for the parametrization of turbulent vertical mixing in ICON Ocean model.
+Ocean physics parametrization library for the ICON Ocean model.
