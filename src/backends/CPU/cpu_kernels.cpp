@@ -288,15 +288,9 @@ void integrate(int blockNo, int start_index, int end_index,
                                         p_cvmix.tke_Tdif);
 
     // dissipation of TKE
-    for (int level = 0; level < p_constant.nlevs+1; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            p_cvmix.tke_Tdis(blockNo, level, jc) = 0.0;
-
-    for (int level = 1; level < max_levels; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < p_patch.dolic_c(level, jc))
-                p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_cvmix.tke_Lmix(blockNo, level, jc) *
-                                                       p_internal.sqrttke(level, jc) * p_cvmix.tke(blockNo, level, jc);
+    vertical_dissipation(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+                         p_constant.nlevs, p_constant_tke.c_eps, p_cvmix.tke_Lmix, p_internal.sqrttke,
+                         p_cvmix.tke, p_cvmix.tke_Tdis);
 
     // reset tke to bounding values
     for (int level = 0; level < p_constant.nlevs+1; level++)
@@ -571,6 +565,20 @@ inline void vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int en
                                            dzt_stretched(dolic, jc) * (tke(blockNo, dolic-1, jc) - tke_bott);
         }
     }
+}
+
+inline void vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                                 int nlevs, double c_eps, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
+                                 mdspan_3d_double tke, mdspan_3d_double tke_Tdis) {
+    for (int level = 0; level < nlevs+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            tke_Tdis(blockNo, level, jc) = 0.0;
+
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc))
+                tke_Tdis(blockNo, level, jc) = - c_eps / tke_Lmix(blockNo, level, jc) *
+                                                 sqrttke(level, jc) * tke(blockNo, level, jc);
 }
 
 void calc_impl_edges(int blockNo, int start_index, int end_index,

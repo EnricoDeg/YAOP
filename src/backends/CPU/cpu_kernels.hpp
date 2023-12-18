@@ -85,4 +85,8 @@ inline void vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int en
                                             mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
                                             mdspan_3d_double tke_Tdif);
 
+inline void vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                                 int nlevs, double c_eps, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
+                                 mdspan_3d_double tke, mdspan_3d_double tke_Tdis);
+
 #endif  // SRC_BACKENDS_CPU_CPU_KERNELS_HPP_
