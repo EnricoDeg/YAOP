@@ -62,4 +62,19 @@ inline void solve_tridiag(int blockNo, int start_index, int end_index, int max_l
                           mdspan_2d_double a, mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
                           mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp);
 
+inline void vertical_diffusion(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                               double diff_surf_forc, double diff_bott_forc,
+                               mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
+                               mdspan_3d_double tke, mdspan_3d_double tke_Tdif);
+
+inline void vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
+                                            double tke_surf, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
+                                            mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
+                                            mdspan_3d_double tke_Tdif);
+
+inline void vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
+                                            double tke_bott, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
+                                            mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
+                                            mdspan_3d_double tke_Tdif);
+
 #endif  // SRC_BACKENDS_CPU_CPU_KERNELS_HPP_

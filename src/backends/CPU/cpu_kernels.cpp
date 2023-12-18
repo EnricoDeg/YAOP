@@ -280,6 +280,29 @@ void integrate(int blockNo, int start_index, int end_index,
     solve_tridiag(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
                   p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
                   p_internal.d_tri, p_cvmix.tke, p_internal.cp, p_internal.dp);
+
+    // diagnose implicite tendencies (only for diagnostics)
+    // vertical diffusion of TKE
+    vertical_diffusion(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+                       diff_surf_forc, diff_bott_forc,
+                       p_internal.a_dif, p_internal.b_dif, p_internal.c_dif,
+                       p_cvmix.tke, p_cvmix.tke_Tdif);
+
+    // flux out of first box due to diffusion with Dirichlet boundary value of TKE
+    // (tke_surf=tke_upd(1)) and TKE of box below (tke_new(2))
+    if (p_constant_tke.use_ubound_dirichlet)
+        vertical_diffusion_ub_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
+                                        tke_surf, p_internal.ke, p_internal.dzw_stretched,
+                                        p_internal.dzt_stretched, p_cvmix.tke,
+                                        p_cvmix.tke_Tdif);
+
+    if (p_constant_tke.use_lbound_dirichlet)
+        vertical_diffusion_lb_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
+                                        tke_bott, p_internal.ke, p_internal.dzw_stretched,
+                                        p_internal.dzt_stretched, p_cvmix.tke,
+                                        p_cvmix.tke_Tdif);
+
+    // dissipation of TKE
 }
 
 inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
@@ -397,6 +420,53 @@ inline void solve_tridiag(int blockNo, int start_index, int end_index, int max_l
         for (int jc = start_index; jc <= end_index; jc++)
             if (level <= dolic_c(blockNo, jc))
                 x(blockNo, level, jc) = dp(level, jc) - cp(level, jc) * x(blockNo, level-1, jc);
+}
+
+inline void vertical_diffusion(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                               double diff_surf_forc, double diff_bott_forc,
+                               mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
+                               mdspan_3d_double tke, mdspan_3d_double tke_Tdif) {
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc))
+                 tke_Tdif(blockNo, level, jc) = a_dif(level, jc) * tke(blockNo, level-1, jc) -
+                                                b_dif(level, jc) * tke(blockNo, level, jc) +
+                                                c_dif(level, jc) * tke(blockNo, level+1, jc);
+
+    for (int jc = start_index; jc <= end_index; jc++) {
+        if (dolic_c(blockNo, jc) > 0) {
+            int dolic = dolic_c(blockNo, jc);
+            tke_Tdif(blockNo, 0, jc) = - b_dif(0, jc) * tke(blockNo, 0, jc) +
+                                         c_dif(0, jc) * tke(blockNo, 1, jc);
+            tke_Tdif(blockNo, 1, jc) += diff_surf_forc;
+            tke_Tdif(blockNo, dolic-1, jc) += diff_bott_forc;
+            tke_Tdif(blockNo, dolic, jc) = a_dif(dolic, jc) * tke(blockNo, dolic-1, jc) -
+                                           b_dif(dolic, jc) * tke(blockNo, dolic, jc);
+        }
+    }
+}
+
+inline void vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
+                                            double tke_surf, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
+                                            mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
+                                            mdspan_3d_double tke_Tdif) {
+    for (int jc = start_index; jc <= end_index; jc++)
+        if (dolic_c(blockNo, jc) > 0)
+            tke_Tdif(blockNo, 0, jc) = - ke(0, jc) / dzw_stretched(0, jc) / dzt_stretched(0, jc) *
+                                       (tke_surf - tke(blockNo, 1, jc));
+}
+
+inline void vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
+                                            double tke_bott, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
+                                            mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
+                                            mdspan_3d_double tke_Tdif) {
+    for (int jc = start_index; jc <= end_index; jc++) {
+        if (dolic_c(blockNo, jc) > 0) {
+            int dolic = dolic_c(blockNo, jc);
+            tke_Tdif(blockNo, dolic, jc) = ke(dolic-1, jc) / dzw_stretched(dolic-1, jc) /
+                                           dzt_stretched(dolic, jc) * (tke(blockNo, dolic-1, jc) - tke_bott);
+        }
+    }
 }
 
 void calc_impl_edges(int blockNo, int start_index, int end_index,
