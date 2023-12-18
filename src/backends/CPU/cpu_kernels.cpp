@@ -312,6 +312,89 @@ void integrate(int blockNo, int start_index, int end_index,
             if (level < p_patch.dolic_c(level, jc))
                 p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_cvmix.tke_Lmix(blockNo, level, jc) *
                                                        p_internal.sqrttke(level, jc) * p_cvmix.tke(blockNo, level, jc);
+
+    // reset tke to bounding values
+    for (int level = 0; level < p_constant.nlevs+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            p_internal.tke_unrest(level, jc) = p_cvmix.tke(blockNo, level, jc);
+
+    // restrict values of TKE to tke_min, if IDEMIX is not used
+    if (p_constant_tke.only_tke) {
+        for (int level = 0; level < max_levels+1; level++)
+            for (int jc = start_index; jc <= end_index; jc++)
+                if (level < p_patch.dolic_c(blockNo, jc) + 1)
+                    p_cvmix.tke(blockNo, level, jc) = max(p_cvmix.tke(blockNo, level, jc), p_constant_tke.tke_min);
+    }
+
+    // assign diagnostic variables
+    for (int level = 0; level < max_levels+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            if (level < p_patch.dolic_c(blockNo, jc) + 1) {
+                p_cvmix.tke_Tbpr(blockNo, level, jc) *= -1.0;
+                p_cvmix.tke_Tbck(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
+                                                       p_internal.tke_unrest(level, jc)) /
+                                                       p_constant.dtime;
+            }
+        }
+    }
+
+    for (int level = 0; level < max_levels+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            p_cvmix.tke_Tbck(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
+                                                   p_internal.tke_unrest(level, jc)) /
+                                                   p_constant.dtime;
+
+    if (p_constant_tke.use_ubound_dirichlet) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            p_cvmix.tke_Twin(blockNo, 0, jc) = (p_cvmix.tke(blockNo, 0, jc) - p_internal.tke_old(0, jc)) /
+                                               p_constant.dtime - p_cvmix.tke_Tdif(blockNo, 0, jc);
+            p_cvmix.tke_Tbck(blockNo, 0, jc) = 0.0;
+        }
+    } else {
+        for (int jc = start_index; jc <= end_index; jc++)
+            p_cvmix.tke_Twin(blockNo, 0, jc) = (p_constant_tke.cd * pow(p_internal.forc_tke_surf_2D(jc), 1.5)) /
+                                               p_internal.dzt_stretched(0, jc);
+    }
+
+    if (p_constant_tke.use_lbound_dirichlet) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            if (p_patch.dolic_c(blockNo, jc) > 0) {
+                int dolic = p_patch.dolic_c(blockNo, jc);
+                p_cvmix.tke_Twin(blockNo, dolic, jc) = (p_cvmix.tke(blockNo, dolic, jc) -
+                                                       p_internal.tke_old(dolic, jc)) /
+                                                       p_constant.dtime -
+                                                       p_cvmix.tke_Tdif(blockNo, dolic, jc);
+                p_cvmix.tke_Tbck(blockNo, dolic, jc) = 0.0;
+            }
+        }
+    } else {
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (p_patch.dolic_c(blockNo, jc) > 0)
+                p_cvmix.tke_Twin(blockNo, p_patch.dolic_c(blockNo, jc), jc) = 0.0;
+    }
+
+    for (int level = 0; level < p_constant.nlevs+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            p_cvmix.tke_Ttot(blockNo, level, jc) = (p_cvmix.tke(blockNo, level, jc) -
+                                                   p_internal.tke_old(level, jc)) / p_constant.dtime;
+
+    for (int level = 0; level < p_constant.nlevs+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            if (level >= p_patch.dolic_c(blockNo, jc)+1) {
+                p_cvmix.tke_Lmix(blockNo, level, jc) = 0.0;
+                p_cvmix.tke_Pr(blockNo, level, jc) = 0.0;
+            }
+        }
+    }
+
+    // the rest is for debugging
+    for (int level = 0; level < p_constant.nlevs+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.tke_kv(level, jc);
+            p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.tke_Av(blockNo, level, jc);
+            p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
+        }
+    }
 }
 
 inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
