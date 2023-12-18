@@ -303,6 +303,15 @@ void integrate(int blockNo, int start_index, int end_index,
                                         p_cvmix.tke_Tdif);
 
     // dissipation of TKE
+    for (int level = 0; level < p_constant.nlevs+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            p_cvmix.tke_Tdis(blockNo, level, jc) = 0.0;
+
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < p_patch.dolic_c(level, jc))
+                p_cvmix.tke_Tdis(blockNo, level, jc) = - p_constant_tke.c_eps / p_cvmix.tke_Lmix(blockNo, level, jc) *
+                                                       p_internal.sqrttke(level, jc) * p_cvmix.tke(blockNo, level, jc);
 }
 
 inline void calculate_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
