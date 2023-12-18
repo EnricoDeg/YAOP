@@ -255,26 +255,11 @@ void integrate(int blockNo, int start_index, int end_index,
     }
 
     // construct tridiagonal matrix to solve diffusion and dissipation implicitely
-    for (int level = 0; level < p_constant.nlevs+1; level++) {
-        for (int jc = start_index; jc <= end_index; jc++) {
-            p_internal.a_tri(level, jc) = - p_constant.dtime * p_internal.a_dif(level, jc);
-            p_internal.b_tri(level, jc) = 1.0 + p_constant.dtime * p_internal.b_dif(level, jc);
-            p_internal.c_tri(level, jc) = - p_constant.dtime * p_internal.c_dif(level, jc);
-        }
-    }
-
-    for (int level = 1; level < max_levels; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < p_patch.dolic_c(blockNo, jc))
-                p_internal.b_tri(level, jc) = p_internal.b_tri(level, jc) + p_constant.dtime *
-                                              p_constant_tke.c_eps * p_internal.sqrttke(level, jc) /
-                                              p_cvmix.tke_Lmix(blockNo, level, jc);
-
-    for (int level = 0; level < max_levels+1; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < p_patch.dolic_c(blockNo, jc) + 1)
-                p_internal.d_tri(level, jc) = p_internal.tke_upd(level, jc) +
-                                      p_constant.dtime * p_internal.forc(level, jc);
+    build_tridiag(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+                  p_constant.dtime, p_constant_tke.c_eps, p_constant.nlevs,
+                  p_internal.a_dif, p_internal.b_dif, p_internal.c_dif,
+                  p_internal.sqrttke, p_cvmix.tke_Lmix, p_internal.tke_upd, p_internal.forc,
+                  p_internal.a_tri, p_internal.b_tri, p_internal.c_tri, p_internal.d_tri);
 
     // solve the tri-diag matrix
     solve_tridiag(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
@@ -479,6 +464,33 @@ inline void forcing(int blockNo, int start_index, int end_index, int max_levels,
             }
         }
     }
+}
+
+inline void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                          double dtime, double c_eps, int nlevs,
+                          mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
+                          mdspan_2d_double sqrttke, mdspan_3d_double tke_Lmix, mdspan_2d_double tke_upd,
+                          mdspan_2d_double forc,
+                          mdspan_2d_double a_tri, mdspan_2d_double b_tri, mdspan_2d_double c_tri,
+                          mdspan_2d_double d_tri) {
+    for (int level = 0; level < nlevs+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            a_tri(level, jc) = - dtime * a_dif(level, jc);
+            b_tri(level, jc) = 1.0 + dtime * b_dif(level, jc);
+            c_tri(level, jc) = - dtime * c_dif(level, jc);
+        }
+    }
+
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc))
+                b_tri(level, jc) = b_tri(level, jc) + dtime * c_eps * sqrttke(level, jc) /
+                                   tke_Lmix(blockNo, level, jc);
+
+    for (int level = 0; level < max_levels+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc) + 1)
+                d_tri(level, jc) = tke_upd(level, jc) + dtime * forc(level, jc);
 }
 
 inline void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,

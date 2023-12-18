@@ -58,6 +58,14 @@ inline void forcing(int blockNo, int start_index, int end_index, int max_levels,
                     mdspan_2d_double tke_kv, mdspan_3d_double tke_Tspr, mdspan_3d_double tke_Tbpr,
                     mdspan_3d_double tke_plc, mdspan_3d_double tke_Tiwf, mdspan_2d_double forc);
 
+inline void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+                          double dtime, double c_eps, int nlevs,
+                          mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
+                          mdspan_2d_double sqrttke, mdspan_3d_double tke_Lmix, mdspan_2d_double tke_upd,
+                          mdspan_2d_double forc,
+                          mdspan_2d_double a_tri, mdspan_2d_double b_tri, mdspan_2d_double c_tri,
+                          mdspan_2d_double d_tri);
+
 inline void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
                           mdspan_2d_double a, mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
                           mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp);
