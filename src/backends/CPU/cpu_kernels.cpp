@@ -263,14 +263,18 @@ void integrate(int blockNo, int start_index, int end_index,
         }
     }
 
-    for (int level = 0; level < max_levels+1; level++) {
-        for (int jc = start_index; jc <= end_index; jc++) {
-            if (level < p_patch.dolic_c(blockNo, jc) + 1) {
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < p_patch.dolic_c(blockNo, jc))
+                p_internal.b_tri(level, jc) = p_internal.b_tri(level, jc) + p_constant.dtime *
+                                              p_constant_tke.c_eps * p_internal.sqrttke(level, jc) /
+                                              p_cvmix.tke_Lmix(blockNo, level, jc);
+
+    for (int level = 0; level < max_levels+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < p_patch.dolic_c(blockNo, jc) + 1)
                 p_internal.d_tri(level, jc) = p_internal.tke_upd(level, jc) +
                                       p_constant.dtime * p_internal.forc(level, jc);
-            }
-        }
-    }
 
     // solve the tri-diag matrix
     solve_tridiag(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
