@@ -33,21 +33,33 @@ gtest_discover_tests(get_index_range)
 if(ENABLE_CUDA OR ENABLE_HIP)
 
 else()
-    # calculate_mxl_2
+    # calc_mxl_2
     add_executable(
-      calculate_mxl_2
-      calculate_mxl_2.cpp
+      calc_mxl_2
+      calc_mxl_2.cpp
     )
-
-    target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR})
-    target_include_directories(calculate_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
-    target_link_libraries (calculate_mxl_2 yaop)
-
+    target_include_directories(calc_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR})
+    target_include_directories(calc_mxl_2 PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
+    target_link_libraries (calc_mxl_2 yaop)
     target_link_libraries(
-      calculate_mxl_2
+      calc_mxl_2
       GTest::gtest_main
     )
-
     include(GoogleTest)
-    gtest_discover_tests(calculate_mxl_2)
+    gtest_discover_tests(calc_mxl_2)
+
+    # calc_diffusivity
+    add_executable(
+      calc_diffusivity
+      calc_diffusivity.cpp
+    )
+    target_include_directories(calc_diffusivity PRIVATE ${PROJECT_SOURCE_DIR})
+    target_include_directories(calc_diffusivity PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
+    target_link_libraries (calc_diffusivity yaop)
+    target_link_libraries(
+      calc_diffusivity
+      GTest::gtest_main
+    )
+    include(GoogleTest)
+    gtest_discover_tests(calc_diffusivity)
 endif()
