@@ -19,6 +19,7 @@
 
 #include <mdspan/mdspan.hpp>
 #include "src/shared/interface/data_struct.hpp"
+#include "src/shared/assertion.hpp"
 
 constexpr auto dyn = Kokkos::dynamic_extent;
 using ext1d_d = Kokkos::extents<int, dyn>;
@@ -42,81 +43,129 @@ class cpu_mdspan_impl {
  public:
     /*! \brief Create a 1D mdspan object from double pointer.
      *
+     *  If a NULL pointer is provided, an empty mdspan is created (size 0)
      */
     static mdspan_1d_double memview(double *data, int nlevs) {
-        return mdspan_1d_double{ data, ext1d_d{nlevs} };
+        YAOP_ASSERT(nlevs > 0);
+
+        if (data == NULL)
+            return mdspan_1d_double{ data, ext1d_d{0} };
+        else
+            return mdspan_1d_double{ data, ext1d_d{nlevs} };
     }
     /*! \brief Create a 2D mdspan object from double pointer.
      *
+     *  If a NULL pointer is provided, an empty mdspan is created (size 0)
      */
     static mdspan_2d_double memview(double *data, int nblocks, int nproma) {
-        return mdspan_2d_double{ data, ext2d_d{nblocks, nproma} };
+        YAOP_ASSERT(nblocks > 0);
+        YAOP_ASSERT(nproma > 0);
+
+        if (data == NULL)
+            return mdspan_2d_double{ data, ext2d_d{0, 0} };
+        else
+            return mdspan_2d_double{ data, ext2d_d{nblocks, nproma} };
     }
     /*! \brief Create a 3D mdspan object from double pointer.
      *
+     *  If a NULL pointer is provided, an empty mdspan is created (size 0)
      */
     static mdspan_3d_double memview(double *data, int nblocks, int nlevs, int nproma) {
-        return mdspan_3d_double{ data, ext3d_d{nblocks, nlevs, nproma} };
+        YAOP_ASSERT(nblocks > 0);
+        YAOP_ASSERT(nlevs > 0);
+        YAOP_ASSERT(nproma > 0);
+
+        if (data == NULL)
+            return mdspan_3d_double{ data, ext3d_d{0, 0, 0} };
+        else
+            return mdspan_3d_double{ data, ext3d_d{nblocks, nlevs, nproma} };
     }
     /*! \brief Create a 2D mdspan object from int pointer.
      *
+     *  If a NULL pointer is provided, an empty mdspan is created (size 0)
      */
     static mdspan_2d_int memview(int *data, int nblocks, int nproma) {
-        return mdspan_2d_int{ data, ext2d_d{nblocks, nproma} };
+        YAOP_ASSERT(nblocks > 0);
+        YAOP_ASSERT(nproma > 0);
+
+        if (data == NULL)
+            return mdspan_2d_int{ data, ext2d_d{0, 0} };
+        else
+            return mdspan_2d_int{ data, ext2d_d{nblocks, nproma} };
     }
     /*! \brief Create a 3D mdspan object from int pointer.
      *
+     *  If a NULL pointer is provided, an empty mdspan is created (size 0)
      */
     static mdspan_3d_int memview(int *data, int nblocks, int nlevs, int nproma) {
-        return mdspan_3d_int{ data, ext3d_d{nblocks, nlevs, nproma} };
+        YAOP_ASSERT(nblocks > 0);
+        YAOP_ASSERT(nlevs > 0);
+        YAOP_ASSERT(nproma > 0);
+
+        if (data == NULL)
+            return mdspan_3d_int{ data, ext3d_d{0, 0, 0} };
+        else
+            return mdspan_3d_int{ data, ext3d_d{nblocks, nlevs, nproma} };
     }
     /*! \brief Allocate memory and create a 1D mdspan object from double pointer.
      *
      */
     static mdspan_1d_double memview_malloc(double *field, int dim1) {
+        YAOP_ASSERT(dim1 >= 0);
+
         field = reinterpret_cast<double *>(malloc(dim1 * sizeof(double)));
-        mdspan_1d_double memview{ field, ext1d_d{dim1} };
-        return memview;
+        return mdspan_1d_double{ field, ext1d_d{dim1} };
     }
     /*! \brief Allocate memory and create a 2D mdspan object from double pointer.
      *
      */
     static mdspan_2d_double memview_malloc(double *field, int dim1, int dim2) {
+        YAOP_ASSERT(dim1 >= 0);
+        YAOP_ASSERT(dim2 >= 0);
+
         field = reinterpret_cast<double *>(malloc(dim1 * dim2 * sizeof(double)));
-        mdspan_2d_double memview{ field, ext2d_d{dim1, dim2} };
-        return memview;
+        return mdspan_2d_double{ field, ext2d_d{dim1, dim2} };
     }
     /*! \brief Allocate memory and create a 3D mdspan object from double pointer.
      *
      */
     static mdspan_3d_double memview_malloc(double *field, int dim1, int dim2, int dim3) {
+        YAOP_ASSERT(dim1 >= 0);
+        YAOP_ASSERT(dim2 >= 0);
+        YAOP_ASSERT(dim3 >= 0);
+
         field = reinterpret_cast<double *>(malloc(dim1 * dim2 * dim3 * sizeof(double)));
-        mdspan_3d_double memview{ field, ext3d_d{dim1, dim2, dim3} };
-        return memview;
+        return mdspan_3d_double{ field, ext3d_d{dim1, dim2, dim3} };
     }
     /*! \brief Allocate memory and create a 1D mdspan object from int pointer.
      *
      */
     static mdspan_1d_int memview_malloc(int *field, int dim1) {
+        YAOP_ASSERT(dim1 >= 0);
+
         field = reinterpret_cast<int *>(malloc(dim1 * sizeof(int)));
-        mdspan_1d_int memview{ field, ext1d_d{dim1} };
-        return memview;
+        return mdspan_1d_int{ field, ext1d_d{dim1} };
     }
     /*! \brief Allocate memory and create a 2D mdspan object from int pointer.
      *
      */
     static mdspan_2d_int memview_malloc(int *field, int dim1, int dim2) {
+        YAOP_ASSERT(dim1 >= 0);
+        YAOP_ASSERT(dim2 >= 0);
+
         field = reinterpret_cast<int *>(malloc(dim1 * dim2 * sizeof(int)));
-        mdspan_2d_int memview{ field, ext2d_d{dim1, dim2} };
-        return memview;
+        return mdspan_2d_int{ field, ext2d_d{dim1, dim2} };
     }
     /*! \brief Allocate memory and create a 3D mdspan object from int pointer.
      *
      */
     static mdspan_3d_int memview_malloc(int *field, int dim1, int dim2, int dim3) {
+        YAOP_ASSERT(dim1 >= 0);
+        YAOP_ASSERT(dim2 >= 0);
+        YAOP_ASSERT(dim3 >= 0);
+
         field = reinterpret_cast<int *>(malloc(dim1 * dim2 * dim3 * sizeof(int)));
-        mdspan_3d_int memview{ field, ext3d_d{dim1, dim2, dim3} };
-        return memview;
+        return mdspan_3d_int{ field, ext3d_d{dim1, dim2, dim3} };
     }
     /*! \brief Free memory from double pointer.
      *
