@@ -393,7 +393,7 @@ void calc_diffusivity(int blockNo, int start_index, int end_index, int max_level
                       mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr) {
     for (int level = 0; level < max_levels+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
-            if (level < dolic_c(blockNo, jc)) {
+            if (level < dolic_c(blockNo, jc) + 1) {
                 tke_Av(blockNo, level, jc) = min(p_constant_tke->KappaM_max,
                                                  p_constant_tke->c_k * tke_Lmix(blockNo, level, jc) *
                                                  sqrttke(level, jc));
