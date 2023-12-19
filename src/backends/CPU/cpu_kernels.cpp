@@ -108,6 +108,18 @@ void calc_impl_cells(int blockNo, int start_index, int end_index,
         for (int jc = start_index; jc <= end_index; jc++)
             p_internal.dzt_stretched(level, jc) = p_patch.prism_center_dist_c(blockNo, level, jc) *
                                                   ocean_state.stretch_c(blockNo, jc);
+
+    // integration
+    integrate(blockNo, start_index, end_index, p_patch, p_cvmix, p_internal, p_constant,
+              p_constant_tke);
+
+    //  write tke vert. diffusivity to vert tracer diffusivities
+    for (int level = 0; level < p_constant.nlevs+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            p_cvmix.a_temp_v(blockNo, level, jc) = p_internal.tke_kv(level, jc);
+            p_cvmix.a_salt_v(blockNo, level, jc) = p_internal.tke_kv(level, jc);
+        }
+    }
 }
 
 void integrate(int blockNo, int start_index, int end_index,
