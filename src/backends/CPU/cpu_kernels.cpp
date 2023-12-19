@@ -612,4 +612,24 @@ void calc_impl_edges(int blockNo, int start_index, int end_index,
                      t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
                      t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
                      t_constant p_constant) {
+    // compute max level on block (maxval fortran function)
+    int max_levels = 0;
+    for (int je = start_index; je <= end_index; je++)
+        if (p_patch.dolic_e(blockNo, je) > max_levels)
+            max_levels = p_patch.dolic_e(blockNo, je);
+
+    for (int level = 1; level < p_constant.nlevs+1; level++) {
+        for (int je = start_index; je <= end_index; je++) {
+            int cell_1_idx = p_patch.edges_cell_idx(0, blockNo, je);
+            int cell_1_block = p_patch.edges_cell_blk(0, blockNo, je);
+            int cell_2_idx = p_patch.edges_cell_idx(1, blockNo, je);
+            int cell_2_block = p_patch.edges_cell_blk(1, blockNo, je);
+
+            if (level < p_patch.dolic_e(blockNo, je))
+                p_cvmix.a_veloc_v(blockNo, level, je) = 0.5 * (p_internal.tke_Av(cell_1_block, level, cell_1_idx) +
+                                                        p_internal.tke_Av(cell_2_block, level, cell_2_idx));
+            else
+                p_cvmix.a_veloc_v(blockNo, level, je) = 0.0;
+        }
+    }
 }
