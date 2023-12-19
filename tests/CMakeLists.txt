@@ -62,4 +62,20 @@ else()
     )
     include(GoogleTest)
     gtest_discover_tests(calc_diffusivity)
+
+    # cpu_mdspan_impl
+    add_executable(
+      cpu_mdspan_impl
+      cpu_mdspan_impl.cpp
+    )
+    target_include_directories(cpu_mdspan_impl PRIVATE ${PROJECT_SOURCE_DIR})
+    target_include_directories(cpu_mdspan_impl PRIVATE ${PROJECT_SOURCE_DIR}/externals/mdspan/include)
+    target_link_libraries (cpu_mdspan_impl yaop)
+    target_link_libraries(
+      cpu_mdspan_impl
+      GTest::gtest_main
+    )
+    include(GoogleTest)
+    gtest_discover_tests(cpu_mdspan_impl)
+
 endif()
