@@ -37,7 +37,7 @@ TKE_cpu::TKE_cpu(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix
     // Allocate internal arrays memory and create memory views
     std::cout << "Initializing TKE cpu... " << std::endl;
 
-    this->internal_fields_malloc<cpu_memview::mdspan, cpu_memview::dextents, cpu_mdspan_impl>
+    this->internal_fields_malloc<double, cpu_memview::mdspan, cpu_memview::dextents, cpu_mdspan_impl>
                                 (&p_internal_view);
 }
 
@@ -45,7 +45,7 @@ TKE_cpu::~TKE_cpu() {
     // Free internal arrays memory
     std::cout << "Finalizing TKE cpu... " << std::endl;
 
-    this->internal_fields_free<cpu_mdspan_impl>();
+    this->internal_fields_free<double, cpu_mdspan_impl>();
 }
 
 void TKE_cpu::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
@@ -58,18 +58,18 @@ void TKE_cpu::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
     // The pointer to the data should not change inside the time loop
     // structs view are filled only at the first time step
     if (!m_is_view_init) {
-        this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
+        this->fill_struct_memview<double, cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&p_cvmix_view, &p_cvmix, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
-        this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
+        this->fill_struct_memview<double, cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&p_patch_view, &p_patch, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
-        this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
+        this->fill_struct_memview<double, cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&ocean_state_view, &ocean_state, p_constant.nblocks, p_constant.nlevs,
                                   p_constant.nproma);
-        this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
+        this->fill_struct_memview<double, cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&atmos_fluxes_view, &atmos_fluxes, p_constant.nblocks, p_constant.nproma);
-        this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
+        this->fill_struct_memview<double, cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&p_as_view, &p_as, p_constant.nblocks, p_constant.nproma);
-        this->fill_struct_memview<cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
+        this->fill_struct_memview<double, cpu_memview::mdspan, cpu_memview::dextents, cpu_memview_policy>
                                  (&p_sea_ice_view, &p_sea_ice, p_constant.nblocks, p_constant.nproma);
         m_is_view_init = true;
     }
