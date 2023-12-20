@@ -184,14 +184,34 @@ void build_diffusion_dissipation_tridiag(int blockNo, int start_index, int end_i
             a_dif(0, jc) = 0.0;
 }
 
+template <class T>
 inline
 void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
-                   double dtime, double c_eps, int nlevs,
-                   mdspan_2d<double> a_dif, mdspan_2d<double> b_dif, mdspan_2d<double> c_dif,
-                   mdspan_2d<double> sqrttke, mdspan_3d<double> tke_Lmix, mdspan_2d<double> tke_upd,
-                   mdspan_2d<double> forc,
-                   mdspan_2d<double> a_tri, mdspan_2d<double> b_tri, mdspan_2d<double> c_tri,
-                   mdspan_2d<double> d_tri);
+                   T dtime, T c_eps, int nlevs,
+                   mdspan_2d<T> a_dif, mdspan_2d<T> b_dif, mdspan_2d<T> c_dif,
+                   mdspan_2d<T> sqrttke, mdspan_3d<T> tke_Lmix, mdspan_2d<T> tke_upd,
+                   mdspan_2d<T> forc,
+                   mdspan_2d<T> a_tri, mdspan_2d<T> b_tri, mdspan_2d<T> c_tri,
+                   mdspan_2d<T> d_tri) {
+    for (int level = 0; level < nlevs+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            a_tri(level, jc) = - dtime * a_dif(level, jc);
+            b_tri(level, jc) = 1.0 + dtime * b_dif(level, jc);
+            c_tri(level, jc) = - dtime * c_dif(level, jc);
+        }
+    }
+
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc))
+                b_tri(level, jc) = b_tri(level, jc) + dtime * c_eps * sqrttke(level, jc) /
+                                   tke_Lmix(blockNo, level, jc);
+
+    for (int level = 0; level < max_levels+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc) + 1)
+                d_tri(level, jc) = tke_upd(level, jc) + dtime * forc(level, jc);
+}
 
 inline
 void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,

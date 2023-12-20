@@ -229,7 +229,7 @@ void integrate(int blockNo, int start_index, int end_index,
     }
 
     // construct tridiagonal matrix to solve diffusion and dissipation implicitely
-    build_tridiag(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+    build_tridiag<double>(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
                   p_constant.dtime, p_constant_tke.c_eps, p_constant.nlevs,
                   p_internal.a_dif, p_internal.b_dif, p_internal.c_dif,
                   p_internal.sqrttke, p_cvmix.tke_Lmix, p_internal.tke_upd, p_internal.forc,
@@ -348,34 +348,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
         }
     }
-}
-
-inline
-void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
-                   double dtime, double c_eps, int nlevs,
-                   mdspan_2d<double> a_dif, mdspan_2d<double> b_dif, mdspan_2d<double> c_dif,
-                   mdspan_2d<double> sqrttke, mdspan_3d<double> tke_Lmix, mdspan_2d<double> tke_upd,
-                   mdspan_2d<double> forc,
-                   mdspan_2d<double> a_tri, mdspan_2d<double> b_tri, mdspan_2d<double> c_tri,
-                   mdspan_2d<double> d_tri) {
-    for (int level = 0; level < nlevs+1; level++) {
-        for (int jc = start_index; jc <= end_index; jc++) {
-            a_tri(level, jc) = - dtime * a_dif(level, jc);
-            b_tri(level, jc) = 1.0 + dtime * b_dif(level, jc);
-            c_tri(level, jc) = - dtime * c_dif(level, jc);
-        }
-    }
-
-    for (int level = 1; level < max_levels; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc))
-                b_tri(level, jc) = b_tri(level, jc) + dtime * c_eps * sqrttke(level, jc) /
-                                   tke_Lmix(blockNo, level, jc);
-
-    for (int level = 0; level < max_levels+1; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc) + 1)
-                d_tri(level, jc) = tke_upd(level, jc) + dtime * forc(level, jc);
 }
 
 inline
