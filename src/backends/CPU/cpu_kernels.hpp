@@ -21,6 +21,7 @@
 #include <cmath>
 #include "src/backends/CPU/cpu_memory.hpp"
 #include "src/shared/interface/memview_struct.hpp"
+#include "src/shared/interface/data_struct.hpp"
 
 using std::max;
 using std::min;
@@ -49,9 +50,41 @@ void integrate(int blockNo, int start_index, int end_index,
                t_constant p_constant,
                t_constant_tke p_constant_tke);
 
+template <class T>
 inline
-void calc_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
-                mdspan_2d<int> dolic_c, mdspan_3d<double> tke_Lmix, mdspan_2d<double> dzw_stretched);
+void calc_mxl_2(int blockNo, int start_index, int end_index, int max_levels, T mxl_min,
+                mdspan_2d<int> dolic_c, mdspan_3d<T> tke_Lmix, mdspan_2d<T> dzw_stretched) {
+    for (int jc = start_index; jc <= end_index; jc++) {
+        if (dolic_c(blockNo, jc) > 0) {
+            tke_Lmix(blockNo, 0, jc) = 0.0;
+            tke_Lmix(blockNo, dolic_c(blockNo, jc), jc) = 0.0;
+        }
+    }
+
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc))
+                tke_Lmix(blockNo, level, jc) = min(tke_Lmix(blockNo, level, jc),
+                         tke_Lmix(blockNo, level-1, jc) + dzw_stretched(level-1, jc));
+
+    for (int jc = start_index; jc <= end_index; jc++)
+        if (dolic_c(blockNo, jc) > 0) {
+            int dolic = dolic_c(blockNo, jc);
+            tke_Lmix(blockNo, dolic-1, jc) = min(tke_Lmix(blockNo, dolic-1, jc),
+                                             mxl_min + dzw_stretched(dolic-1, jc));
+        }
+
+    for (int level = max_levels-2; level > 0; level--)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc) - 1)
+                tke_Lmix(blockNo, level, jc) = min(tke_Lmix(blockNo, level, jc),
+                         tke_Lmix(blockNo, level+1, jc) +  dzw_stretched(level, jc));
+
+    for (int level = 0; level < max_levels+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc) + 1)
+                tke_Lmix(blockNo, level, jc) = max(tke_Lmix(blockNo, level, jc), mxl_min);
+}
 
 inline
 void calc_diffusivity(int blockNo, int start_index, int end_index, int max_levels,

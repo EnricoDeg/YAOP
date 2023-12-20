@@ -147,8 +147,8 @@ void integrate(int blockNo, int start_index, int end_index,
     }
 
     if (p_constant_tke.tke_mxl_choice == 2) {
-        calc_mxl_2(blockNo, start_index, end_index, max_levels, p_constant_tke.mxl_min,
-                   p_patch.dolic_c, p_cvmix.tke_Lmix, p_internal.dzw_stretched);
+        calc_mxl_2<double>(blockNo, start_index, end_index, max_levels, p_constant_tke.mxl_min,
+                           p_patch.dolic_c, p_cvmix.tke_Lmix, p_internal.dzw_stretched);
     } else if (p_constant_tke.tke_mxl_choice == 3) {
         // TODO(EnricoDeg): not default
     } else {
@@ -348,41 +348,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
         }
     }
-}
-
-inline
-void calc_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
-                mdspan_2d<int> dolic_c, mdspan_3d<double> tke_Lmix, mdspan_2d<double> dzw_stretched) {
-    for (int jc = start_index; jc <= end_index; jc++) {
-        if (dolic_c(blockNo, jc) > 0) {
-            tke_Lmix(blockNo, 0, jc) = 0.0;
-            tke_Lmix(blockNo, dolic_c(blockNo, jc), jc) = 0.0;
-        }
-    }
-
-    for (int level = 1; level < max_levels; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc))
-                tke_Lmix(blockNo, level, jc) = min(tke_Lmix(blockNo, level, jc),
-                         tke_Lmix(blockNo, level-1, jc) + dzw_stretched(level-1, jc));
-
-    for (int jc = start_index; jc <= end_index; jc++)
-        if (dolic_c(blockNo, jc) > 0) {
-            int dolic = dolic_c(blockNo, jc);
-            tke_Lmix(blockNo, dolic-1, jc) = min(tke_Lmix(blockNo, dolic-1, jc),
-                                             mxl_min + dzw_stretched(dolic-1, jc));
-        }
-
-    for (int level = max_levels-2; level > 0; level--)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc) - 1)
-                tke_Lmix(blockNo, level, jc) = min(tke_Lmix(blockNo, level, jc),
-                         tke_Lmix(blockNo, level+1, jc) +  dzw_stretched(level, jc));
-
-    for (int level = 0; level < max_levels+1; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc) + 1)
-                tke_Lmix(blockNo, level, jc) = max(tke_Lmix(blockNo, level, jc), mxl_min);
 }
 
 inline
