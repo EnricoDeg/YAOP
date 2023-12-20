@@ -168,7 +168,7 @@ void integrate(int blockNo, int start_index, int end_index,
                  p_cvmix.tke_plc, p_cvmix.tke_Tiwf, p_internal.forc);
 
     // vertical dissipation and diffusion solved implicitly
-    build_diffusion_dissipation_tridiag(blockNo, start_index, end_index, max_levels,
+    build_diffusion_dissipation_tridiag<double>(blockNo, start_index, end_index, max_levels,
                                         p_patch.dolic_c, p_constant_tke.alpha_tke,
                                         p_internal.tke_Av, p_internal.dzt_stretched,
                                         p_internal.dzw_stretched,
@@ -348,49 +348,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
         }
     }
-}
-
-inline
-void build_diffusion_dissipation_tridiag(int blockNo, int start_index, int end_index, int max_levels,
-                                         mdspan_2d<int> dolic_c, double alpha_tke,
-                                         mdspan_3d<double> tke_Av, mdspan_2d<double> dzt_stretched,
-                                         mdspan_2d<double> dzw_stretched,
-                                         mdspan_2d<double> ke, mdspan_2d<double> a_dif, mdspan_2d<double> b_dif,
-                                         mdspan_2d<double> c_dif) {
-    // c is lower diagonal of matrix
-    for (int level = 0; level < max_levels; level++) {
-        for (int jc = start_index; jc <= end_index; jc++) {
-            if (level < dolic_c(blockNo, jc)) {
-                int kp1 = min(level+1, dolic_c(blockNo, jc)-1);
-                int kk = max(level, 1);
-                ke(level, jc) = 0.5 * alpha_tke * (tke_Av(blockNo, kp1, jc) + tke_Av(blockNo, kk, jc));
-                c_dif(level, jc) = ke(level, jc) / (dzt_stretched(level, jc) * dzw_stretched(level, jc));
-            }
-        }
-    }
-
-    // not part of the diffusion matrix, thus value is arbitrary (set to zero)
-    for (int jc = start_index; jc <= end_index; jc++)
-        if (dolic_c(blockNo, jc) >= 0)
-            c_dif(dolic_c(blockNo, jc), jc) = 0.0;
-
-    // b is main diagonal of matrix
-    for (int level = 1; level < max_levels; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc))
-                b_dif(level, jc) = ke(level-1, jc) / (dzt_stretched(level, jc) * dzw_stretched(level-1, jc)) +
-                                   ke(level, jc) / (dzt_stretched(level, jc) * dzw_stretched(level, jc));
-
-    // a is upper diagonal of matrix
-    for (int level = 1; level < max_levels+1; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc) + 1)
-                a_dif(level, jc) = ke(level-1, jc) / (dzt_stretched(level, jc) * dzw_stretched(level-1, jc));
-
-    // not part of the diffusion matrix, thus value is arbitrary (set to zero)
-    for (int jc = start_index; jc <= end_index; jc++)
-        if (dolic_c(blockNo, jc) >= 0)
-            a_dif(0, jc) = 0.0;
 }
 
 inline
