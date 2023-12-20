@@ -17,17 +17,18 @@
 #ifndef SRC_SHARED_INTERFACE_MEMVIEW_STRUCT_HPP_
 #define SRC_SHARED_INTERFACE_MEMVIEW_STRUCT_HPP_
 
-template <template <class ...> class memview,
+template <class T,
+          template <class ...> class memview,
           template <class, size_t> class dext>
 struct t_patch_view {
-    memview<double, dext<int, 3>> depth_CellInterface;
-    memview<double, dext<int, 3>> prism_center_dist_c;
-    memview<double, dext<int, 3>> inv_prism_center_dist_c;
-    memview<double, dext<int, 3>> prism_thick_c;
+    memview<T, dext<int, 3>> depth_CellInterface;
+    memview<T, dext<int, 3>> prism_center_dist_c;
+    memview<T, dext<int, 3>> inv_prism_center_dist_c;
+    memview<T, dext<int, 3>> prism_thick_c;
     memview<int, dext<int, 2>> dolic_c;
     memview<int, dext<int, 2>> dolic_e;
-    memview<double, dext<int, 1>> zlev_i;
-    memview<double, dext<int, 3>> wet_c;
+    memview<T, dext<int, 1>> zlev_i;
+    memview<T, dext<int, 3>> wet_c;
     memview<int, dext<int, 3>> edges_cell_idx;
     memview<int, dext<int, 3>> edges_cell_blk;
 };

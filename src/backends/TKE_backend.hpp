@@ -75,7 +75,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void fill_struct_memview(t_patch_view<memview, dext> *p_patch_view,
+    void fill_struct_memview(t_patch_view<T, memview, dext> *p_patch_view,
                              t_patch *p_patch, int nblocks, int nlevs, int nproma) {
         p_patch_view->depth_CellInterface = memview_policy<T>::memview(p_patch->depth_CellInterface,
                                                                     nblocks, nlevs+1, nproma);

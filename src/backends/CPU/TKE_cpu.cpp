@@ -21,7 +21,7 @@
 
 // Structures with memory views
 static struct t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix_view;
-static struct t_patch_view<cpu_memview::mdspan, cpu_memview::dextents> p_patch_view;
+static struct t_patch_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_patch_view;
 static struct t_ocean_state_view<cpu_memview::mdspan, cpu_memview::dextents> ocean_state_view;
 static struct t_atmo_fluxes_view<cpu_memview::mdspan, cpu_memview::dextents> atmos_fluxes_view;
 static struct t_atmos_for_ocean_view<cpu_memview::mdspan, cpu_memview::dextents> p_as_view;
@@ -79,7 +79,7 @@ void TKE_cpu::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
         int start_index, end_index;
         get_index_range(cells_block_size, cells_start_block, cells_end_block,
                         cells_start_index, cells_end_index, jb, &start_index, &end_index);
-        calc_impl_cells(jb, start_index, end_index,
+        calc_impl_cells<double>(jb, start_index, end_index,
                         p_patch_view, p_cvmix_view,
                         ocean_state_view, atmos_fluxes_view,
                         p_as_view, p_sea_ice_view,
@@ -92,7 +92,7 @@ void TKE_cpu::calc_impl(t_patch p_patch, t_cvmix p_cvmix,
         int start_index, end_index;
         get_index_range(edges_block_size, edges_start_block, edges_end_block,
                         edges_start_index, edges_end_index, jb, &start_index, &end_index);
-        calc_impl_edges(jb, start_index, end_index,
+        calc_impl_edges<double>(jb, start_index, end_index,
                         p_patch_view, p_cvmix_view,
                         p_internal_view, p_constant);
     }
