@@ -24,11 +24,11 @@ TEST(cpu_mdspan_impl, memview) {
     int nproma = 1;
 
     double *test_ptr = reinterpret_cast<double *>(malloc(nblocks * nlevs * nproma * sizeof(double)));
-    mdspan_3d_double test = cpu_mdspan_impl::memview(test_ptr, nblocks, nlevs, nproma);
+    mdspan_3d<double> test = cpu_mdspan_impl<double>::memview(test_ptr, nblocks, nlevs, nproma);
     ASSERT_EQ(test.size(), nblocks*nlevs*nproma);
     free(test_ptr);
 
     test_ptr = NULL;
-    mdspan_3d_double test_null = cpu_mdspan_impl::memview(test_ptr, nblocks, nlevs, nproma);
+    mdspan_3d<double> test_null = cpu_mdspan_impl<double>::memview(test_ptr, nblocks, nlevs, nproma);
     ASSERT_EQ(test_null.size(), 0);
 }

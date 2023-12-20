@@ -32,9 +32,9 @@ TEST(calculate_mxl_2, min_val_0D) {
     double *dzw_ptr;
 
     // Allocate memory and create memview objs
-    mdspan_2d_int dolic_c = cpu_mdspan_impl::memview_malloc(dolic_c_ptr, nblocks, nproma);
-    mdspan_3d_double tke_Lmix = cpu_mdspan_impl::memview_malloc(Lmix_ptr, nblocks, max_levels+1, nproma);
-    mdspan_2d_double dzw_stretched = cpu_mdspan_impl::memview_malloc(dzw_ptr, max_levels, nproma);
+    mdspan_2d<int> dolic_c = cpu_mdspan_impl<int>::memview_malloc(dolic_c_ptr, nblocks, nproma);
+    mdspan_3d<double> tke_Lmix = cpu_mdspan_impl<double>::memview_malloc(Lmix_ptr, nblocks, max_levels+1, nproma);
+    mdspan_2d<double> dzw_stretched = cpu_mdspan_impl<double>::memview_malloc(dzw_ptr, max_levels, nproma);
 
     // Initialize arrays
     for (int jb = 0; jb < nblocks; jb++)
@@ -51,7 +51,7 @@ TEST(calculate_mxl_2, min_val_0D) {
             dzw_stretched(level, jc) = 1.0;
 
     // compute mixing length scale
-    calc_mxl_2(blockNo, start_index, end_index, max_levels, mxl_min,
+    calc_mxl_2<double>(blockNo, start_index, end_index, max_levels, mxl_min,
                     dolic_c, tke_Lmix, dzw_stretched);
 
     // checks

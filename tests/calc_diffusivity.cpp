@@ -43,14 +43,14 @@ TEST(calc_diffusivity, tke_Av_0D) {
     double *tke_Pr_ptr = NULL;
 
     // Allocate memory and create memview objs
-    mdspan_2d_int dolic_c = cpu_mdspan_impl::memview_malloc(dolic_c_ptr, nblocks, nproma);
-    mdspan_3d_double tke_Lmix = cpu_mdspan_impl::memview_malloc(Lmix_ptr, nblocks, nlevs+1, nproma);
-    mdspan_2d_double sqrttke = cpu_mdspan_impl::memview_malloc(sqrttke_ptr, nlevs+1, nproma);
-    mdspan_2d_double Nsqr = cpu_mdspan_impl::memview_malloc(Nsqr_ptr, nlevs+1, nproma);
-    mdspan_2d_double Ssqr = cpu_mdspan_impl::memview_malloc(Ssqr_ptr, nlevs+1, nproma);
-    mdspan_3d_double tke_Av = cpu_mdspan_impl::memview_malloc(tke_Av_ptr, nblocks, nlevs+1, nproma);
-    mdspan_2d_double tke_kv = cpu_mdspan_impl::memview_malloc(tke_kv_ptr, nlevs+1, nproma);
-    mdspan_3d_double tke_Pr = cpu_mdspan_impl::memview_malloc(tke_Pr_ptr, nblocks, nlevs+1, nproma);
+    mdspan_2d<int> dolic_c = cpu_mdspan_impl<int>::memview_malloc(dolic_c_ptr, nblocks, nproma);
+    mdspan_3d<double> tke_Lmix = cpu_mdspan_impl<double>::memview_malloc(Lmix_ptr, nblocks, nlevs+1, nproma);
+    mdspan_2d<double> sqrttke = cpu_mdspan_impl<double>::memview_malloc(sqrttke_ptr, nlevs+1, nproma);
+    mdspan_2d<double> Nsqr = cpu_mdspan_impl<double>::memview_malloc(Nsqr_ptr, nlevs+1, nproma);
+    mdspan_2d<double> Ssqr = cpu_mdspan_impl<double>::memview_malloc(Ssqr_ptr, nlevs+1, nproma);
+    mdspan_3d<double> tke_Av = cpu_mdspan_impl<double>::memview_malloc(tke_Av_ptr, nblocks, nlevs+1, nproma);
+    mdspan_2d<double> tke_kv = cpu_mdspan_impl<double>::memview_malloc(tke_kv_ptr, nlevs+1, nproma);
+    mdspan_3d<double> tke_Pr = cpu_mdspan_impl<double>::memview_malloc(tke_Pr_ptr, nblocks, nlevs+1, nproma);
 
     // Initialize arrays
     for (int jb = 0; jb < nblocks; jb++)
