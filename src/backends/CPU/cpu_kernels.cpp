@@ -162,7 +162,7 @@ void integrate(int blockNo, int start_index, int end_index,
                      p_internal.tke_Av, p_internal.tke_kv, p_cvmix.tke_Pr);
 
     // tke forcing
-    calc_forcing(blockNo, start_index, end_index, max_levels, p_constant.l_lc, p_constant_tke.only_tke,
+    calc_forcing<double>(blockNo, start_index, end_index, max_levels, p_constant.l_lc, p_constant_tke.only_tke,
                  p_patch.dolic_c, p_internal.Ssqr, p_internal.Nsqr, p_internal.tke_Av,
                  p_internal.tke_kv, p_cvmix.tke_Tspr, p_cvmix.tke_Tbpr,
                  p_cvmix.tke_plc, p_cvmix.tke_Tiwf, p_internal.forc);
@@ -346,31 +346,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.tke_kv(level, jc);
             p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.tke_Av(blockNo, level, jc);
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
-        }
-    }
-}
-
-inline
-void calc_forcing(int blockNo, int start_index, int end_index, int max_levels, bool l_lc, bool only_tke,
-                  mdspan_2d<int> dolic_c, mdspan_2d<double> Ssqr, mdspan_2d<double> Nsqr, mdspan_3d<double> tke_Av,
-                  mdspan_2d<double> tke_kv, mdspan_3d<double> tke_Tspr, mdspan_3d<double> tke_Tbpr,
-                  mdspan_3d<double> tke_plc, mdspan_3d<double> tke_Tiwf, mdspan_2d<double> forc) {
-    for (int level = 0; level < max_levels+1; level++) {
-        for (int jc = start_index; jc <= end_index; jc++) {
-            if (level < dolic_c(blockNo, jc) + 1) {
-                // forcing by shear and buoycancy production
-                tke_Tspr(blockNo, level, jc) = Ssqr(level, jc) * tke_Av(blockNo, level, jc);
-                tke_Tbpr(blockNo, level, jc) = Nsqr(level, jc) * tke_kv(level, jc);
-                if (level == 0) tke_Tbpr(blockNo, 0, jc) = 0.0;
-
-                forc(level, jc) = tke_Tspr(blockNo, level, jc) - tke_Tbpr(blockNo, level, jc);
-                // additional langmuir turbulence term
-                if (l_lc)
-                    forc(level, jc) += tke_plc(blockNo, level, jc);
-                // forcing by internal wave dissipation
-                if (!only_tke)
-                    forc(level, jc) += tke_Tiwf(blockNo, level, jc);
-            }
         }
     }
 }

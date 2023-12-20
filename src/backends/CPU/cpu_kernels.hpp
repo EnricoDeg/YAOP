@@ -114,11 +114,31 @@ void calc_diffusivity(int blockNo, int start_index, int end_index, int max_level
     }
 }
 
+template <class T>
 inline
 void calc_forcing(int blockNo, int start_index, int end_index, int max_levels, bool l_lc, bool only_tke,
-                  mdspan_2d<int> dolic_c, mdspan_2d<double> Ssqr, mdspan_2d<double> Nsqr, mdspan_3d<double> tke_Av,
-                  mdspan_2d<double> tke_kv, mdspan_3d<double> tke_Tspr, mdspan_3d<double> tke_Tbpr,
-                  mdspan_3d<double> tke_plc, mdspan_3d<double> tke_Tiwf, mdspan_2d<double> forc);
+                  mdspan_2d<int> dolic_c, mdspan_2d<T> Ssqr, mdspan_2d<T> Nsqr, mdspan_3d<T> tke_Av,
+                  mdspan_2d<T> tke_kv, mdspan_3d<T> tke_Tspr, mdspan_3d<T> tke_Tbpr,
+                  mdspan_3d<T> tke_plc, mdspan_3d<T> tke_Tiwf, mdspan_2d<T> forc) {
+    for (int level = 0; level < max_levels+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            if (level < dolic_c(blockNo, jc) + 1) {
+                // forcing by shear and buoycancy production
+                tke_Tspr(blockNo, level, jc) = Ssqr(level, jc) * tke_Av(blockNo, level, jc);
+                tke_Tbpr(blockNo, level, jc) = Nsqr(level, jc) * tke_kv(level, jc);
+                if (level == 0) tke_Tbpr(blockNo, 0, jc) = 0.0;
+
+                forc(level, jc) = tke_Tspr(blockNo, level, jc) - tke_Tbpr(blockNo, level, jc);
+                // additional langmuir turbulence term
+                if (l_lc)
+                    forc(level, jc) += tke_plc(blockNo, level, jc);
+                // forcing by internal wave dissipation
+                if (!only_tke)
+                    forc(level, jc) += tke_Tiwf(blockNo, level, jc);
+            }
+        }
+    }
+}
 
 inline
 void build_diffusion_dissipation_tridiag(int blockNo, int start_index, int end_index, int max_levels,
