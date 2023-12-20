@@ -236,7 +236,7 @@ void integrate(int blockNo, int start_index, int end_index,
                   p_internal.a_tri, p_internal.b_tri, p_internal.c_tri, p_internal.d_tri);
 
     // solve the tri-diag matrix
-    solve_tridiag(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+    solve_tridiag<double>(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
                   p_internal.a_tri, p_internal.b_tri, p_internal.c_tri,
                   p_internal.d_tri, p_cvmix.tke, p_internal.cp, p_internal.dp);
 
@@ -348,40 +348,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
         }
     }
-}
-
-inline
-void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
-                   mdspan_2d<double> a, mdspan_2d<double> b, mdspan_2d<double> c, mdspan_2d<double> d,
-                   mdspan_3d<double> x, mdspan_2d<double> cp, mdspan_2d<double> dp) {
-    // initialize a-prime (cp) and d-prime
-    for (int jc = start_index; jc <= end_index; jc++) {
-        if (dolic_c(blockNo, jc)+1 > 0) {
-            int dolic = dolic_c(blockNo, jc);
-            cp(dolic, jc) = c(dolic, jc) / b(dolic, jc);
-            dp(dolic, jc) = d(dolic, jc) / b(dolic, jc);
-        }
-    }
-
-    // solve for vectors a-prime and d-prime
-    for (int level = max_levels-1; level >= 0; level--) {
-        for (int jc = start_index; jc <= end_index; jc++) {
-            if (level <= dolic_c(blockNo, jc)) {
-                double fxa = 1.0 / (b(level, jc) - cp(level+1, jc) * c(level, jc));
-            }
-        }
-    }
-
-    // initialize x
-    for (int jc = start_index; jc <= end_index; jc++)
-        if (dolic_c(blockNo, jc)+1 > 0)
-            x(blockNo, 0, jc) = dp(0, jc);
-
-    // solve for x from the vectors a-prime and d-prime
-    for (int level = 1; level < max_levels+1; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level <= dolic_c(blockNo, jc))
-                x(blockNo, level, jc) = dp(level, jc) - cp(level, jc) * x(blockNo, level-1, jc);
 }
 
 inline
