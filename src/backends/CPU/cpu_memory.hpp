@@ -18,7 +18,6 @@
 #define SRC_BACKENDS_CPU_CPU_MEMORY_HPP_
 
 #include <mdspan/mdspan.hpp>
-#include "src/shared/interface/data_struct.hpp"
 #include "src/shared/assertion.hpp"
 
 constexpr auto dyn = Kokkos::dynamic_extent;
