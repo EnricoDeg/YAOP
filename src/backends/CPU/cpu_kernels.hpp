@@ -86,12 +86,33 @@ void calc_mxl_2(int blockNo, int start_index, int end_index, int max_levels, T m
                 tke_Lmix(blockNo, level, jc) = max(tke_Lmix(blockNo, level, jc), mxl_min);
 }
 
+template <class T>
 inline
 void calc_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
                       t_constant_tke *p_constant_tke,
-                      mdspan_2d<int> dolic_c, mdspan_3d<double> tke_Lmix, mdspan_2d<double> sqrttke,
-                      mdspan_2d<double> Nsqr, mdspan_2d<double> Ssqr,
-                      mdspan_3d<double> tke_Av, mdspan_2d<double> tke_kv, mdspan_3d<double> tke_Pr);
+                      mdspan_2d<int> dolic_c, mdspan_3d<T> tke_Lmix, mdspan_2d<T> sqrttke,
+                      mdspan_2d<T> Nsqr, mdspan_2d<T> Ssqr,
+                      mdspan_3d<T> tke_Av, mdspan_2d<T> tke_kv, mdspan_3d<T> tke_Pr) {
+    for (int level = 0; level < max_levels+1; level++) {
+        for (int jc = start_index; jc <= end_index; jc++) {
+            if (level < dolic_c(blockNo, jc) + 1) {
+                tke_Av(blockNo, level, jc) = min(p_constant_tke->KappaM_max,
+                                                 p_constant_tke->c_k * tke_Lmix(blockNo, level, jc) *
+                                                 sqrttke(level, jc));
+                tke_Pr(blockNo, level, jc) = Nsqr(level, jc) / max(Ssqr(level, jc), 1.0e-12);
+                if (!p_constant_tke->only_tke)
+                    tke_Pr(blockNo, level, jc) = min(tke_Pr(blockNo, level, jc),
+                                                     tke_Av(blockNo, level, jc) * Nsqr(level, jc) / 1.0e-12);
+                tke_Pr(blockNo, level, jc) = max(1.0, min(10.0, 6.6 * tke_Pr(blockNo, level, jc)));
+                tke_kv(level, jc) = tke_Av(blockNo, level, jc) / tke_Pr(blockNo, level, jc);
+                if (p_constant_tke->use_Kappa_min) {
+                    tke_Av(blockNo, level, jc) = max(p_constant_tke->KappaM_min, tke_Av(blockNo, level, jc));
+                    tke_kv(level, jc) = max(p_constant_tke->KappaH_min, tke_kv(level, jc));
+                }
+            }
+        }
+    }
+}
 
 inline
 void calc_forcing(int blockNo, int start_index, int end_index, int max_levels, bool l_lc, bool only_tke,

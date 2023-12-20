@@ -156,7 +156,7 @@ void integrate(int blockNo, int start_index, int end_index,
     }
 
     // calculate diffusivities
-    calc_diffusivity(blockNo, start_index, end_index, max_levels, &p_constant_tke,
+    calc_diffusivity<double>(blockNo, start_index, end_index, max_levels, &p_constant_tke,
                      p_patch.dolic_c, p_cvmix.tke_Lmix, p_internal.sqrttke,
                      p_internal.Nsqr, p_internal.Ssqr,
                      p_internal.tke_Av, p_internal.tke_kv, p_cvmix.tke_Pr);
@@ -346,33 +346,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.tke_kv(level, jc);
             p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.tke_Av(blockNo, level, jc);
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
-        }
-    }
-}
-
-inline
-void calc_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
-                      t_constant_tke *p_constant_tke,
-                      mdspan_2d<int> dolic_c, mdspan_3d<double> tke_Lmix, mdspan_2d<double> sqrttke,
-                      mdspan_2d<double> Nsqr, mdspan_2d<double> Ssqr,
-                      mdspan_3d<double> tke_Av, mdspan_2d<double> tke_kv, mdspan_3d<double> tke_Pr) {
-    for (int level = 0; level < max_levels+1; level++) {
-        for (int jc = start_index; jc <= end_index; jc++) {
-            if (level < dolic_c(blockNo, jc) + 1) {
-                tke_Av(blockNo, level, jc) = min(p_constant_tke->KappaM_max,
-                                                 p_constant_tke->c_k * tke_Lmix(blockNo, level, jc) *
-                                                 sqrttke(level, jc));
-                tke_Pr(blockNo, level, jc) = Nsqr(level, jc) / max(Ssqr(level, jc), 1.0e-12);
-                if (!p_constant_tke->only_tke)
-                    tke_Pr(blockNo, level, jc) = min(tke_Pr(blockNo, level, jc),
-                                                     tke_Av(blockNo, level, jc) * Nsqr(level, jc) / 1.0e-12);
-                tke_Pr(blockNo, level, jc) = max(1.0, min(10.0, 6.6 * tke_Pr(blockNo, level, jc)));
-                tke_kv(level, jc) = tke_Av(blockNo, level, jc) / tke_Pr(blockNo, level, jc);
-                if (p_constant_tke->use_Kappa_min) {
-                    tke_Av(blockNo, level, jc) = max(p_constant_tke->KappaM_min, tke_Av(blockNo, level, jc));
-                    tke_kv(level, jc) = max(p_constant_tke->KappaH_min, tke_kv(level, jc));
-                }
-            }
         }
     }
 }

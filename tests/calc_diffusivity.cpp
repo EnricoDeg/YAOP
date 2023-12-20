@@ -72,7 +72,7 @@ TEST(calc_diffusivity, tke_Av_0D) {
                 tke_Av(jb, level, jc) = 1.0;
 
     // calculate diffusivities
-    calc_diffusivity(blockNo, start_index, end_index, max_levels,
+    calc_diffusivity<double>(blockNo, start_index, end_index, max_levels,
                      &p_constant_tke,
                      dolic_c, tke_Lmix, sqrttke, Nsqr, Ssqr,
                      tke_Av, tke_kv, tke_Pr);
