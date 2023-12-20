@@ -301,9 +301,20 @@ void tke_vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_i
     }
 }
 
+template <class T>
 inline
 void tke_vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
-                              int nlevs, double c_eps, mdspan_3d<double> tke_Lmix, mdspan_2d<double> sqrttke,
-                              mdspan_3d<double> tke, mdspan_3d<double> tke_Tdis);
+                              int nlevs, T c_eps, mdspan_3d<T> tke_Lmix, mdspan_2d<T> sqrttke,
+                              mdspan_3d<T> tke, mdspan_3d<T> tke_Tdis) {
+    for (int level = 0; level < nlevs+1; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            tke_Tdis(blockNo, level, jc) = 0.0;
+
+    for (int level = 1; level < max_levels; level++)
+        for (int jc = start_index; jc <= end_index; jc++)
+            if (level < dolic_c(blockNo, jc))
+                tke_Tdis(blockNo, level, jc) = - c_eps / tke_Lmix(blockNo, level, jc) *
+                                                 sqrttke(level, jc) * tke(blockNo, level, jc);
+}
 
 #endif  // SRC_BACKENDS_CPU_CPU_KERNELS_HPP_
