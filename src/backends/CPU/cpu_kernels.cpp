@@ -256,7 +256,7 @@ void integrate(int blockNo, int start_index, int end_index,
                                             p_cvmix.tke_Tdif);
 
     if (p_constant_tke.use_lbound_dirichlet)
-        tke_vertical_diffusion_lb_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
+        tke_vertical_diffusion_lb_dirichlet<double>(blockNo, start_index, end_index, p_patch.dolic_c,
                                             tke_bott, p_internal.ke, p_internal.dzw_stretched,
                                             p_internal.dzt_stretched, p_cvmix.tke,
                                             p_cvmix.tke_Tdif);
@@ -346,20 +346,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.tke_kv(level, jc);
             p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.tke_Av(blockNo, level, jc);
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
-        }
-    }
-}
-
-inline
-void tke_vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d<int> dolic_c,
-                                         double tke_bott, mdspan_2d<double> ke, mdspan_2d<double> dzw_stretched,
-                                         mdspan_2d<double> dzt_stretched, mdspan_3d<double> tke,
-                                         mdspan_3d<double> tke_Tdif) {
-    for (int jc = start_index; jc <= end_index; jc++) {
-        if (dolic_c(blockNo, jc) > 0) {
-            int dolic = dolic_c(blockNo, jc);
-            tke_Tdif(blockNo, dolic, jc) = ke(dolic-1, jc) / dzw_stretched(dolic-1, jc) /
-                                           dzt_stretched(dolic, jc) * (tke(blockNo, dolic-1, jc) - tke_bott);
         }
     }
 }

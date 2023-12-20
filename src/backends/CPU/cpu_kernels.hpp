@@ -286,11 +286,20 @@ void tke_vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_i
                                        (tke_surf - tke(blockNo, 1, jc));
 }
 
+template <class T>
 inline
 void tke_vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d<int> dolic_c,
-                                         double tke_bott, mdspan_2d<double> ke, mdspan_2d<double> dzw_stretched,
-                                         mdspan_2d<double> dzt_stretched, mdspan_3d<double> tke,
-                                         mdspan_3d<double> tke_Tdif);
+                                         T tke_bott, mdspan_2d<T> ke, mdspan_2d<T> dzw_stretched,
+                                         mdspan_2d<T> dzt_stretched, mdspan_3d<T> tke,
+                                         mdspan_3d<T> tke_Tdif) {
+    for (int jc = start_index; jc <= end_index; jc++) {
+        if (dolic_c(blockNo, jc) > 0) {
+            int dolic = dolic_c(blockNo, jc);
+            tke_Tdif(blockNo, dolic, jc) = ke(dolic-1, jc) / dzw_stretched(dolic-1, jc) /
+                                           dzt_stretched(dolic, jc) * (tke(blockNo, dolic-1, jc) - tke_bott);
+        }
+    }
+}
 
 inline
 void tke_vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
