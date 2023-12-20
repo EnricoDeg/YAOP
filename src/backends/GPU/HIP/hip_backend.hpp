@@ -35,6 +35,13 @@ using mdspan_3d_double = Kokkos::mdspan<double, ext3d_t>;
 using mdspan_2d_int = Kokkos::mdspan<int, ext2d_t>;
 using mdspan_3d_int = Kokkos::mdspan<int, ext3d_t>;
 
+template<class T>
+using mdspan_1d = Kokkos::mdspan<T, ext1d_t>;
+template<class T>
+using mdspan_2d = Kokkos::mdspan<T, ext2d_t>;
+template<class T>
+using mdspan_3d = Kokkos::mdspan<T, ext3d_t>;
+
 /*! \brief HIP mdspan memory view policy.
  *
  *  It defines the policy to allocate/deallocate arrays and create Kokkos mdspan objects.

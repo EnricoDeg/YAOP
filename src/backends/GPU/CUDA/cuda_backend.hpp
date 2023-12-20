@@ -35,6 +35,13 @@ using mdspan_3d_double = cuda::std::mdspan<double, ext3d_t>;
 using mdspan_2d_int = cuda::std::mdspan<int, ext2d_t>;
 using mdspan_3d_int = cuda::std::mdspan<int, ext3d_t>;
 
+template<class T>
+using mdspan_1d = cuda::std::mdspan<T, ext1d_t>;
+template<class T>
+using mdspan_2d = cuda::std::mdspan<T, ext2d_t>;
+template<class T>
+using mdspan_3d = cuda::std::mdspan<T, ext3d_t>;
+
 /*! \brief CUDA mdspan memory view policy.
  *
  *  It defines the policy to allocate/deallocate arrays and create CUDA mdspan objects.

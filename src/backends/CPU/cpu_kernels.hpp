@@ -51,64 +51,64 @@ void integrate(int blockNo, int start_index, int end_index,
 
 inline
 void calc_mxl_2(int blockNo, int start_index, int end_index, int max_levels, double mxl_min,
-                mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double dzw_stretched);
+                mdspan_2d<int> dolic_c, mdspan_3d<double> tke_Lmix, mdspan_2d<double> dzw_stretched);
 
 inline
 void calc_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
                       t_constant_tke *p_constant_tke,
-                      mdspan_2d_int dolic_c, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
-                      mdspan_2d_double Nsqr, mdspan_2d_double Ssqr,
-                      mdspan_3d_double tke_Av, mdspan_2d_double tke_kv, mdspan_3d_double tke_Pr);
+                      mdspan_2d<int> dolic_c, mdspan_3d<double> tke_Lmix, mdspan_2d<double> sqrttke,
+                      mdspan_2d<double> Nsqr, mdspan_2d<double> Ssqr,
+                      mdspan_3d<double> tke_Av, mdspan_2d<double> tke_kv, mdspan_3d<double> tke_Pr);
 
 inline
 void calc_forcing(int blockNo, int start_index, int end_index, int max_levels, bool l_lc, bool only_tke,
-                  mdspan_2d_int dolic_c, mdspan_2d_double Ssqr, mdspan_2d_double Nsqr, mdspan_3d_double tke_Av,
-                  mdspan_2d_double tke_kv, mdspan_3d_double tke_Tspr, mdspan_3d_double tke_Tbpr,
-                  mdspan_3d_double tke_plc, mdspan_3d_double tke_Tiwf, mdspan_2d_double forc);
+                  mdspan_2d<int> dolic_c, mdspan_2d<double> Ssqr, mdspan_2d<double> Nsqr, mdspan_3d<double> tke_Av,
+                  mdspan_2d<double> tke_kv, mdspan_3d<double> tke_Tspr, mdspan_3d<double> tke_Tbpr,
+                  mdspan_3d<double> tke_plc, mdspan_3d<double> tke_Tiwf, mdspan_2d<double> forc);
 
 inline
 void build_diffusion_dissipation_tridiag(int blockNo, int start_index, int end_index, int max_levels,
-                                         mdspan_2d_int dolic_c, double alpha_tke,
-                                         mdspan_3d_double tke_Av, mdspan_2d_double dzt_stretched,
-                                         mdspan_2d_double dzw_stretched,
-                                         mdspan_2d_double ke, mdspan_2d_double a_dif, mdspan_2d_double b_dif,
-                                         mdspan_2d_double c_dif);
+                                         mdspan_2d<int> dolic_c, double alpha_tke,
+                                         mdspan_3d<double> tke_Av, mdspan_2d<double> dzt_stretched,
+                                         mdspan_2d<double> dzw_stretched,
+                                         mdspan_2d<double> ke, mdspan_2d<double> a_dif, mdspan_2d<double> b_dif,
+                                         mdspan_2d<double> c_dif);
 
 inline
-void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+void build_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
                    double dtime, double c_eps, int nlevs,
-                   mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
-                   mdspan_2d_double sqrttke, mdspan_3d_double tke_Lmix, mdspan_2d_double tke_upd,
-                   mdspan_2d_double forc,
-                   mdspan_2d_double a_tri, mdspan_2d_double b_tri, mdspan_2d_double c_tri,
-                   mdspan_2d_double d_tri);
+                   mdspan_2d<double> a_dif, mdspan_2d<double> b_dif, mdspan_2d<double> c_dif,
+                   mdspan_2d<double> sqrttke, mdspan_3d<double> tke_Lmix, mdspan_2d<double> tke_upd,
+                   mdspan_2d<double> forc,
+                   mdspan_2d<double> a_tri, mdspan_2d<double> b_tri, mdspan_2d<double> c_tri,
+                   mdspan_2d<double> d_tri);
 
 inline
-void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
-                   mdspan_2d_double a, mdspan_2d_double b, mdspan_2d_double c, mdspan_2d_double d,
-                   mdspan_3d_double x, mdspan_2d_double cp, mdspan_2d_double dp);
+void solve_tridiag(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
+                   mdspan_2d<double> a, mdspan_2d<double> b, mdspan_2d<double> c, mdspan_2d<double> d,
+                   mdspan_3d<double> x, mdspan_2d<double> cp, mdspan_2d<double> dp);
 
 inline
-void tke_vertical_diffusion(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
+void tke_vertical_diffusion(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
                             double diff_surf_forc, double diff_bott_forc,
-                            mdspan_2d_double a_dif, mdspan_2d_double b_dif, mdspan_2d_double c_dif,
-                            mdspan_3d_double tke, mdspan_3d_double tke_Tdif);
+                            mdspan_2d<double> a_dif, mdspan_2d<double> b_dif, mdspan_2d<double> c_dif,
+                            mdspan_3d<double> tke, mdspan_3d<double> tke_Tdif);
 
 inline
-void tke_vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
-                                         double tke_surf, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
-                                         mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
-                                         mdspan_3d_double tke_Tdif);
+void tke_vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d<int> dolic_c,
+                                         double tke_surf, mdspan_2d<double> ke, mdspan_2d<double> dzw_stretched,
+                                         mdspan_2d<double> dzt_stretched, mdspan_3d<double> tke,
+                                         mdspan_3d<double> tke_Tdif);
 
 inline
-void tke_vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d_int dolic_c,
-                                         double tke_bott, mdspan_2d_double ke, mdspan_2d_double dzw_stretched,
-                                         mdspan_2d_double dzt_stretched, mdspan_3d_double tke,
-                                         mdspan_3d_double tke_Tdif);
+void tke_vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d<int> dolic_c,
+                                         double tke_bott, mdspan_2d<double> ke, mdspan_2d<double> dzw_stretched,
+                                         mdspan_2d<double> dzt_stretched, mdspan_3d<double> tke,
+                                         mdspan_3d<double> tke_Tdif);
 
 inline
-void tke_vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d_int dolic_c,
-                              int nlevs, double c_eps, mdspan_3d_double tke_Lmix, mdspan_2d_double sqrttke,
-                              mdspan_3d_double tke, mdspan_3d_double tke_Tdis);
+void tke_vertical_dissipation(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
+                              int nlevs, double c_eps, mdspan_3d<double> tke_Lmix, mdspan_2d<double> sqrttke,
+                              mdspan_3d<double> tke, mdspan_3d<double> tke_Tdis);
 
 #endif  // SRC_BACKENDS_CPU_CPU_KERNELS_HPP_
