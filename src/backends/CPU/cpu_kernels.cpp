@@ -242,7 +242,7 @@ void integrate(int blockNo, int start_index, int end_index,
 
     // diagnose implicite tendencies (only for diagnostics)
     // vertical diffusion of TKE
-    tke_vertical_diffusion(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
+    tke_vertical_diffusion<double>(blockNo, start_index, end_index, max_levels, p_patch.dolic_c,
                            diff_surf_forc, diff_bott_forc,
                            p_internal.a_dif, p_internal.b_dif, p_internal.c_dif,
                            p_cvmix.tke, p_cvmix.tke_Tdif);
@@ -346,31 +346,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_1(blockNo, level, jc) = p_internal.tke_kv(level, jc);
             p_cvmix.cvmix_dummy_2(blockNo, level, jc) = p_internal.tke_Av(blockNo, level, jc);
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
-        }
-    }
-}
-
-inline
-void tke_vertical_diffusion(int blockNo, int start_index, int end_index, int max_levels, mdspan_2d<int> dolic_c,
-                            double diff_surf_forc, double diff_bott_forc,
-                            mdspan_2d<double> a_dif, mdspan_2d<double> b_dif, mdspan_2d<double> c_dif,
-                            mdspan_3d<double> tke, mdspan_3d<double> tke_Tdif) {
-    for (int level = 1; level < max_levels; level++)
-        for (int jc = start_index; jc <= end_index; jc++)
-            if (level < dolic_c(blockNo, jc))
-                 tke_Tdif(blockNo, level, jc) = a_dif(level, jc) * tke(blockNo, level-1, jc) -
-                                                b_dif(level, jc) * tke(blockNo, level, jc) +
-                                                c_dif(level, jc) * tke(blockNo, level+1, jc);
-
-    for (int jc = start_index; jc <= end_index; jc++) {
-        if (dolic_c(blockNo, jc) > 0) {
-            int dolic = dolic_c(blockNo, jc);
-            tke_Tdif(blockNo, 0, jc) = - b_dif(0, jc) * tke(blockNo, 0, jc) +
-                                         c_dif(0, jc) * tke(blockNo, 1, jc);
-            tke_Tdif(blockNo, 1, jc) += diff_surf_forc;
-            tke_Tdif(blockNo, dolic-1, jc) += diff_bott_forc;
-            tke_Tdif(blockNo, dolic, jc) = a_dif(dolic, jc) * tke(blockNo, dolic-1, jc) -
-                                           b_dif(dolic, jc) * tke(blockNo, dolic, jc);
         }
     }
 }
