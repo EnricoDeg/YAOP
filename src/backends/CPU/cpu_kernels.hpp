@@ -274,11 +274,17 @@ void tke_vertical_diffusion(int blockNo, int start_index, int end_index, int max
     }
 }
 
+template <class T>
 inline
 void tke_vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d<int> dolic_c,
-                                         double tke_surf, mdspan_2d<double> ke, mdspan_2d<double> dzw_stretched,
-                                         mdspan_2d<double> dzt_stretched, mdspan_3d<double> tke,
-                                         mdspan_3d<double> tke_Tdif);
+                                         T tke_surf, mdspan_2d<T> ke, mdspan_2d<T> dzw_stretched,
+                                         mdspan_2d<T> dzt_stretched, mdspan_3d<T> tke,
+                                         mdspan_3d<T> tke_Tdif) {
+    for (int jc = start_index; jc <= end_index; jc++)
+        if (dolic_c(blockNo, jc) > 0)
+            tke_Tdif(blockNo, 0, jc) = - ke(0, jc) / dzw_stretched(0, jc) / dzt_stretched(0, jc) *
+                                       (tke_surf - tke(blockNo, 1, jc));
+}
 
 inline
 void tke_vertical_diffusion_lb_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d<int> dolic_c,

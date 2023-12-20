@@ -250,7 +250,7 @@ void integrate(int blockNo, int start_index, int end_index,
     // flux out of first box due to diffusion with Dirichlet boundary value of TKE
     // (tke_surf=tke_upd(1)) and TKE of box below (tke_new(2))
     if (p_constant_tke.use_ubound_dirichlet)
-        tke_vertical_diffusion_ub_dirichlet(blockNo, start_index, end_index, p_patch.dolic_c,
+        tke_vertical_diffusion_ub_dirichlet<double>(blockNo, start_index, end_index, p_patch.dolic_c,
                                             tke_surf, p_internal.ke, p_internal.dzw_stretched,
                                             p_internal.dzt_stretched, p_cvmix.tke,
                                             p_cvmix.tke_Tdif);
@@ -348,17 +348,6 @@ void integrate(int blockNo, int start_index, int end_index,
             p_cvmix.cvmix_dummy_3(blockNo, level, jc) = p_internal.Nsqr(level, jc);
         }
     }
-}
-
-inline
-void tke_vertical_diffusion_ub_dirichlet(int blockNo, int start_index, int end_index, mdspan_2d<int> dolic_c,
-                                         double tke_surf, mdspan_2d<double> ke, mdspan_2d<double> dzw_stretched,
-                                         mdspan_2d<double> dzt_stretched, mdspan_3d<double> tke,
-                                         mdspan_3d<double> tke_Tdif) {
-    for (int jc = start_index; jc <= end_index; jc++)
-        if (dolic_c(blockNo, jc) > 0)
-            tke_Tdif(blockNo, 0, jc) = - ke(0, jc) / dzw_stretched(0, jc) / dzt_stretched(0, jc) *
-                                       (tke_surf - tke(blockNo, 1, jc));
 }
 
 inline
