@@ -34,11 +34,9 @@ else()
 endif()
 
 if(ENABLE_CUDA)
-    set_source_files_properties(backends/kernels.cpp PROPERTIES LANGUAGE CUDA)
     set_source_files_properties(backends/GPU/gpu_kernels.cpp PROPERTIES LANGUAGE CUDA)
     set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE CUDA)
 elseif(ENABLE_HIP)
-    set_source_files_properties(backends/kernels.cpp PROPERTIES LANGUAGE HIP)
     set_source_files_properties(backends/GPU/gpu_kernels.cpp PROPERTIES LANGUAGE HIP)
     set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE HIP)
 endif()
@@ -47,7 +45,6 @@ set(SOURCE_EXE  YAOP.cpp
                 ${SOURCE_C}
                 ${SOURCE_FORTRAN}
                 backends/TKE_backend.cpp
-                backends/kernels.cpp
                 ${SOURCE_CUDA}
                 ${SOURCE_HIP}
                 ${SOURCE_GPU}
