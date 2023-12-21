@@ -77,7 +77,7 @@ class YAOP {
  private:
     struct Impl;
     Impl *m_impl;
-    struct t_patch p_patch;
+    struct t_patch<double> p_patch;
     struct t_cvmix p_cvmix;
     struct t_sea_ice p_sea_ice;
     struct t_atmos_for_ocean p_as;

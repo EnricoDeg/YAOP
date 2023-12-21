@@ -16,21 +16,6 @@
 
 #include "src/shared/interface/data_struct.hpp"
 
-void fill_struct(struct t_patch *p_patch, double *depth_CellInterface, double *prism_center_dist_c,
-                 double *inv_prism_center_dist_c, double *prism_thick_c, int *dolic_c, int *dolic_e,
-                 double *zlev_i, double *wet_c, int *edges_cell_idx, int *edges_cell_blk) {
-    p_patch->depth_CellInterface = depth_CellInterface;
-    p_patch->prism_center_dist_c = prism_center_dist_c;
-    p_patch->inv_prism_center_dist_c = inv_prism_center_dist_c;
-    p_patch->prism_thick_c = prism_thick_c;
-    p_patch->dolic_c = dolic_c;
-    p_patch->dolic_e = dolic_e;
-    p_patch->zlev_i = zlev_i;
-    p_patch->wet_c = wet_c;
-    p_patch->edges_cell_idx = edges_cell_idx;
-    p_patch->edges_cell_blk = edges_cell_blk;
-}
-
 void fill_struct(struct t_cvmix * p_cvmix, double *tke, double *tke_plc, double *hlc, double *wlc,
                  double *u_stokes, double *a_veloc_v, double *a_temp_v, double *a_salt_v, double *iwe_Tdis,
                  double *cvmix_dummy_1, double *cvmix_dummy_2, double *cvmix_dummy_3, double *tke_Tbpr,
