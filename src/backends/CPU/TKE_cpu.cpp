@@ -20,7 +20,7 @@
 #include "src/shared/utils.hpp"
 
 // Structures with memory views
-static struct t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix_view;
+static struct t_cvmix_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_cvmix_view;
 static struct t_patch_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_patch_view;
 static struct t_ocean_state_view<cpu_memview::mdspan, cpu_memview::dextents> ocean_state_view;
 static struct t_atmo_fluxes_view<cpu_memview::mdspan, cpu_memview::dextents> atmos_fluxes_view;

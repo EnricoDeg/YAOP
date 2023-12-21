@@ -31,7 +31,7 @@ using std::min;
 template <class T>
 void calc_impl_edges(int blockNo, int start_index, int end_index,
                      t_patch_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_patch,
-                     t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
+                     t_cvmix_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
                      t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
                      t_constant p_constant) {
     // compute max level on block (maxval fortran function)
@@ -326,7 +326,7 @@ void tke_vertical_dissipation(int blockNo, int start_index, int end_index, int m
 template <class T>
 void integrate(int blockNo, int start_index, int end_index,
                t_patch_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_patch,
-               t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
+               t_cvmix_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
                t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
                t_constant p_constant,
                t_constant_tke p_constant_tke) {
@@ -555,7 +555,7 @@ void integrate(int blockNo, int start_index, int end_index,
 template <class T>
 void calc_impl_cells(int blockNo, int start_index, int end_index,
                      t_patch_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_patch,
-                     t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
+                     t_cvmix_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
                      t_ocean_state_view<cpu_memview::mdspan, cpu_memview::dextents> ocean_state,
                      t_atmo_fluxes_view<cpu_memview::mdspan, cpu_memview::dextents> atmos_fluxes,
                      t_atmos_for_ocean_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_as,

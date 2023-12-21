@@ -47,31 +47,32 @@ struct t_atmos_for_ocean_view {
     memview<T, dext<int, 2>> fu10;
 };
 
-template <template <class ...> class memview,
+template <class T,
+          template <class ...> class memview,
           template <class, size_t> class dext>
 struct t_cvmix_view {
-    memview<double, dext<int, 3>> tke;
-    memview<double, dext<int, 3>> tke_plc;
-    memview<double, dext<int, 2>> hlc;
-    memview<double, dext<int, 3>> wlc;
-    memview<double, dext<int, 2>> u_stokes;
-    memview<double, dext<int, 3>> a_veloc_v;
-    memview<double, dext<int, 3>> a_temp_v;
-    memview<double, dext<int, 3>> a_salt_v;
-    memview<double, dext<int, 3>> iwe_Tdis;
-    memview<double, dext<int, 3>> cvmix_dummy_1;
-    memview<double, dext<int, 3>> cvmix_dummy_2;
-    memview<double, dext<int, 3>> cvmix_dummy_3;
-    memview<double, dext<int, 3>> tke_Tbpr;
-    memview<double, dext<int, 3>> tke_Tspr;
-    memview<double, dext<int, 3>> tke_Tdif;
-    memview<double, dext<int, 3>> tke_Tdis;
-    memview<double, dext<int, 3>> tke_Twin;
-    memview<double, dext<int, 3>> tke_Tiwf;
-    memview<double, dext<int, 3>> tke_Tbck;
-    memview<double, dext<int, 3>> tke_Ttot;
-    memview<double, dext<int, 3>> tke_Lmix;
-    memview<double, dext<int, 3>> tke_Pr;
+    memview<T, dext<int, 3>> tke;
+    memview<T, dext<int, 3>> tke_plc;
+    memview<T, dext<int, 2>> hlc;
+    memview<T, dext<int, 3>> wlc;
+    memview<T, dext<int, 2>> u_stokes;
+    memview<T, dext<int, 3>> a_veloc_v;
+    memview<T, dext<int, 3>> a_temp_v;
+    memview<T, dext<int, 3>> a_salt_v;
+    memview<T, dext<int, 3>> iwe_Tdis;
+    memview<T, dext<int, 3>> cvmix_dummy_1;
+    memview<T, dext<int, 3>> cvmix_dummy_2;
+    memview<T, dext<int, 3>> cvmix_dummy_3;
+    memview<T, dext<int, 3>> tke_Tbpr;
+    memview<T, dext<int, 3>> tke_Tspr;
+    memview<T, dext<int, 3>> tke_Tdif;
+    memview<T, dext<int, 3>> tke_Tdis;
+    memview<T, dext<int, 3>> tke_Twin;
+    memview<T, dext<int, 3>> tke_Tiwf;
+    memview<T, dext<int, 3>> tke_Tbck;
+    memview<T, dext<int, 3>> tke_Ttot;
+    memview<T, dext<int, 3>> tke_Lmix;
+    memview<T, dext<int, 3>> tke_Pr;
 };
 
 template <template <class ...> class memview,

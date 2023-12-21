@@ -169,7 +169,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void fill_struct_memview(t_cvmix_view<memview, dext> *p_cvmix_view, t_cvmix *p_cvmix,
+    void fill_struct_memview(t_cvmix_view<T, memview, dext> *p_cvmix_view, t_cvmix *p_cvmix,
                              int nblocks, int nlevs, int nproma) {
         p_cvmix_view->tke = memview_policy<T>::memview(p_cvmix->tke, nblocks, nlevs+1, nproma);
         p_cvmix_view->tke_plc = memview_policy<T>::memview(p_cvmix->tke_plc, nblocks, nlevs+1, nproma);
