@@ -40,10 +40,11 @@ struct t_sea_ice_view {
     memview<T, dext<int, 2>> concsum;
 };
 
-template <template <class ...> class memview,
+template <class T,
+          template <class ...> class memview,
           template <class, size_t> class dext>
 struct t_atmos_for_ocean_view {
-    memview<double, dext<int, 2>> fu10;
+    memview<T, dext<int, 2>> fu10;
 };
 
 template <template <class ...> class memview,

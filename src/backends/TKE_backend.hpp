@@ -117,7 +117,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void fill_struct_memview(t_atmos_for_ocean_view<memview, dext> *p_as_view, t_atmos_for_ocean *p_as,
+    void fill_struct_memview(t_atmos_for_ocean_view<T, memview, dext> *p_as_view, t_atmos_for_ocean *p_as,
                              int nblocks, int nproma) {
         p_as_view->fu10 = memview_policy<T>::memview(p_as->fu10, nblocks, nproma);
     }

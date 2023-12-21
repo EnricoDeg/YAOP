@@ -24,7 +24,7 @@ static struct t_cvmix_view<cpu_memview::mdspan, cpu_memview::dextents> p_cvmix_v
 static struct t_patch_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_patch_view;
 static struct t_ocean_state_view<cpu_memview::mdspan, cpu_memview::dextents> ocean_state_view;
 static struct t_atmo_fluxes_view<cpu_memview::mdspan, cpu_memview::dextents> atmos_fluxes_view;
-static struct t_atmos_for_ocean_view<cpu_memview::mdspan, cpu_memview::dextents> p_as_view;
+static struct t_atmos_for_ocean_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_as_view;
 static struct t_sea_ice_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_sea_ice_view;
 static struct t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal_view;
 
