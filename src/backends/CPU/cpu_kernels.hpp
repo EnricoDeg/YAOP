@@ -556,7 +556,7 @@ template <class T>
 void calc_impl_cells(int blockNo, int start_index, int end_index,
                      t_patch_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_patch,
                      t_cvmix_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
-                     t_ocean_state_view<cpu_memview::mdspan, cpu_memview::dextents> ocean_state,
+                     t_ocean_state_view<T, cpu_memview::mdspan, cpu_memview::dextents> ocean_state,
                      t_atmo_fluxes_view<T, cpu_memview::mdspan, cpu_memview::dextents> atmos_fluxes,
                      t_atmos_for_ocean_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_as,
                      t_sea_ice_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_sea_ice,

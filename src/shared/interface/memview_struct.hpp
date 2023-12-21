@@ -83,16 +83,17 @@ struct t_atmo_fluxes_view {
     memview<T, dext<int, 2>> stress_yw;
 };
 
-template <template <class ...> class memview,
+template <class T,
+          template <class ...> class memview,
           template <class, size_t> class dext>
 struct t_ocean_state_view {
-    memview<double, dext<int, 3>> temp;
-    memview<double, dext<int, 3>> salt;
-    memview<double, dext<int, 2>> stretch_c;
-    memview<double, dext<int, 2>> eta_c;
-    memview<double, dext<int, 3>> p_vn_x1;
-    memview<double, dext<int, 3>> p_vn_x2;
-    memview<double, dext<int, 3>> p_vn_x3;
+    memview<T, dext<int, 3>> temp;
+    memview<T, dext<int, 3>> salt;
+    memview<T, dext<int, 2>> stretch_c;
+    memview<T, dext<int, 2>> eta_c;
+    memview<T, dext<int, 3>> p_vn_x1;
+    memview<T, dext<int, 3>> p_vn_x2;
+    memview<T, dext<int, 3>> p_vn_x3;
 };
 
 template <template <class ...> class memview,
