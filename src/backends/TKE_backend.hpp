@@ -102,7 +102,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void fill_struct_memview(t_sea_ice_view<memview, dext> *p_sea_ice_view, t_sea_ice *p_sea_ice,
+    void fill_struct_memview(t_sea_ice_view<T, memview, dext> *p_sea_ice_view, t_sea_ice *p_sea_ice,
                              int nblocks, int nproma) {
         p_sea_ice_view->concsum = memview_policy<T>::memview(p_sea_ice->concsum, nblocks, nproma);
     }

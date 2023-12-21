@@ -33,10 +33,11 @@ struct t_patch_view {
     memview<int, dext<int, 3>> edges_cell_blk;
 };
 
-template <template <class ...> class memview,
+template <class T,
+          template <class ...> class memview,
           template <class, size_t> class dext>
 struct t_sea_ice_view {
-    memview<double, dext<int, 2>> concsum;
+    memview<T, dext<int, 2>> concsum;
 };
 
 template <template <class ...> class memview,
