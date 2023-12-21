@@ -82,7 +82,7 @@ class YAOP {
     struct t_sea_ice p_sea_ice;
     struct t_atmos_for_ocean p_as;
     struct t_atmo_fluxes atmos_fluxes;
-    struct t_ocean_state ocean_state;
+    struct t_ocean_state<double> ocean_state;
     bool m_is_struct_init;
 };
 

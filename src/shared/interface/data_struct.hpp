@@ -96,14 +96,15 @@ struct t_cvmix {
     T *tke_Pr;
 };
 
+template <class T>
 struct t_ocean_state {
-    double *temp;
-    double *salt;
-    double *stretch_c;
-    double *eta_c;
-    double *p_vn_x1;
-    double *p_vn_x2;
-    double *p_vn_x3;
+    T *temp;
+    T *salt;
+    T *stretch_c;
+    T *eta_c;
+    T *p_vn_x1;
+    T *p_vn_x2;
+    T *p_vn_x3;
 };
 
 struct t_atmo_fluxes {
@@ -174,8 +175,17 @@ void fill_struct(t_cvmix<T> * p_cvmix, T *tke, T *tke_plc, T *hlc, T *wlc,
 /*! \brief Fill ocean state data struct from array pointers.
 *
 */
-void fill_struct(struct t_ocean_state * ocean_state, double *temp, double *salt, double *stretch_c,
-                 double *eta_c, double *p_vn_x1, double *p_vn_x2, double *p_vn_x3);
+template <class T>
+void fill_struct(t_ocean_state<T> * ocean_state, T *temp, T *salt, T *stretch_c,
+                 T *eta_c, T *p_vn_x1, T *p_vn_x2, T *p_vn_x3) {
+    ocean_state->temp = temp;
+    ocean_state->salt = salt;
+    ocean_state->stretch_c = stretch_c;
+    ocean_state->eta_c = eta_c;
+    ocean_state->p_vn_x1 = p_vn_x1;
+    ocean_state->p_vn_x2 = p_vn_x2;
+    ocean_state->p_vn_x3 = p_vn_x3;
+}
 
 /*! \brief Fill atmosphere fluxes data struct from array pointers.
 *
