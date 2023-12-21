@@ -75,11 +75,12 @@ struct t_cvmix_view {
     memview<T, dext<int, 3>> tke_Pr;
 };
 
-template <template <class ...> class memview,
+template <class T,
+          template <class ...> class memview,
           template <class, size_t> class dext>
 struct t_atmo_fluxes_view {
-    memview<double, dext<int, 2>> stress_xw;
-    memview<double, dext<int, 2>> stress_yw;
+    memview<T, dext<int, 2>> stress_xw;
+    memview<T, dext<int, 2>> stress_yw;
 };
 
 template <template <class ...> class memview,

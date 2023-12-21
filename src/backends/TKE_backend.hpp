@@ -132,7 +132,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void fill_struct_memview(t_atmo_fluxes_view<memview, dext> *atmos_fluxes_view, t_atmo_fluxes *atmos_fluxes,
+    void fill_struct_memview(t_atmo_fluxes_view<T, memview, dext> *atmos_fluxes_view, t_atmo_fluxes *atmos_fluxes,
                              int nblocks, int nproma) {
         atmos_fluxes_view->stress_xw = memview_policy<T>::memview(atmos_fluxes->stress_xw, nblocks, nproma);
         atmos_fluxes_view->stress_yw = memview_policy<T>::memview(atmos_fluxes->stress_yw, nblocks, nproma);
