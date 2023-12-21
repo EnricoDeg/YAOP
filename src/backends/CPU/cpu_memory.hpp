@@ -119,7 +119,7 @@ class cpu_mdspan_impl {
     }
 };
 
-namespace cpu_memview = Kokkos;
+namespace memview_nms = Kokkos;
 template<class T>
 using cpu_memview_policy = cpu_mdspan_impl<T>;
 

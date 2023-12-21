@@ -21,6 +21,12 @@
 #include "src/shared/interface/data_struct.hpp"
 #include "src/shared/interface/memview_struct.hpp"
 
+#if defined CUDA || defined HIP
+
+#else
+#include "src/backends/CPU/cpu_memory.hpp"
+#endif
+
 /*! \brief TKE backend class.
  *
  *  It implements the part which is in common for each backend:
@@ -364,6 +370,15 @@ class TKE_backend {
     double *m_dp;
     double *m_tke_upd;
     double *m_tke_unrest;
+
+    // Structures with memory views
+    struct t_cvmix_view<double, memview_nms::mdspan, memview_nms::dextents> p_cvmix_view;
+    struct t_patch_view<double, memview_nms::mdspan, memview_nms::dextents> p_patch_view;
+    struct t_ocean_state_view<double, memview_nms::mdspan, memview_nms::dextents> ocean_state_view;
+    struct t_atmo_fluxes_view<double, memview_nms::mdspan, memview_nms::dextents> atmos_fluxes_view;
+    struct t_atmos_for_ocean_view<double, memview_nms::mdspan, memview_nms::dextents> p_as_view;
+    struct t_sea_ice_view<double, memview_nms::mdspan, memview_nms::dextents> p_sea_ice_view;
+    struct t_tke_internal_view<double, memview_nms::mdspan, memview_nms::dextents> p_internal_view;
 };
 
 #endif  // SRC_BACKENDS_TKE_BACKEND_HPP_
