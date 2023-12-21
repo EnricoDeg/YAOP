@@ -26,7 +26,7 @@
 #endif
 
 struct YAOP::Impl {
-  TKE_backend::Ptr backend_tke;
+  TKE_backend<double>::Ptr backend_tke;
 };
 
 YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
@@ -35,12 +35,12 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
     : m_impl(new Impl) {
     std::cout << "Initializing Ocean Physics Library ... " << std::endl;
 #ifdef CUDA
-    m_impl->backend_tke = TKE_backend::Ptr(new TKE_gpu(nproma, nlevs, nblocks,
+    m_impl->backend_tke = TKE_backend<double>::Ptr(new TKE_gpu(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
                                        ReferencePressureIndbars, pi));
 #else
-    m_impl->backend_tke = TKE_backend::Ptr(new TKE_cpu<double>(nproma, nlevs, nblocks,
+    m_impl->backend_tke = TKE_backend<double>::Ptr(new TKE_cpu<double>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
                                        ReferencePressureIndbars, pi));

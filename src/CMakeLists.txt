@@ -42,7 +42,6 @@ endif()
 set(SOURCE_EXE  YAOP.cpp
                 ${SOURCE_C}
                 ${SOURCE_FORTRAN}
-                backends/TKE_backend.cpp
                 ${SOURCE_CUDA}
                 ${SOURCE_HIP}
                 ${SOURCE_GPU}

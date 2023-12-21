@@ -26,7 +26,7 @@
  *
  */
 template <class T>
-class TKE_cpu : public TKE_backend {
+class TKE_cpu : public TKE_backend<T> {
  public:
     /*! \brief TKE_cpu class constructor.
     *
@@ -36,14 +36,14 @@ class TKE_cpu : public TKE_backend {
     TKE_cpu(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
             int vert_cor_type, T dtime, T OceanReferenceDensity, T grav,
             int l_lc, T clc, T ReferencePressureIndbars, T pi)
-            : TKE_backend(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
-                          vert_cor_type, dtime, OceanReferenceDensity, grav,
-                          l_lc, clc, ReferencePressureIndbars, pi) {
+            : TKE_backend<T>(nproma, nlevs, nblocks, vert_mix_type, vmix_idemix_tke,
+                             vert_cor_type, dtime, OceanReferenceDensity, grav,
+                             l_lc, clc, ReferencePressureIndbars, pi) {
         // Allocate internal arrays memory and create memory views
         std::cout << "Initializing TKE cpu... " << std::endl;
 
-        this->internal_fields_malloc<T, memview_nms::mdspan, memview_nms::dextents, cpu_mdspan_impl>
-                                    (&p_internal_view);
+        TKE_backend<T>::template internal_fields_malloc
+                                 <memview_nms::mdspan, memview_nms::dextents, cpu_memview_policy>();
     }
 
     /*! \brief TKE_cpu class destructor.
@@ -54,7 +54,7 @@ class TKE_cpu : public TKE_backend {
         // Free internal arrays memory
         std::cout << "Finalizing TKE cpu... " << std::endl;
 
-        this->internal_fields_free<T, cpu_mdspan_impl>();
+        TKE_backend<T>::template internal_fields_free<cpu_memview_policy>();
     }
 
  protected:
@@ -72,21 +72,24 @@ class TKE_cpu : public TKE_backend {
                    int cells_end_index) {
         // The pointer to the data should not change inside the time loop
         // structs view are filled only at the first time step
-        if (!m_is_view_init) {
-            this->fill_struct_memview<T, memview_nms::mdspan, memview_nms::dextents, cpu_memview_policy>
-                                     (&p_cvmix_view, &p_cvmix, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
-            this->fill_struct_memview<T, memview_nms::mdspan, memview_nms::dextents, cpu_memview_policy>
-                                     (&p_patch_view, &p_patch, p_constant.nblocks, p_constant.nlevs, p_constant.nproma);
-            this->fill_struct_memview<T, memview_nms::mdspan, memview_nms::dextents, cpu_memview_policy>
-                                     (&ocean_state_view, &ocean_state, p_constant.nblocks, p_constant.nlevs,
-                                      p_constant.nproma);
-            this->fill_struct_memview<T, memview_nms::mdspan, memview_nms::dextents, cpu_memview_policy>
-                                     (&atmos_fluxes_view, &atmos_fluxes, p_constant.nblocks, p_constant.nproma);
-            this->fill_struct_memview<T, memview_nms::mdspan, memview_nms::dextents, cpu_memview_policy>
-                                     (&p_as_view, &p_as, p_constant.nblocks, p_constant.nproma);
-            this->fill_struct_memview<T, memview_nms::mdspan, memview_nms::dextents, cpu_memview_policy>
-                                     (&p_sea_ice_view, &p_sea_ice, p_constant.nblocks, p_constant.nproma);
-            m_is_view_init = true;
+        if (!this->m_is_view_init) {
+            int nblocks = this->p_constant.nblocks;
+            int nlevs = this->p_constant.nlevs;
+            int nproma = this->p_constant.nproma;
+            TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
+                                     (&p_cvmix, nblocks, nlevs, nproma);
+            TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
+                                     (&p_patch, nblocks, nlevs, nproma);
+            TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
+                                     (&ocean_state, nblocks, nlevs,
+                                      nproma);
+            TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
+                                     (&atmos_fluxes, nblocks, nproma);
+            TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
+                                     (&p_as, nblocks, nproma);
+            TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
+                                     (&p_sea_ice, nblocks, nproma);
+            this->m_is_view_init = true;
         }
 
         // over cells
@@ -95,11 +98,11 @@ class TKE_cpu : public TKE_backend {
             get_index_range(cells_block_size, cells_start_block, cells_end_block,
                             cells_start_index, cells_end_index, jb, &start_index, &end_index);
             calc_impl_cells<T>(jb, start_index, end_index,
-                                    p_patch_view, p_cvmix_view,
-                                    ocean_state_view, atmos_fluxes_view,
-                                    p_as_view, p_sea_ice_view,
-                                    p_internal_view, p_constant,
-                                    p_constant_tke);
+                               this->p_patch_view, this->p_cvmix_view,
+                               this->ocean_state_view, this->atmos_fluxes_view,
+                               this->p_as_view, this->p_sea_ice_view,
+                               this->p_internal_view, this->p_constant,
+                               this->p_constant_tke);
         }
 
         // over edges
@@ -108,8 +111,8 @@ class TKE_cpu : public TKE_backend {
             get_index_range(edges_block_size, edges_start_block, edges_end_block,
                             edges_start_index, edges_end_index, jb, &start_index, &end_index);
             calc_impl_edges<T>(jb, start_index, end_index,
-                            p_patch_view, p_cvmix_view,
-                            p_internal_view, p_constant);
+                               this->p_patch_view, this->p_cvmix_view,
+                               this->p_internal_view, this->p_constant);
         }
     }
 };
