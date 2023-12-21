@@ -257,7 +257,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void internal_fields_malloc(t_tke_internal_view<memview, dext> *p_internal_view) {
+    void internal_fields_malloc(t_tke_internal_view<T, memview, dext> *p_internal_view) {
         p_internal_view->tke_old = this->memview_malloc<T, memview, dext, memview_policy>
                                          (m_tke_old, p_constant.nlevs+1, p_constant.nproma);
         p_internal_view->forc_tke_surf_2D = this->memview_malloc<T, memview, dext, memview_policy>

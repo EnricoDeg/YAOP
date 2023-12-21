@@ -32,7 +32,7 @@ template <class T>
 void calc_impl_edges(int blockNo, int start_index, int end_index,
                      t_patch_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_patch,
                      t_cvmix_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
-                     t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
+                     t_tke_internal_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_internal,
                      t_constant p_constant) {
     // compute max level on block (maxval fortran function)
     int max_levels = 0;
@@ -327,7 +327,7 @@ template <class T>
 void integrate(int blockNo, int start_index, int end_index,
                t_patch_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_patch,
                t_cvmix_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_cvmix,
-               t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
+               t_tke_internal_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_internal,
                t_constant p_constant,
                t_constant_tke p_constant_tke) {
     T tke_surf, diff_surf_forc, tke_bott, diff_bott_forc;
@@ -560,7 +560,7 @@ void calc_impl_cells(int blockNo, int start_index, int end_index,
                      t_atmo_fluxes_view<T, cpu_memview::mdspan, cpu_memview::dextents> atmos_fluxes,
                      t_atmos_for_ocean_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_as,
                      t_sea_ice_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_sea_ice,
-                     t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal,
+                     t_tke_internal_view<T, cpu_memview::mdspan, cpu_memview::dextents> p_internal,
                      t_constant p_constant,
                      t_constant_tke p_constant_tke) {
     // initialization

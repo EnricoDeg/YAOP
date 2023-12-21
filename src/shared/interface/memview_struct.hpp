@@ -96,31 +96,32 @@ struct t_ocean_state_view {
     memview<T, dext<int, 3>> p_vn_x3;
 };
 
-template <template <class ...> class memview,
+template <class T,
+          template <class ...> class memview,
           template <class, size_t> class dext>
 struct t_tke_internal_view {
-    memview<double, dext<int, 1>> forc_tke_surf_2D;
-    memview<double, dext<int, 2>> dzw_stretched;
-    memview<double, dext<int, 2>> dzt_stretched;
-    memview<double, dext<int, 2>> tke_old;
-    memview<double, dext<int, 3>> tke_Av;
-    memview<double, dext<int, 2>> tke_kv;
-    memview<double, dext<int, 2>> Nsqr;
-    memview<double, dext<int, 2>> Ssqr;
-    memview<double, dext<int, 2>> a_dif;
-    memview<double, dext<int, 2>> b_dif;
-    memview<double, dext<int, 2>> c_dif;
-    memview<double, dext<int, 2>> a_tri;
-    memview<double, dext<int, 2>> b_tri;
-    memview<double, dext<int, 2>> c_tri;
-    memview<double, dext<int, 2>> d_tri;
-    memview<double, dext<int, 2>> sqrttke;
-    memview<double, dext<int, 2>> forc;
-    memview<double, dext<int, 2>> ke;
-    memview<double, dext<int, 2>> cp;
-    memview<double, dext<int, 2>> dp;
-    memview<double, dext<int, 2>> tke_upd;
-    memview<double, dext<int, 2>> tke_unrest;
+    memview<T, dext<int, 1>> forc_tke_surf_2D;
+    memview<T, dext<int, 2>> dzw_stretched;
+    memview<T, dext<int, 2>> dzt_stretched;
+    memview<T, dext<int, 2>> tke_old;
+    memview<T, dext<int, 3>> tke_Av;
+    memview<T, dext<int, 2>> tke_kv;
+    memview<T, dext<int, 2>> Nsqr;
+    memview<T, dext<int, 2>> Ssqr;
+    memview<T, dext<int, 2>> a_dif;
+    memview<T, dext<int, 2>> b_dif;
+    memview<T, dext<int, 2>> c_dif;
+    memview<T, dext<int, 2>> a_tri;
+    memview<T, dext<int, 2>> b_tri;
+    memview<T, dext<int, 2>> c_tri;
+    memview<T, dext<int, 2>> d_tri;
+    memview<T, dext<int, 2>> sqrttke;
+    memview<T, dext<int, 2>> forc;
+    memview<T, dext<int, 2>> ke;
+    memview<T, dext<int, 2>> cp;
+    memview<T, dext<int, 2>> dp;
+    memview<T, dext<int, 2>> tke_upd;
+    memview<T, dext<int, 2>> tke_unrest;
 };
 
 #endif  // SRC_SHARED_INTERFACE_MEMVIEW_STRUCT_HPP_

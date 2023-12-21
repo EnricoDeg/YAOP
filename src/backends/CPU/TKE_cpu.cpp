@@ -26,7 +26,7 @@ static struct t_ocean_state_view<double, cpu_memview::mdspan, cpu_memview::dexte
 static struct t_atmo_fluxes_view<double, cpu_memview::mdspan, cpu_memview::dextents> atmos_fluxes_view;
 static struct t_atmos_for_ocean_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_as_view;
 static struct t_sea_ice_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_sea_ice_view;
-static struct t_tke_internal_view<cpu_memview::mdspan, cpu_memview::dextents> p_internal_view;
+static struct t_tke_internal_view<double, cpu_memview::mdspan, cpu_memview::dextents> p_internal_view;
 
 TKE_cpu::TKE_cpu(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
                    int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
