@@ -52,7 +52,7 @@ class TKE_backend {
     *  It calls calc_impl which contains the actual implementation.
     */
     void calc(t_patch<double> p_patch, t_cvmix<double> p_cvmix,
-              t_ocean_state<double> ocean_state, t_atmo_fluxes atmos_fluxes,
+              t_ocean_state<double> ocean_state, t_atmo_fluxes<double> atmos_fluxes,
               t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
               int edges_block_size, int edges_start_block, int edges_end_block,
               int edges_start_index, int edges_end_index, int cells_block_size,
@@ -64,7 +64,7 @@ class TKE_backend {
     *
     */
     virtual void calc_impl(t_patch<double> p_patch, t_cvmix<double> p_cvmix,
-                           t_ocean_state<double> ocean_state, t_atmo_fluxes atmos_fluxes,
+                           t_ocean_state<double> ocean_state, t_atmo_fluxes<double> atmos_fluxes,
                            t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                            int edges_block_size, int edges_start_block, int edges_end_block,
                            int edges_start_index, int edges_end_index, int cells_block_size,
@@ -138,7 +138,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void fill_struct_memview(t_atmo_fluxes_view<T, memview, dext> *atmos_fluxes_view, t_atmo_fluxes *atmos_fluxes,
+    void fill_struct_memview(t_atmo_fluxes_view<T, memview, dext> *atmos_fluxes_view, t_atmo_fluxes<T> *atmos_fluxes,
                              int nblocks, int nproma) {
         atmos_fluxes_view->stress_xw = memview_policy<T>::memview(atmos_fluxes->stress_xw, nblocks, nproma);
         atmos_fluxes_view->stress_yw = memview_policy<T>::memview(atmos_fluxes->stress_yw, nblocks, nproma);

@@ -16,11 +16,6 @@
 
 #include "src/shared/interface/data_struct.hpp"
 
-void fill_struct(struct t_atmo_fluxes *atmo_fluxes, double *stress_xw, double *stress_yw) {
-    atmo_fluxes->stress_xw = stress_xw;
-    atmo_fluxes->stress_yw = stress_yw;
-}
-
 void fill_struct(struct t_atmos_for_ocean *p_as, double *fu10) {
     p_as->fu10 = fu10;
 }

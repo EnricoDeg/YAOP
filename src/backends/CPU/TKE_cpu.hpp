@@ -64,7 +64,7 @@ class TKE_cpu : public TKE_backend {
     *   turbulent kinetic energy vertical scheme.
     */
     void calc_impl(t_patch<T> p_patch, t_cvmix<T> p_cvmix,
-                   t_ocean_state<T> ocean_state, t_atmo_fluxes atmos_fluxes,
+                   t_ocean_state<T> ocean_state, t_atmo_fluxes<T> atmos_fluxes,
                    t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                    int edges_block_size, int edges_start_block, int edges_end_block,
                    int edges_start_index, int edges_end_index, int cells_block_size,

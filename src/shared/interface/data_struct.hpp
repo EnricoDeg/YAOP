@@ -107,9 +107,10 @@ struct t_ocean_state {
     T *p_vn_x3;
 };
 
+template <class T>
 struct t_atmo_fluxes {
-    double *stress_xw;
-    double *stress_yw;
+    T *stress_xw;
+    T *stress_yw;
 };
 
 struct t_atmos_for_ocean {
@@ -190,7 +191,11 @@ void fill_struct(t_ocean_state<T> * ocean_state, T *temp, T *salt, T *stretch_c,
 /*! \brief Fill atmosphere fluxes data struct from array pointers.
 *
 */
-void fill_struct(struct t_atmo_fluxes *atmo_fluxes, double *stress_xw, double *stress_yw);
+template <class T>
+void fill_struct(t_atmo_fluxes<T> *atmo_fluxes, T *stress_xw, T *stress_yw) {
+    atmo_fluxes->stress_xw = stress_xw;
+    atmo_fluxes->stress_yw = stress_yw;
+}
 
 /*! \brief Fill atmosphere data struct from array pointers.
 *
