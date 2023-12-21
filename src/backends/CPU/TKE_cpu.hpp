@@ -63,7 +63,7 @@ class TKE_cpu : public TKE_backend {
     *   It fills the memory view structures during the first call and then compute the
     *   turbulent kinetic energy vertical scheme.
     */
-    void calc_impl(t_patch<T> p_patch, t_cvmix p_cvmix,
+    void calc_impl(t_patch<T> p_patch, t_cvmix<T> p_cvmix,
                    t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
                    t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                    int edges_block_size, int edges_start_block, int edges_end_block,

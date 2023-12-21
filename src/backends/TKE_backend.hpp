@@ -51,7 +51,7 @@ class TKE_backend {
     *
     *  It calls calc_impl which contains the actual implementation.
     */
-    void calc(t_patch<double> p_patch, t_cvmix p_cvmix,
+    void calc(t_patch<double> p_patch, t_cvmix<double> p_cvmix,
               t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
               t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
               int edges_block_size, int edges_start_block, int edges_end_block,
@@ -63,7 +63,7 @@ class TKE_backend {
     /*! \brief Polymorphic function for the actual TKE scheme backend implementation.
     *
     */
-    virtual void calc_impl(t_patch<double> p_patch, t_cvmix p_cvmix,
+    virtual void calc_impl(t_patch<double> p_patch, t_cvmix<double> p_cvmix,
                            t_ocean_state ocean_state, t_atmo_fluxes atmos_fluxes,
                            t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
                            int edges_block_size, int edges_start_block, int edges_end_block,
@@ -175,7 +175,7 @@ class TKE_backend {
               template <class ...> class memview,
               template <class, size_t> class dext,
               template <class> class memview_policy>
-    void fill_struct_memview(t_cvmix_view<T, memview, dext> *p_cvmix_view, t_cvmix *p_cvmix,
+    void fill_struct_memview(t_cvmix_view<T, memview, dext> *p_cvmix_view, t_cvmix<T> *p_cvmix,
                              int nblocks, int nlevs, int nproma) {
         p_cvmix_view->tke = memview_policy<T>::memview(p_cvmix->tke, nblocks, nlevs+1, nproma);
         p_cvmix_view->tke_plc = memview_policy<T>::memview(p_cvmix->tke_plc, nblocks, nlevs+1, nproma);

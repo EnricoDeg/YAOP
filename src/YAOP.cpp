@@ -72,10 +72,10 @@ void YAOP::calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
                     int cells_start_block, int cells_end_block, int cells_start_index,
                     int cells_end_index) {
     if (!m_is_struct_init) {
-        fill_struct(&p_patch, depth_CellInterface, prism_center_dist_c,
+        fill_struct<double>(&p_patch, depth_CellInterface, prism_center_dist_c,
                     inv_prism_center_dist_c, prism_thick_c, dolic_c, dolic_e,
                     zlev_i, wet_c, edges_cell_idx, edges_cell_blk);
-        fill_struct(&p_cvmix, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
+        fill_struct<double>(&p_cvmix, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
                     a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
                     cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
                     tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
