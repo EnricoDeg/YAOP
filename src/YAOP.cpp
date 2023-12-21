@@ -40,7 +40,7 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
                                        ReferencePressureIndbars, pi));
 #else
-    m_impl->backend_tke = TKE_backend::Ptr(new TKE_cpu(nproma, nlevs, nblocks,
+    m_impl->backend_tke = TKE_backend::Ptr(new TKE_cpu<double>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
                                        ReferencePressureIndbars, pi));
