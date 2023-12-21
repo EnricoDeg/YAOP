@@ -59,7 +59,7 @@ TKE_backend::TKE_backend(int nproma, int nlevs, int nblocks, int vert_mix_type, 
 
 void TKE_backend::calc(t_patch<double> p_patch, t_cvmix<double> p_cvmix,
                        t_ocean_state<double> ocean_state, t_atmo_fluxes<double> atmos_fluxes,
-                       t_atmos_for_ocean p_as, t_sea_ice p_sea_ice,
+                       t_atmos_for_ocean<double> p_as, t_sea_ice<double> p_sea_ice,
                        int edges_block_size, int edges_start_block, int edges_end_block,
                        int edges_start_index, int edges_end_index, int cells_block_size,
                        int cells_start_block, int cells_end_block, int cells_start_index,

@@ -47,8 +47,7 @@ set(SOURCE_EXE  YAOP.cpp
                 ${SOURCE_HIP}
                 ${SOURCE_GPU}
                 ${SOURCE_CPU}
-                shared/utils.cpp
-                shared/interface/data_struct.cpp)
+                shared/utils.cpp)
 
 add_library(yaop SHARED ${SOURCE_EXE})
 target_include_directories(yaop PRIVATE ${PROJECT_SOURCE_DIR})

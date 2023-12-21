@@ -79,8 +79,8 @@ class YAOP {
     Impl *m_impl;
     struct t_patch<double> p_patch;
     struct t_cvmix<double> p_cvmix;
-    struct t_sea_ice p_sea_ice;
-    struct t_atmos_for_ocean p_as;
+    struct t_sea_ice<double> p_sea_ice;
+    struct t_atmos_for_ocean<double> p_as;
     struct t_atmo_fluxes<double> atmos_fluxes;
     struct t_ocean_state<double> ocean_state;
     bool m_is_struct_init;
