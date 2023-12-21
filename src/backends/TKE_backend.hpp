@@ -343,8 +343,8 @@ class TKE_backend {
 
  protected:
     // Structures with parameters
-    struct t_constant p_constant;
-    struct t_constant_tke p_constant_tke;
+    struct t_constant<double> p_constant;
+    struct t_constant_tke<double> p_constant_tke;
 
     bool m_is_view_init;
 

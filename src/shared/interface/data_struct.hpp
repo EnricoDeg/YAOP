@@ -18,34 +18,36 @@
 #define SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_
 
 // TKE constants
+template <class T>
 struct t_constant {
     int nproma;
     int nblocks;
     int vert_mix_type;
     int vmix_idemix_tke;
     int vert_cor_type;
-    double dtime;
-    double OceanReferenceDensity;
-    double grav;
+    T dtime;
+    T OceanReferenceDensity;
+    T grav;
     int l_lc;
-    double clc;
-    double ReferencePressureIndbars;
-    double pi;
+    T clc;
+    T ReferencePressureIndbars;
+    T pi;
     int nlevs;
 };
 
+template <class T>
 struct t_constant_tke {
-    double c_k;
-    double c_eps;
-    double cd;
-    double alpha_tke;
-    double clc;
-    double mxl_min;
-    double KappaM_min;
-    double KappaH_min;
-    double KappaM_max;
-    double tke_surf_min;
-    double tke_min;
+    T c_k;
+    T c_eps;
+    T cd;
+    T alpha_tke;
+    T clc;
+    T mxl_min;
+    T KappaM_min;
+    T KappaH_min;
+    T KappaM_max;
+    T tke_surf_min;
+    T tke_min;
     int tke_mxl_choice;
     int handle_old_vals;
     bool only_tke;

@@ -33,7 +33,7 @@ void calc_impl_edges(int blockNo, int start_index, int end_index,
                      t_patch_view<T, memview_nms::mdspan, memview_nms::dextents> p_patch,
                      t_cvmix_view<T, memview_nms::mdspan, memview_nms::dextents> p_cvmix,
                      t_tke_internal_view<T, memview_nms::mdspan, memview_nms::dextents> p_internal,
-                     t_constant p_constant) {
+                     t_constant<T> p_constant) {
     // compute max level on block (maxval fortran function)
     int max_levels = 0;
     for (int je = start_index; je <= end_index; je++)
@@ -95,7 +95,7 @@ void calc_mxl_2(int blockNo, int start_index, int end_index, int max_levels, T m
 template <class T>
 inline
 void calc_diffusivity(int blockNo, int start_index, int end_index, int max_levels,
-                      t_constant_tke *p_constant_tke,
+                      t_constant_tke<T> *p_constant_tke,
                       mdspan_2d<int> dolic_c, mdspan_3d<T> tke_Lmix, mdspan_2d<T> sqrttke,
                       mdspan_2d<T> Nsqr, mdspan_2d<T> Ssqr,
                       mdspan_3d<T> tke_Av, mdspan_2d<T> tke_kv, mdspan_3d<T> tke_Pr) {
@@ -328,8 +328,8 @@ void integrate(int blockNo, int start_index, int end_index,
                t_patch_view<T, memview_nms::mdspan, memview_nms::dextents> p_patch,
                t_cvmix_view<T, memview_nms::mdspan, memview_nms::dextents> p_cvmix,
                t_tke_internal_view<T, memview_nms::mdspan, memview_nms::dextents> p_internal,
-               t_constant p_constant,
-               t_constant_tke p_constant_tke) {
+               t_constant<T> p_constant,
+               t_constant_tke<T> p_constant_tke) {
     T tke_surf, diff_surf_forc, tke_bott, diff_bott_forc;
 
     // compute max level on block (maxval fortran function)
@@ -561,8 +561,8 @@ void calc_impl_cells(int blockNo, int start_index, int end_index,
                      t_atmos_for_ocean_view<T, memview_nms::mdspan, memview_nms::dextents> p_as,
                      t_sea_ice_view<T, memview_nms::mdspan, memview_nms::dextents> p_sea_ice,
                      t_tke_internal_view<T, memview_nms::mdspan, memview_nms::dextents> p_internal,
-                     t_constant p_constant,
-                     t_constant_tke p_constant_tke) {
+                     t_constant<T> p_constant,
+                     t_constant_tke<T> p_constant_tke) {
     // initialization
     for (int level = 0; level < p_constant.nlevs+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {

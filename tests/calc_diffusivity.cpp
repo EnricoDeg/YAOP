@@ -27,7 +27,7 @@ TEST(calc_diffusivity, tke_Av_0D) {
     int max_levels = 0;
     int nlevs = 1;
 
-    t_constant_tke p_constant_tke;
+    t_constant_tke<double> p_constant_tke;
     p_constant_tke.KappaM_max = 1.0;
     p_constant_tke.c_k = 1.0;
     p_constant_tke.only_tke = true;
