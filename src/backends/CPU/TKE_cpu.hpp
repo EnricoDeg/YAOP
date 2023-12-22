@@ -65,7 +65,7 @@ class TKE_cpu : public TKE_backend<T> {
     */
     void calc_impl(t_patch<T> p_patch, t_cvmix<T> p_cvmix,
                    t_ocean_state<T> ocean_state, t_atmo_fluxes<T> atmos_fluxes,
-                   t_atmos_for_ocean<T> p_as, t_sea_ice_base *p_sea_ice,
+                   t_atmos_for_ocean_base *p_as, t_sea_ice_base *p_sea_ice,
                    int edges_block_size, int edges_start_block, int edges_end_block,
                    int edges_start_index, int edges_end_index, int cells_block_size,
                    int cells_start_block, int cells_end_block, int cells_start_index,
@@ -86,7 +86,7 @@ class TKE_cpu : public TKE_backend<T> {
             TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
                                      (&atmos_fluxes, nblocks, nproma);
             TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
-                                     (&p_as, nblocks, nproma);
+                                     (p_as, nblocks, nproma);
             TKE_backend<T>::template fill_struct_memview<cpu_memview_policy>
                                      (p_sea_ice, nblocks, nproma);
             this->m_is_view_init = true;

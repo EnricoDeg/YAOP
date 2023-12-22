@@ -113,16 +113,22 @@ struct t_atmo_fluxes {
     T *stress_yw;
 };
 
+class t_atmos_for_ocean_base {
+ public:
+    t_atmos_for_ocean_base() {}
+    ~t_atmos_for_ocean_base() {}
+};
+
 template <class T>
-struct t_atmos_for_ocean {
+class t_atmos_for_ocean : public t_atmos_for_ocean_base {
+ public:
+    void fill(T *fu10_i) { this->fu10 = fu10_i; }
+    T * get_fu10() { return this->fu10; }
+
+ protected:
     T *fu10;
 };
-/*
-template <class T>
-struct t_sea_ice {
-    T *concsum;
-};
-*/
+
 class t_sea_ice_base {
  public:
     t_sea_ice_base() {}
@@ -132,15 +138,11 @@ class t_sea_ice_base {
 template <class T>
 class t_sea_ice : public t_sea_ice_base {
  public:
-    t_sea_ice(T *concsum_i) : consum(concsum_i) {} // NOLINT
-    T *concsum;
+    void fill(T *concsum_i) { this->concsum = concsum_i; }
+    T * get_concsum() { return this->concsum; }
 
  protected:
-    T * get_concsum() {
-        return this->concsum;
-    }
-
-//    T *concsum;
+    T *concsum;
 };
 
 /*! \brief Fill grid info data struct from array pointers.
@@ -219,21 +221,4 @@ void fill_struct(t_atmo_fluxes<T> *atmo_fluxes, T *stress_xw, T *stress_yw) {
     atmo_fluxes->stress_yw = stress_yw;
 }
 
-/*! \brief Fill atmosphere data struct from array pointers.
-*
-*/
-template <class T>
-void fill_struct(t_atmos_for_ocean<T> *p_as, T *fu10) {
-    p_as->fu10 = fu10;
-}
-
-/*! \brief Fill sea ice data struct from array pointers.
-*
-*/
-/*
-template <class T>
-void fill_struct(t_sea_ice<T> *p_sea_ice, T *concsum) {
-    p_sea_ice->concsum = concsum;
-}
-*/
 #endif  // SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_
