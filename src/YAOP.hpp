@@ -35,6 +35,10 @@ class YAOP {
         int vert_cor_type, double dtime, double OceanReferenceDensity, double grav,
         int l_lc, double clc, double ReferencePressureIndbars, double pi);
 
+    YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemix_tke,
+        int vert_cor_type, float dtime, float OceanReferenceDensity, float grav,
+        int l_lc, float clc, float ReferencePressureIndbars, float pi);
+
     /*! \brief YAOP main class destructor called in the model finalization.
      *
      *  Internally the memory is deallocated.
@@ -68,6 +72,25 @@ class YAOP {
               int cells_start_block, int cells_end_block, int cells_start_index,
               int cells_end_index);
 
+    void calc_tke(float *depth_CellInterface, float *prism_center_dist_c,
+              float *inv_prism_center_dist_c, float *prism_thick_c,
+              int *dolic_c, int *dolic_e, float *zlev_i, float *wet_c,
+              int *edges_cell_idx, int *edges_cell_blk,
+              float *temp, float *salt, float *stretch_c, float *eta_c,
+              float *p_vn_x1, float *p_vn_x2, float *p_vn_x3,
+              float *tke, float *tke_plc_in, float *hlc_in, float *wlc_in,
+              float *u_stokes_in, float *a_veloc_v, float *a_temp_v, float *a_salt_v,
+              float *iwe_Tdis, float *cvmix_dummy_1, float *cvmix_dummy_2,
+              float *cvmix_dummy_3, float *tke_Tbpr, float *tke_Tspr,
+              float *tke_Tdif, float *tke_Tdis, float *tke_Twin,
+              float *tke_Tiwf, float *tke_Tbck, float *tke_Ttot,
+              float *tke_Lmix, float *tke_Pr, float *stress_xw,
+              float *stress_yw, float *fu10, float *concsum,
+              int edges_block_size, int edges_start_block, int edges_end_block,
+              int edges_start_index, int edges_end_index, int cells_block_size,
+              int cells_start_block, int cells_end_block, int cells_start_index,
+              int cells_end_index);
+
     void calc_vertical_stability();
 
     void calc_pp();
@@ -77,12 +100,21 @@ class YAOP {
  private:
     struct Impl;
     Impl *m_impl;
+
     struct t_patch<double> p_patch;
     struct t_cvmix<double> p_cvmix;
     struct t_sea_ice<double> p_sea_ice;
     struct t_atmos_for_ocean<double> p_as;
     struct t_atmo_fluxes<double> atmos_fluxes;
     struct t_ocean_state<double> ocean_state;
+
+    struct t_patch<float> p_patch_sp;
+    struct t_cvmix<float> p_cvmix_sp;
+    struct t_sea_ice<float> p_sea_ice_sp;
+    struct t_atmos_for_ocean<float> p_as_sp;
+    struct t_atmo_fluxes<float> atmos_fluxes_sp;
+    struct t_ocean_state<float> ocean_state_sp;
+
     bool m_is_struct_init;
 };
 
