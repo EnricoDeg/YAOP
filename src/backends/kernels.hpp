@@ -33,12 +33,15 @@ using std::max;
 #if defined CUDA || defined HIP
 __device__
 #endif
+template <class T>
 inline
-double calculate_density(double temp, double salt, double pressure) {
-    double dvs, fne, fst, qn3;
-    double qnq, qvs, s, s3h;
-    double t, denom, s__2;
-    double rho;
+T calculate_density(T temp, T salt, T pressure) {
+    T dvs, fne, fst, qn3;
+    T qnq, qvs, s, s3h;
+    T t, denom, s__2;
+    T rho;
+    T zero = 0.0;
+    T two = 2.0;
 
     // This is the adisit part, that transforms potential in in-situ temperature
     qnq = -pressure * (-a_a3 + pressure * a_c3);
@@ -55,8 +58,8 @@ double calculate_density(double temp, double salt, double pressure) {
     fst = dvs + t * (2.0 * qnq + 3.0 * qn3 * t);
 
     t    = t - fne / fst;
-    s    = max(salt, 0.0);
-    s__2 = pow(s, 2.0);
+    s    = max(salt, zero);
+    s__2 = pow(s, two);
     s3h  = s * sqrt(s);
 
     rho = r_a0 + t * (r_a1 + t * (r_a2 + t * (r_a3 + t * (r_a4 + t * r_a5))))

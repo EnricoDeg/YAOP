@@ -610,11 +610,11 @@ void calc_impl_cells(int blockNo, int start_index, int end_index,
     for (int level = 1; level < max_levels; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
             if (level < p_patch.dolic_c(blockNo, jc)) {
-                T rho_up = calculate_density(ocean_state.temp(blockNo, level-1, jc),
+                T rho_up = calculate_density<T>(ocean_state.temp(blockNo, level-1, jc),
                                                   ocean_state.salt(blockNo, level-1, jc),
                                                   p_patch.zlev_i(level) *
                                                   p_constant.ReferencePressureIndbars);
-                T rho_down = calculate_density(ocean_state.temp(blockNo, level, jc),
+                T rho_down = calculate_density<T>(ocean_state.temp(blockNo, level, jc),
                                                     ocean_state.salt(blockNo, level, jc),
                                                     p_patch.zlev_i(level) *
                                                     p_constant.ReferencePressureIndbars);
