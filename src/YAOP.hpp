@@ -18,6 +18,7 @@
 #define SRC_YAOP_HPP_
 
 #include <iostream>
+#include <memory>
 #include "src/shared/interface/data_struct.hpp"
 
 /*! \brief YAOP main class, part of the library interface.
@@ -103,17 +104,20 @@ class YAOP {
 
     struct t_patch<double> p_patch;
     struct t_cvmix<double> p_cvmix;
-    struct t_sea_ice<double> p_sea_ice;
+//    struct t_sea_ice<double> p_sea_ice;
     struct t_atmos_for_ocean<double> p_as;
     struct t_atmo_fluxes<double> atmos_fluxes;
     struct t_ocean_state<double> ocean_state;
 
     struct t_patch<float> p_patch_sp;
     struct t_cvmix<float> p_cvmix_sp;
-    struct t_sea_ice<float> p_sea_ice_sp;
+//    struct t_sea_ice<float> p_sea_ice_sp;
     struct t_atmos_for_ocean<float> p_as_sp;
     struct t_atmo_fluxes<float> atmos_fluxes_sp;
     struct t_ocean_state<float> ocean_state_sp;
+
+    // std::shared_ptr<t_sea_ice_base> p_sea_ice;
+    t_sea_ice_base *p_sea_ice;
 
     bool m_is_struct_init;
 };

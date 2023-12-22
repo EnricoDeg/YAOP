@@ -117,10 +117,30 @@ template <class T>
 struct t_atmos_for_ocean {
     T *fu10;
 };
-
+/*
 template <class T>
 struct t_sea_ice {
     T *concsum;
+};
+*/
+class t_sea_ice_base {
+ public:
+    t_sea_ice_base() {}
+    ~t_sea_ice_base() {}
+};
+
+template <class T>
+class t_sea_ice : public t_sea_ice_base {
+ public:
+    t_sea_ice(T *concsum_i) : consum(concsum_i) {} // NOLINT
+    T *concsum;
+
+ protected:
+    T * get_concsum() {
+        return this->concsum;
+    }
+
+//    T *concsum;
 };
 
 /*! \brief Fill grid info data struct from array pointers.
@@ -210,9 +230,10 @@ void fill_struct(t_atmos_for_ocean<T> *p_as, T *fu10) {
 /*! \brief Fill sea ice data struct from array pointers.
 *
 */
+/*
 template <class T>
 void fill_struct(t_sea_ice<T> *p_sea_ice, T *concsum) {
     p_sea_ice->concsum = concsum;
 }
-
+*/
 #endif  // SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_

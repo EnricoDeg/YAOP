@@ -41,6 +41,8 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
                                        ReferencePressureIndbars, pi));
 #else
+    // p_sea_ice = t_sea_ice_base::Ptr(new t_sea_ice<double>());
+    // p_sea_ice = new t_sea_ice<double>();
     m_impl->backend_tke_dp = TKE_backend<double>::Ptr(new TKE_cpu<double>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
@@ -60,6 +62,8 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
                                        ReferencePressureIndbars, pi));
 #else
+    // p_sea_ice = t_sea_ice_base::Ptr(new t_sea_ice<float>());
+    // p_sea_ice = new t_sea_ice<float>();
     m_impl->backend_tke_sp = TKE_backend<float>::Ptr(new TKE_cpu<float>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
@@ -102,7 +106,8 @@ void YAOP::calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
         fill_struct<double>(&ocean_state, temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3);
         fill_struct<double>(&atmos_fluxes, stress_xw, stress_yw);
         fill_struct<double>(&p_as, fu10);
-        fill_struct<double>(&p_sea_ice, concsum);
+        p_sea_ice = new t_sea_ice<double>(concsum);
+        // fill_struct<double>(&p_sea_ice, concsum);
         m_is_struct_init = true;
     }
 
@@ -142,11 +147,12 @@ void YAOP::calc_tke(float *depth_CellInterface, float *prism_center_dist_c,
         fill_struct<float>(&ocean_state_sp, temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3);
         fill_struct<float>(&atmos_fluxes_sp, stress_xw, stress_yw);
         fill_struct<float>(&p_as_sp, fu10);
-        fill_struct<float>(&p_sea_ice_sp, concsum);
+        // fill_struct<float>(&p_sea_ice_sp, concsum);
+        p_sea_ice = new t_sea_ice<float>(concsum);
         m_is_struct_init = true;
     }
 
-    m_impl->backend_tke_sp->calc(p_patch_sp, p_cvmix_sp, ocean_state_sp, atmos_fluxes_sp, p_as_sp, p_sea_ice_sp,
+    m_impl->backend_tke_sp->calc(p_patch_sp, p_cvmix_sp, ocean_state_sp, atmos_fluxes_sp, p_as_sp, p_sea_ice,
                           edges_block_size, edges_start_block, edges_end_block,
                           edges_start_index, edges_end_index, cells_block_size,
                           cells_start_block, cells_end_block, cells_start_index,
