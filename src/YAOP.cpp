@@ -91,6 +91,18 @@ void YAOP::calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
                     int edges_start_index, int edges_end_index, int cells_block_size,
                     int cells_start_block, int cells_end_block, int cells_start_index,
                     int cells_end_index) {
+    // This structures are filled during the first call to initialize the memory views.
+    // Then they are left empty during the following calls, but passed anyway to the backend.
+    // It allows to have the struct templated as well as the backend without having to template
+    // the YAOP class.
+    // There can be more elegant workarounds to achieve that but this is the simplest one.
+    struct t_patch<double> p_patch;
+    struct t_cvmix<double> p_cvmix;
+    struct t_sea_ice<double> p_sea_ice;
+    struct t_atmos_for_ocean<double> p_as;
+    struct t_atmo_fluxes<double> atmos_fluxes;
+    struct t_ocean_state<double> ocean_state;
+
     if (!m_is_struct_init) {
         fill_struct<double>(&p_patch, depth_CellInterface, prism_center_dist_c,
                     inv_prism_center_dist_c, prism_thick_c, dolic_c, dolic_e,
@@ -131,22 +143,34 @@ void YAOP::calc_tke(float *depth_CellInterface, float *prism_center_dist_c,
                     int edges_start_index, int edges_end_index, int cells_block_size,
                     int cells_start_block, int cells_end_block, int cells_start_index,
                     int cells_end_index) {
+    // This structures are filled during the first call to initialize the memory views.
+    // Then they are left empty during the following calls, but passed anyway to the backend.
+    // It allows to have the struct templated as well as the backend without having to template
+    // the YAOP class.
+    // There can be more elegant workarounds to achieve that but this is the simplest one.
+    struct t_patch<float> p_patch;
+    struct t_cvmix<float> p_cvmix;
+    struct t_sea_ice<float> p_sea_ice;
+    struct t_atmos_for_ocean<float> p_as;
+    struct t_atmo_fluxes<float> atmos_fluxes;
+    struct t_ocean_state<float> ocean_state;
+
     if (!m_is_struct_init) {
-        fill_struct<float>(&p_patch_sp, depth_CellInterface, prism_center_dist_c,
+        fill_struct<float>(&p_patch, depth_CellInterface, prism_center_dist_c,
                     inv_prism_center_dist_c, prism_thick_c, dolic_c, dolic_e,
                     zlev_i, wet_c, edges_cell_idx, edges_cell_blk);
-        fill_struct<float>(&p_cvmix_sp, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
+        fill_struct<float>(&p_cvmix, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
                     a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
                     cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
                     tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
-        fill_struct<float>(&ocean_state_sp, temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3);
-        fill_struct<float>(&atmos_fluxes_sp, stress_xw, stress_yw);
-        fill_struct<float>(&p_as_sp, fu10);
-        fill_struct<float>(&p_sea_ice_sp, concsum);
+        fill_struct<float>(&ocean_state, temp, salt, stretch_c, eta_c, p_vn_x1, p_vn_x2, p_vn_x3);
+        fill_struct<float>(&atmos_fluxes, stress_xw, stress_yw);
+        fill_struct<float>(&p_as, fu10);
+        fill_struct<float>(&p_sea_ice, concsum);
         m_is_struct_init = true;
     }
 
-    m_impl->backend_tke_sp->calc(p_patch_sp, p_cvmix_sp, ocean_state_sp, atmos_fluxes_sp, p_as_sp, p_sea_ice_sp,
+    m_impl->backend_tke_sp->calc(p_patch, p_cvmix, ocean_state, atmos_fluxes, p_as, p_sea_ice,
                           edges_block_size, edges_start_block, edges_end_block,
                           edges_start_index, edges_end_index, cells_block_size,
                           cells_start_block, cells_end_block, cells_start_index,
