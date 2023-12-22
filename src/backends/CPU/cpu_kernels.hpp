@@ -102,13 +102,14 @@ void calc_diffusivity(int blockNo, int start_index, int end_index, int max_level
     for (int level = 0; level < max_levels+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
             if (level < dolic_c(blockNo, jc) + 1) {
+                T zeps = 1.0e-12;
                 tke_Av(blockNo, level, jc) = min(p_constant_tke->KappaM_max,
                                                  p_constant_tke->c_k * tke_Lmix(blockNo, level, jc) *
                                                  sqrttke(level, jc));
-                tke_Pr(blockNo, level, jc) = Nsqr(level, jc) / max(Ssqr(level, jc), 1.0e-12);
+                tke_Pr(blockNo, level, jc) = Nsqr(level, jc) / max(Ssqr(level, jc), zeps);
                 if (!p_constant_tke->only_tke)
                     tke_Pr(blockNo, level, jc) = min(tke_Pr(blockNo, level, jc),
-                                                     tke_Av(blockNo, level, jc) * Nsqr(level, jc) / 1.0e-12);
+                                                     tke_Av(blockNo, level, jc) * Nsqr(level, jc) / zeps);
                 tke_Pr(blockNo, level, jc) = max(1.0, min(10.0, 6.6 * tke_Pr(blockNo, level, jc)));
                 tke_kv(level, jc) = tke_Av(blockNo, level, jc) / tke_Pr(blockNo, level, jc);
                 if (p_constant_tke->use_Kappa_min) {
@@ -341,10 +342,12 @@ void integrate(int blockNo, int start_index, int end_index,
     // Initialize diagnostics and calculate mixing length scale
     for (int level = 0; level < p_constant.nlevs+1; level++) {
         for (int jc = start_index; jc <= end_index; jc++) {
-            p_cvmix.tke_Twin(blockNo, level, jc) = 0.0;
-            p_internal.sqrttke(level, jc) = sqrt(max(0.0, p_internal.tke_old(level, jc)));
+            T zeps = 1.0e-12;
+            T zero = 0.0;
+            p_cvmix.tke_Twin(blockNo, level, jc) = zero;
+            p_internal.sqrttke(level, jc) = sqrt(max(zero, p_internal.tke_old(level, jc)));
             p_cvmix.tke_Lmix(blockNo, level, jc) = sqrt(2.0) * p_internal.sqrttke(level, jc) /
-                                    sqrt(max(1.0e-12, p_internal.Nsqr(level, jc)));
+                                    sqrt(max(zeps, p_internal.Nsqr(level, jc)));
         }
     }
 
