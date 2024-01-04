@@ -89,7 +89,7 @@ class TKE_backend {
     *  It calls calc_impl which contains the actual implementation.
     */
     void calc(t_patch<T> p_patch, t_cvmix<T> p_cvmix,
-                           t_ocean_state<T> ocean_state, t_atmo_fluxes_base *atmos_fluxes,
+                           t_ocean_state_base *ocean_state, t_atmo_fluxes_base *atmos_fluxes,
                            t_atmos_for_ocean_base *p_as, t_sea_ice_base *p_sea_ice,
                            int edges_block_size, int edges_start_block, int edges_end_block,
                            int edges_start_index, int edges_end_index, int cells_block_size,
@@ -107,7 +107,7 @@ class TKE_backend {
     *
     */
     virtual void calc_impl(t_patch<T> p_patch, t_cvmix<T> p_cvmix,
-                           t_ocean_state<T> ocean_state, t_atmo_fluxes_base *atmos_fluxes,
+                           t_ocean_state_base *ocean_state, t_atmo_fluxes_base *atmos_fluxes,
                            t_atmos_for_ocean_base *p_as, t_sea_ice_base *p_sea_ice,
                            int edges_block_size, int edges_start_block, int edges_end_block,
                            int edges_start_index, int edges_end_index, int cells_block_size,
@@ -182,14 +182,21 @@ class TKE_backend {
     *   and how to create a memory view object.
     */
     template <template <class> class memview_policy>
-    void fill_struct_memview(t_ocean_state<T> *ocean_state, int nblocks, int nlevs, int nproma) {
-        this->ocean_state_view.temp = memview_policy<T>::memview(ocean_state->temp, nblocks, nlevs, nproma);
-        this->ocean_state_view.salt = memview_policy<T>::memview(ocean_state->salt, nblocks, nlevs, nproma);
-        this->ocean_state_view.stretch_c = memview_policy<T>::memview(ocean_state->stretch_c, nblocks, nproma);
-        this->ocean_state_view.eta_c = memview_policy<T>::memview(ocean_state->eta_c, nblocks, nproma);
-        this->ocean_state_view.p_vn_x1 = memview_policy<T>::memview(ocean_state->p_vn_x1, nblocks, nlevs, nproma);
-        this->ocean_state_view.p_vn_x2 = memview_policy<T>::memview(ocean_state->p_vn_x2, nblocks, nlevs, nproma);
-        this->ocean_state_view.p_vn_x3 = memview_policy<T>::memview(ocean_state->p_vn_x3, nblocks, nlevs, nproma);
+    void fill_struct_memview(t_ocean_state_base *ocean_state, int nblocks, int nlevs, int nproma) {
+        T *ptr = static_cast<t_ocean_state<T>*>(ocean_state)->get_temp();
+        this->ocean_state_view.temp = memview_policy<T>::memview(ptr, nblocks, nlevs, nproma);
+        ptr = static_cast<t_ocean_state<T>*>(ocean_state)->get_salt();
+        this->ocean_state_view.salt = memview_policy<T>::memview(ptr, nblocks, nlevs, nproma);
+        ptr = static_cast<t_ocean_state<T>*>(ocean_state)->get_stretch_c();
+        this->ocean_state_view.stretch_c = memview_policy<T>::memview(ptr, nblocks, nproma);
+        ptr = static_cast<t_ocean_state<T>*>(ocean_state)->get_eta_c();
+        this->ocean_state_view.eta_c = memview_policy<T>::memview(ptr, nblocks, nproma);
+        ptr = static_cast<t_ocean_state<T>*>(ocean_state)->get_p_vn_x1();
+        this->ocean_state_view.p_vn_x1 = memview_policy<T>::memview(ptr, nblocks, nlevs, nproma);
+        ptr = static_cast<t_ocean_state<T>*>(ocean_state)->get_p_vn_x2();
+        this->ocean_state_view.p_vn_x2 = memview_policy<T>::memview(ptr, nblocks, nlevs, nproma);
+        ptr = static_cast<t_ocean_state<T>*>(ocean_state)->get_p_vn_x3();
+        this->ocean_state_view.p_vn_x3 = memview_policy<T>::memview(ptr, nblocks, nlevs, nproma);
     }
 
     /*! \brief fill a structure of memory views given a structure of pointers about the cvmix info.

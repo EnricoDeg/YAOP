@@ -96,8 +96,34 @@ struct t_cvmix {
     T *tke_Pr;
 };
 
+class t_ocean_state_base {
+ public:
+    t_ocean_state_base() {}
+    ~t_ocean_state_base() {}
+};
+
 template <class T>
-struct t_ocean_state {
+class t_ocean_state : public t_ocean_state_base {
+ public:
+    void fill(T *temp_i, T *salt_i, T *stretch_c_i, T *eta_c_i,
+              T *p_vn_x1_i, T *p_vn_x2_i, T *p_vn_x3_i) {
+        this->temp = temp_i;
+        this->salt = salt_i;
+        this->stretch_c = stretch_c_i;
+        this->eta_c = eta_c_i;
+        this->p_vn_x1 = p_vn_x1_i;
+        this->p_vn_x2 = p_vn_x2_i;
+        this->p_vn_x3 = p_vn_x3_i;
+    }
+    T * get_temp() { return this->temp; }
+    T * get_salt() { return this->salt; }
+    T * get_stretch_c() { return this->stretch_c; }
+    T * get_eta_c() { return this->eta_c; }
+    T * get_p_vn_x1() { return this->p_vn_x1; }
+    T * get_p_vn_x2() { return this->p_vn_x2; }
+    T * get_p_vn_x3() { return this->p_vn_x3; }
+
+ protected:
     T *temp;
     T *salt;
     T *stretch_c;
@@ -210,21 +236,6 @@ void fill_struct(t_cvmix<T> * p_cvmix, T *tke, T *tke_plc, T *hlc, T *wlc,
     p_cvmix->tke_Ttot = tke_Ttot;
     p_cvmix->tke_Lmix = tke_Lmix;
     p_cvmix->tke_Pr = tke_Pr;
-}
-
-/*! \brief Fill ocean state data struct from array pointers.
-*
-*/
-template <class T>
-void fill_struct(t_ocean_state<T> * ocean_state, T *temp, T *salt, T *stretch_c,
-                 T *eta_c, T *p_vn_x1, T *p_vn_x2, T *p_vn_x3) {
-    ocean_state->temp = temp;
-    ocean_state->salt = salt;
-    ocean_state->stretch_c = stretch_c;
-    ocean_state->eta_c = eta_c;
-    ocean_state->p_vn_x1 = p_vn_x1;
-    ocean_state->p_vn_x2 = p_vn_x2;
-    ocean_state->p_vn_x3 = p_vn_x3;
 }
 
 #endif  // SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_
