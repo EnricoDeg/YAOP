@@ -56,8 +56,41 @@ struct t_constant_tke {
     bool use_lbound_dirichlet;
 };
 
+class t_patch_base {
+ public:
+    t_patch_base() {}
+    ~t_patch_base() {}
+};
+
 template <class T>
-struct t_patch {
+class t_patch : public t_patch_base {
+ public:
+    void fill(T *depth_CellInterface_i, T *prism_center_dist_c_i, T *inv_prism_center_dist_c_i,
+              T *prism_thick_c_i, int *dolic_c_i, int *dolic_e_i, T *zlev_i_i, T *wet_c_i,
+              int *edges_cell_idx_i, int *edges_cell_blk_i) {
+        this->depth_CellInterface = depth_CellInterface_i;
+        this->prism_center_dist_c = prism_center_dist_c_i;
+        this->inv_prism_center_dist_c = inv_prism_center_dist_c_i;
+        this->prism_thick_c = prism_thick_c_i;
+        this->dolic_c = dolic_c_i;
+        this->dolic_e = dolic_e_i;
+        this->zlev_i = zlev_i_i;
+        this->wet_c = wet_c_i;
+        this->edges_cell_idx = edges_cell_idx_i;
+        this->edges_cell_blk = edges_cell_blk_i;
+    }
+    T * get_depth_CellInterface() { return this->depth_CellInterface; }
+    T * get_prism_center_dist_c() { return this->prism_center_dist_c; }
+    T * get_inv_prism_center_dist_c() { return this->inv_prism_center_dist_c; }
+    T * get_prism_thick_c() { return this->prism_thick_c; }
+    int * get_dolic_c() { return this->dolic_c; }
+    int * get_dolic_e() { return this->dolic_e; }
+    T * get_zlev_i() { return this->zlev_i; }
+    T * get_wet_c() { return this->wet_c; }
+    int * get_edges_cell_idx() { return this->edges_cell_idx; }
+    int * get_edges_cell_blk() { return this->edges_cell_blk; }
+
+ protected:
     T *depth_CellInterface;
     T *prism_center_dist_c;
     T *inv_prism_center_dist_c;
@@ -244,24 +277,5 @@ class t_sea_ice : public t_sea_ice_base {
  protected:
     T *concsum;
 };
-
-/*! \brief Fill grid info data struct from array pointers.
-*
-*/
-template <class T>
-void fill_struct(t_patch<T> *p_patch, T *depth_CellInterface, T *prism_center_dist_c,
-                 T *inv_prism_center_dist_c, T *prism_thick_c, int *dolic_c, int *dolic_e,
-                 T *zlev_i, T *wet_c, int *edges_cell_idx, int *edges_cell_blk) {
-    p_patch->depth_CellInterface = depth_CellInterface;
-    p_patch->prism_center_dist_c = prism_center_dist_c;
-    p_patch->inv_prism_center_dist_c = inv_prism_center_dist_c;
-    p_patch->prism_thick_c = prism_thick_c;
-    p_patch->dolic_c = dolic_c;
-    p_patch->dolic_e = dolic_e;
-    p_patch->zlev_i = zlev_i;
-    p_patch->wet_c = wet_c;
-    p_patch->edges_cell_idx = edges_cell_idx;
-    p_patch->edges_cell_blk = edges_cell_blk;
-}
 
 #endif  // SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_

@@ -102,15 +102,12 @@ class YAOP {
     struct Impl;
     Impl *m_impl;
 
-    struct t_patch<double> p_patch;
-
-    struct t_patch<float> p_patch_sp;
-
     t_sea_ice_base *p_sea_ice;
     t_atmos_for_ocean_base *p_as;
     t_atmo_fluxes_base *atmos_fluxes;
     t_ocean_state_base *ocean_state;
     t_cvmix_base *p_cvmix;
+    t_patch_base *p_patch;
 
     bool m_is_struct_init;
 };

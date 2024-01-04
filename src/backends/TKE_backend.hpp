@@ -88,7 +88,7 @@ class TKE_backend {
     *
     *  It calls calc_impl which contains the actual implementation.
     */
-    void calc(t_patch<T> p_patch, t_cvmix_base *p_cvmix,
+    void calc(t_patch_base *p_patch, t_cvmix_base *p_cvmix,
                            t_ocean_state_base *ocean_state, t_atmo_fluxes_base *atmos_fluxes,
                            t_atmos_for_ocean_base *p_as, t_sea_ice_base *p_sea_ice,
                            int edges_block_size, int edges_start_block, int edges_end_block,
@@ -106,7 +106,7 @@ class TKE_backend {
     /*! \brief Polymorphic function for the actual TKE scheme backend implementation.
     *
     */
-    virtual void calc_impl(t_patch<T> p_patch, t_cvmix_base *p_cvmix,
+    virtual void calc_impl(t_patch_base *p_patch, t_cvmix_base *p_cvmix,
                            t_ocean_state_base *ocean_state, t_atmo_fluxes_base *atmos_fluxes,
                            t_atmos_for_ocean_base *p_as, t_sea_ice_base *p_sea_ice,
                            int edges_block_size, int edges_start_block, int edges_end_block,
@@ -121,20 +121,27 @@ class TKE_backend {
     *   and how to create a memory view object.
     */
     template <template <class> class memview_policy>
-    void fill_struct_memview(t_patch<T> *p_patch, int nblocks, int nlevs, int nproma) {
-        this->p_patch_view.depth_CellInterface = memview_policy<T>::memview(p_patch->depth_CellInterface,
-                                                                    nblocks, nlevs+1, nproma);
-        this->p_patch_view.prism_center_dist_c = memview_policy<T>::memview(p_patch->prism_center_dist_c,
-                                                                    nblocks, nlevs+1, nproma);
-        this->p_patch_view.inv_prism_center_dist_c = memview_policy<T>::memview(p_patch->inv_prism_center_dist_c,
-                                                                        nblocks, nlevs+1, nproma);
-        this->p_patch_view.prism_thick_c = memview_policy<T>::memview(p_patch->prism_thick_c, nblocks, nlevs, nproma);
-        this->p_patch_view.dolic_c = memview_policy<int>::memview(p_patch->dolic_c, nblocks, nproma);
-        this->p_patch_view.dolic_e = memview_policy<int>::memview(p_patch->dolic_e, nblocks, nproma);
-        this->p_patch_view.zlev_i = memview_policy<T>::memview(p_patch->zlev_i, nlevs);
-        this->p_patch_view.wet_c = memview_policy<T>::memview(p_patch->wet_c, nblocks, nlevs, nproma);
-        this->p_patch_view.edges_cell_idx = memview_policy<int>::memview(p_patch->edges_cell_idx, 2, nlevs, nproma);
-        this->p_patch_view.edges_cell_blk = memview_policy<int>::memview(p_patch->edges_cell_blk, 2, nlevs, nproma);
+    void fill_struct_memview(t_patch_base *p_patch, int nblocks, int nlevs, int nproma) {
+        T *ptr = static_cast<t_patch<T>*>(p_patch)->get_depth_CellInterface();
+        this->p_patch_view.depth_CellInterface = memview_policy<T>::memview(ptr, nblocks, nlevs+1, nproma);
+        ptr = static_cast<t_patch<T>*>(p_patch)->get_prism_center_dist_c();
+        this->p_patch_view.prism_center_dist_c = memview_policy<T>::memview(ptr, nblocks, nlevs+1, nproma);
+        ptr = static_cast<t_patch<T>*>(p_patch)->get_inv_prism_center_dist_c();
+        this->p_patch_view.inv_prism_center_dist_c = memview_policy<T>::memview(ptr, nblocks, nlevs+1, nproma);
+        ptr = static_cast<t_patch<T>*>(p_patch)->get_prism_thick_c();
+        this->p_patch_view.prism_thick_c = memview_policy<T>::memview(ptr, nblocks, nlevs, nproma);
+        int *ptr_i = static_cast<t_patch<T>*>(p_patch)->get_dolic_c();
+        this->p_patch_view.dolic_c = memview_policy<int>::memview(ptr_i, nblocks, nproma);
+        ptr_i = static_cast<t_patch<T>*>(p_patch)->get_dolic_e();
+        this->p_patch_view.dolic_e = memview_policy<int>::memview(ptr_i, nblocks, nproma);
+        ptr = static_cast<t_patch<T>*>(p_patch)->get_zlev_i();
+        this->p_patch_view.zlev_i = memview_policy<T>::memview(ptr, nlevs);
+        ptr = static_cast<t_patch<T>*>(p_patch)->get_wet_c();
+        this->p_patch_view.wet_c = memview_policy<T>::memview(ptr, nblocks, nlevs, nproma);
+        ptr_i = static_cast<t_patch<T>*>(p_patch)->get_edges_cell_idx();
+        this->p_patch_view.edges_cell_idx = memview_policy<int>::memview(ptr_i, 2, nlevs, nproma);
+        ptr_i = static_cast<t_patch<T>*>(p_patch)->get_edges_cell_blk();
+        this->p_patch_view.edges_cell_blk = memview_policy<int>::memview(ptr_i, 2, nlevs, nproma);
     }
 
     /*! \brief fill a structure of memory views given a structure of pointers about the sea ice info.
