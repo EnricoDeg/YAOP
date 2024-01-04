@@ -45,6 +45,7 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
     p_as = new t_atmos_for_ocean<double>();
     atmos_fluxes = new t_atmo_fluxes<double>();
     ocean_state = new t_ocean_state<double>();
+    p_cvmix = new t_cvmix<double>();
     m_impl->backend_tke_dp = TKE_backend<double>::Ptr(new TKE_cpu<double>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
@@ -68,6 +69,7 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
     p_as = new t_atmos_for_ocean<float>();
     atmos_fluxes = new t_atmo_fluxes<float>();
     ocean_state = new t_ocean_state<float>();
+    p_cvmix = new t_cvmix<float>();
     m_impl->backend_tke_sp = TKE_backend<float>::Ptr(new TKE_cpu<float>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
@@ -103,10 +105,10 @@ void YAOP::calc_tke(double *depth_CellInterface, double *prism_center_dist_c,
         fill_struct<double>(&p_patch, depth_CellInterface, prism_center_dist_c,
                     inv_prism_center_dist_c, prism_thick_c, dolic_c, dolic_e,
                     zlev_i, wet_c, edges_cell_idx, edges_cell_blk);
-        fill_struct<double>(&p_cvmix, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
-                    a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
-                    cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
-                    tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
+        static_cast<t_cvmix<double>*>(p_cvmix)->fill(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
+                                                     a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
+                                                     cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
+                                                     tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
         static_cast<t_ocean_state<double>*>(ocean_state)->fill(temp, salt, stretch_c, eta_c,
                                                                p_vn_x1, p_vn_x2, p_vn_x3);
         static_cast<t_atmo_fluxes<double>*>(atmos_fluxes)->fill(stress_xw, stress_yw);
@@ -144,10 +146,10 @@ void YAOP::calc_tke(float *depth_CellInterface, float *prism_center_dist_c,
         fill_struct<float>(&p_patch_sp, depth_CellInterface, prism_center_dist_c,
                     inv_prism_center_dist_c, prism_thick_c, dolic_c, dolic_e,
                     zlev_i, wet_c, edges_cell_idx, edges_cell_blk);
-        fill_struct<float>(&p_cvmix_sp, tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
-                    a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
-                    cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
-                    tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
+        static_cast<t_cvmix<float>*>(p_cvmix)->fill(tke, tke_plc_in, hlc_in, wlc_in, u_stokes_in, a_veloc_v,
+                                                    a_temp_v, a_salt_v, iwe_Tdis, cvmix_dummy_1, cvmix_dummy_2,
+                                                    cvmix_dummy_3, tke_Tbpr, tke_Tspr, tke_Tdif, tke_Tdis, tke_Twin,
+                                                    tke_Tiwf, tke_Tbck, tke_Ttot, tke_Lmix, tke_Pr);
         static_cast<t_ocean_state<float>*>(ocean_state)->fill(temp, salt, stretch_c, eta_c,
                                                               p_vn_x1, p_vn_x2, p_vn_x3);
         static_cast<t_atmo_fluxes<float>*>(atmos_fluxes)->fill(stress_xw, stress_yw);
@@ -156,7 +158,7 @@ void YAOP::calc_tke(float *depth_CellInterface, float *prism_center_dist_c,
         m_is_struct_init = true;
     }
 
-    m_impl->backend_tke_sp->calc(p_patch_sp, p_cvmix_sp, ocean_state, atmos_fluxes, p_as, p_sea_ice,
+    m_impl->backend_tke_sp->calc(p_patch_sp, p_cvmix, ocean_state, atmos_fluxes, p_as, p_sea_ice,
                           edges_block_size, edges_start_block, edges_end_block,
                           edges_start_index, edges_end_index, cells_block_size,
                           cells_start_block, cells_end_block, cells_start_index,

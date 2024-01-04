@@ -70,8 +70,67 @@ struct t_patch {
     int *edges_cell_blk;
 };
 
+class t_cvmix_base {
+ public:
+    t_cvmix_base() {}
+    ~t_cvmix_base() {}
+};
+
 template <class T>
-struct t_cvmix {
+class t_cvmix : public t_cvmix_base {
+ public:
+    void fill(T *tke_i, T *tke_plc_i, T *hlc_i, T *wlc_i, T *u_stokes_i, T *a_veloc_v_i,
+              T *a_temp_v_i, T *a_salt_v_i, T *iwe_Tdis_i, T *cvmix_dummy_1_i,
+              T *cvmix_dummy_2_i, T *cvmix_dummy_3_i, T *tke_Tbpr_i, T *tke_Tspr_i,
+              T *tke_Tdif_i, T *tke_Tdis_i, T *tke_Twin_i, T *tke_Tiwf_i,
+              T *tke_Tbck_i, T *tke_Ttot_i, T *tke_Lmix_i, T *tke_Pr_i) {
+        this->tke = tke_i;
+        this->tke_plc = tke_plc_i;
+        this->hlc = hlc_i;
+        this->wlc = wlc_i;
+        this->u_stokes = u_stokes_i;
+        this->a_veloc_v = a_veloc_v_i;
+        this->a_temp_v = a_temp_v_i;
+        this->a_salt_v = a_salt_v_i;
+        this->iwe_Tdis = iwe_Tdis_i;
+        this->cvmix_dummy_1 = cvmix_dummy_1_i;
+        this->cvmix_dummy_2 = cvmix_dummy_2_i;
+        this->cvmix_dummy_3 = cvmix_dummy_3_i;
+        this->tke_Tbpr = tke_Tbpr_i;
+        this->tke_Tspr = tke_Tspr_i;
+        this->tke_Tdif = tke_Tdif_i;
+        this->tke_Tdis = tke_Tdis_i;
+        this->tke_Twin = tke_Twin_i;
+        this->tke_Tiwf = tke_Tiwf_i;
+        this->tke_Tbck = tke_Tbck_i;
+        this->tke_Ttot = tke_Ttot_i;
+        this->tke_Lmix = tke_Lmix_i;
+        this->tke_Pr = tke_Pr_i;
+    }
+    T * get_tke() { return this->tke; }
+    T * get_tke_plc() { return this->tke_plc; }
+    T * get_hlc() { return this->hlc; }
+    T * get_wlc() { return this->wlc; }
+    T * get_u_stokes() { return this->u_stokes; }
+    T * get_a_veloc_v() { return this->a_veloc_v; }
+    T * get_a_temp_v() { return this->a_temp_v; }
+    T * get_a_salt_v() { return this->a_salt_v; }
+    T * get_iwe_Tdis() { return this->iwe_Tdis; }
+    T * get_cvmix_dummy_1() { return this->cvmix_dummy_1; }
+    T * get_cvmix_dummy_2() { return this->cvmix_dummy_2; }
+    T * get_cvmix_dummy_3() { return this->cvmix_dummy_3; }
+    T * get_tke_Tbpr() { return this->tke_Tbpr; }
+    T * get_tke_Tspr() { return this->tke_Tspr; }
+    T * get_tke_Tdif() { return this->tke_Tdif; }
+    T * get_tke_Tdis() { return this->tke_Tdis; }
+    T * get_tke_Twin() { return this->tke_Twin; }
+    T * get_tke_Tiwf() { return this->tke_Tiwf; }
+    T * get_tke_Tbck() { return this->tke_Tbck; }
+    T * get_tke_Ttot() { return this->tke_Ttot; }
+    T * get_tke_Lmix() { return this->tke_Lmix; }
+    T * get_tke_Pr() { return this->tke_Pr; }
+
+ protected:
     T *tke;
     T *tke_plc;
     T *hlc;
@@ -203,39 +262,6 @@ void fill_struct(t_patch<T> *p_patch, T *depth_CellInterface, T *prism_center_di
     p_patch->wet_c = wet_c;
     p_patch->edges_cell_idx = edges_cell_idx;
     p_patch->edges_cell_blk = edges_cell_blk;
-}
-
-/*! \brief Fill cvmix data struct from array pointers.
-*
-*/
-template <class T>
-void fill_struct(t_cvmix<T> * p_cvmix, T *tke, T *tke_plc, T *hlc, T *wlc,
-                 T *u_stokes, T *a_veloc_v, T *a_temp_v, T *a_salt_v, T *iwe_Tdis,
-                 T *cvmix_dummy_1, T *cvmix_dummy_2, T *cvmix_dummy_3, T *tke_Tbpr,
-                 T *tke_Tspr, T *tke_Tdif, T *tke_Tdis, T *tke_Twin, T *tke_Tiwf,
-                 T *tke_Tbck, T *tke_Ttot, T *tke_Lmix, T *tke_Pr) {
-    p_cvmix->tke = tke;
-    p_cvmix->tke_plc = tke_plc;
-    p_cvmix->hlc = hlc;
-    p_cvmix->wlc = wlc;
-    p_cvmix->u_stokes = u_stokes;
-    p_cvmix->a_veloc_v = a_veloc_v;
-    p_cvmix->a_temp_v = a_temp_v;
-    p_cvmix->a_salt_v = a_salt_v;
-    p_cvmix->iwe_Tdis = iwe_Tdis;
-    p_cvmix->cvmix_dummy_1 = cvmix_dummy_1;
-    p_cvmix->cvmix_dummy_2 = cvmix_dummy_2;
-    p_cvmix->cvmix_dummy_3 = cvmix_dummy_3;
-    p_cvmix->tke_Tbpr = tke_Tbpr;
-    p_cvmix->tke_Tspr = tke_Tspr;
-    p_cvmix->tke_Tdif = tke_Tdif;
-    p_cvmix->tke_Tdis = tke_Tdis;
-    p_cvmix->tke_Twin = tke_Twin;
-    p_cvmix->tke_Tiwf = tke_Tiwf;
-    p_cvmix->tke_Tbck = tke_Tbck;
-    p_cvmix->tke_Ttot = tke_Ttot;
-    p_cvmix->tke_Lmix = tke_Lmix;
-    p_cvmix->tke_Pr = tke_Pr;
 }
 
 #endif  // SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_
