@@ -107,8 +107,23 @@ struct t_ocean_state {
     T *p_vn_x3;
 };
 
+class t_atmo_fluxes_base {
+ public:
+    t_atmo_fluxes_base() {}
+    ~t_atmo_fluxes_base() {}
+};
+
 template <class T>
-struct t_atmo_fluxes {
+class t_atmo_fluxes : public t_atmo_fluxes_base {
+ public:
+    void fill(T *stress_xw_i, T* stress_yw_i) {
+        this->stress_xw = stress_xw_i;
+        this->stress_yw = stress_yw_i;
+    }
+    T * get_stress_xw() { return this->stress_xw; }
+    T * get_stress_yw() { return this->stress_yw; }
+
+ protected:
     T *stress_xw;
     T *stress_yw;
 };
@@ -210,15 +225,6 @@ void fill_struct(t_ocean_state<T> * ocean_state, T *temp, T *salt, T *stretch_c,
     ocean_state->p_vn_x1 = p_vn_x1;
     ocean_state->p_vn_x2 = p_vn_x2;
     ocean_state->p_vn_x3 = p_vn_x3;
-}
-
-/*! \brief Fill atmosphere fluxes data struct from array pointers.
-*
-*/
-template <class T>
-void fill_struct(t_atmo_fluxes<T> *atmo_fluxes, T *stress_xw, T *stress_yw) {
-    atmo_fluxes->stress_xw = stress_xw;
-    atmo_fluxes->stress_yw = stress_yw;
 }
 
 #endif  // SRC_SHARED_INTERFACE_DATA_STRUCT_HPP_
