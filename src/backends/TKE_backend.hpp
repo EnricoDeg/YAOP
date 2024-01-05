@@ -91,12 +91,12 @@ class TKE_backend {
     *  It calls calc_impl which contains the actual implementation.
     */
     void calc(t_patch_base *p_patch, t_cvmix_base *p_cvmix,
-                           t_ocean_state_base *ocean_state, t_atmo_fluxes_base *atmos_fluxes,
-                           t_atmos_for_ocean_base *p_as, t_sea_ice_base *p_sea_ice,
-                           int edges_block_size, int edges_start_block, int edges_end_block,
-                           int edges_start_index, int edges_end_index, int cells_block_size,
-                           int cells_start_block, int cells_end_block, int cells_start_index,
-                           int cells_end_index) {
+              t_ocean_state_base *ocean_state, t_atmo_fluxes_base *atmos_fluxes,
+              t_atmos_for_ocean_base *p_as, t_sea_ice_base *p_sea_ice,
+              int edges_block_size, int edges_start_block, int edges_end_block,
+              int edges_start_index, int edges_end_index, int cells_block_size,
+              int cells_start_block, int cells_end_block, int cells_start_index,
+              int cells_end_index) {
         this->calc_impl(p_patch, p_cvmix, ocean_state, atmos_fluxes, p_as, p_sea_ice,
                         edges_block_size, edges_start_block, edges_end_block,
                         edges_start_index, edges_end_index, cells_block_size,
@@ -398,8 +398,8 @@ class TKE_backend {
 
  protected:
     // Structures with parameters
-    struct t_constant<T> p_constant;
-    struct t_constant_tke<T> p_constant_tke;
+    t_constant<T> p_constant;
+    t_constant_tke<T> p_constant_tke;
 
     bool m_is_view_init;
 
@@ -427,13 +427,13 @@ class TKE_backend {
     T *m_tke_unrest;
 
     // Structures with memory views
-    struct t_cvmix_view<T, memview_nms::mdspan, memview_nms::dextents> p_cvmix_view;
-    struct t_patch_view<T, memview_nms::mdspan, memview_nms::dextents> p_patch_view;
-    struct t_ocean_state_view<T, memview_nms::mdspan, memview_nms::dextents> ocean_state_view;
-    struct t_atmo_fluxes_view<T, memview_nms::mdspan, memview_nms::dextents> atmos_fluxes_view;
-    struct t_atmos_for_ocean_view<T, memview_nms::mdspan, memview_nms::dextents> p_as_view;
-    struct t_sea_ice_view<T, memview_nms::mdspan, memview_nms::dextents> p_sea_ice_view;
-    struct t_tke_internal_view<T, memview_nms::mdspan, memview_nms::dextents> p_internal_view;
+    t_cvmix_view<T, memview_nms::mdspan, memview_nms::dextents> p_cvmix_view;
+    t_patch_view<T, memview_nms::mdspan, memview_nms::dextents> p_patch_view;
+    t_ocean_state_view<T, memview_nms::mdspan, memview_nms::dextents> ocean_state_view;
+    t_atmo_fluxes_view<T, memview_nms::mdspan, memview_nms::dextents> atmos_fluxes_view;
+    t_atmos_for_ocean_view<T, memview_nms::mdspan, memview_nms::dextents> p_as_view;
+    t_sea_ice_view<T, memview_nms::mdspan, memview_nms::dextents> p_sea_ice_view;
+    t_tke_internal_view<T, memview_nms::mdspan, memview_nms::dextents> p_internal_view;
 };
 
 #endif  // SRC_BACKENDS_TKE_BACKEND_HPP_

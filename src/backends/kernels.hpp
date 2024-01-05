@@ -19,9 +19,7 @@
 
 #include "src/shared/constants/constants_thermodyn.hpp"
 
-#if defined CUDA || defined HIP
-
-#else
+#if !defined (CUDA) && !defined (HIP)
 #include <cmath>
 #include <algorithm>
 using std::max;

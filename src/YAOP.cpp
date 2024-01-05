@@ -15,11 +15,9 @@
  */
 
 #include "src/YAOP.hpp"
-
 #include <iostream>
-
 #include "src/backends/TKE_backend.hpp"
-#ifdef CUDA
+#if defined (CUDA) || defined (HIP)
 #include "src/backends/GPU/TKE_gpu.hpp"
 #else
 #include "src/backends/CPU/TKE_cpu.hpp"
@@ -41,7 +39,7 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
     ocean_state = new t_ocean_state<double>();
     p_cvmix = new t_cvmix<double>();
     p_patch = new t_patch<double>();
-#ifdef CUDA
+#if defined (CUDA) || defined (HIP)
     m_impl->backend_tke_dp = TKE_backend<double>::Ptr(new TKE_gpu<double>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
@@ -66,7 +64,7 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
     ocean_state = new t_ocean_state<float>();
     p_cvmix = new t_cvmix<float>();
     p_patch = new t_patch<float>();
-#ifdef CUDA
+#if defined (CUDA) || defined (HIP)
     m_impl->backend_tke_sp = TKE_backend<float>::Ptr(new TKE_gpu<float>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
