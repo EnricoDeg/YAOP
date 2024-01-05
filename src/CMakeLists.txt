@@ -25,18 +25,10 @@ if(ENABLE_C)
     set(SOURCE_C bindings/C/YAOP_capi.cpp)
 endif()
 
-if(ENABLE_CUDA OR ENABLE_HIP)
-    set(SOURCE_GPU backends/GPU/gpu_kernels.cpp
-                   backends/GPU/TKE_gpu.cpp)
-else()
-endif()
-
 if(ENABLE_CUDA)
-    set_source_files_properties(backends/GPU/gpu_kernels.cpp PROPERTIES LANGUAGE CUDA)
-    set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE CUDA)
+    set_source_files_properties(YAOP.cpp PROPERTIES LANGUAGE CUDA)
 elseif(ENABLE_HIP)
-    set_source_files_properties(backends/GPU/gpu_kernels.cpp PROPERTIES LANGUAGE HIP)
-    set_source_files_properties(backends/GPU/TKE_gpu.cpp PROPERTIES LANGUAGE HIP)
+    set_source_files_properties(YAOP.cpp PROPERTIES LANGUAGE HIP)
 endif()
 
 set(SOURCE_EXE  YAOP.cpp
@@ -44,8 +36,6 @@ set(SOURCE_EXE  YAOP.cpp
                 ${SOURCE_FORTRAN}
                 ${SOURCE_CUDA}
                 ${SOURCE_HIP}
-                ${SOURCE_GPU}
-                ${SOURCE_CPU}
                 shared/utils.cpp)
 
 add_library(yaop SHARED ${SOURCE_EXE})

@@ -35,18 +35,18 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
          int l_lc, double clc, double ReferencePressureIndbars, double pi)
     : m_impl(new Impl) {
     std::cout << "Initializing Ocean Physics Library ... " << std::endl;
-#ifdef CUDA
-    m_impl->backend_tke_dp = TKE_backend<double>::Ptr(new TKE_gpu(nproma, nlevs, nblocks,
-                                       vert_mix_type, vmix_idemix_tke, vert_cor_type,
-                                       dtime, OceanReferenceDensity, grav, l_lc, clc,
-                                       ReferencePressureIndbars, pi));
-#else
     p_sea_ice = new t_sea_ice<double>();
     p_as = new t_atmos_for_ocean<double>();
     atmos_fluxes = new t_atmo_fluxes<double>();
     ocean_state = new t_ocean_state<double>();
     p_cvmix = new t_cvmix<double>();
     p_patch = new t_patch<double>();
+#ifdef CUDA
+    m_impl->backend_tke_dp = TKE_backend<double>::Ptr(new TKE_gpu<double>(nproma, nlevs, nblocks,
+                                       vert_mix_type, vmix_idemix_tke, vert_cor_type,
+                                       dtime, OceanReferenceDensity, grav, l_lc, clc,
+                                       ReferencePressureIndbars, pi));
+#else
     m_impl->backend_tke_dp = TKE_backend<double>::Ptr(new TKE_cpu<double>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,
@@ -60,18 +60,18 @@ YAOP::YAOP(int nproma, int nlevs, int nblocks, int vert_mix_type, int vmix_idemi
          int l_lc, float clc, float ReferencePressureIndbars, float pi)
     : m_impl(new Impl) {
     std::cout << "Initializing Ocean Physics Library ... " << std::endl;
-#ifdef CUDA
-    m_impl->backend_tke_sp = TKE_backend<float>::Ptr(new TKE_gpu(nproma, nlevs, nblocks,
-                                       vert_mix_type, vmix_idemix_tke, vert_cor_type,
-                                       dtime, OceanReferenceDensity, grav, l_lc, clc,
-                                       ReferencePressureIndbars, pi));
-#else
     p_sea_ice = new t_sea_ice<float>();
     p_as = new t_atmos_for_ocean<float>();
     atmos_fluxes = new t_atmo_fluxes<float>();
     ocean_state = new t_ocean_state<float>();
     p_cvmix = new t_cvmix<float>();
     p_patch = new t_patch<float>();
+#ifdef CUDA
+    m_impl->backend_tke_sp = TKE_backend<float>::Ptr(new TKE_gpu<float>(nproma, nlevs, nblocks,
+                                       vert_mix_type, vmix_idemix_tke, vert_cor_type,
+                                       dtime, OceanReferenceDensity, grav, l_lc, clc,
+                                       ReferencePressureIndbars, pi));
+#else
     m_impl->backend_tke_sp = TKE_backend<float>::Ptr(new TKE_cpu<float>(nproma, nlevs, nblocks,
                                        vert_mix_type, vmix_idemix_tke, vert_cor_type,
                                        dtime, OceanReferenceDensity, grav, l_lc, clc,

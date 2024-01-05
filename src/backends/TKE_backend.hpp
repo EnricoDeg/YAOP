@@ -21,8 +21,10 @@
 #include "src/shared/interface/data_struct.hpp"
 #include "src/shared/interface/memview_struct.hpp"
 
-#if defined CUDA || defined HIP
-
+#if defined (CUDA)
+#include "src/backends/GPU/CUDA/cuda_backend.hpp"
+#elif defined (HIP)
+#include "src/backends/GPU/HIP/hip_backend.hpp"
 #else
 #include "src/backends/CPU/cpu_memory.hpp"
 #endif
